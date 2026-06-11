@@ -7,6 +7,227 @@ let matches = [];
 let scorers = {};
 let actualResults = {};
 
+// Mapeo detallado de selecciones de fútbol a sus respectivas banderas codes
+const TEAM_CODES = {
+  "Francia": "fr",
+  "España": "es",
+  "Argentina": "ar",
+  "Brasil": "br",
+  "Inglaterra": "gb-eng",
+  "Portugal": "pt",
+  "Alemania": "de",
+  "Países Bajos": "nl",
+  "Colombia": "co",
+  "Senegal": "sn",
+  "Croacia": "hr",
+  "Uruguay": "uy",
+  "Bélgica": "be",
+  "Marruecos": "ma",
+  "Estados Unidos": "us",
+  "México": "mx",
+  "Noruega": "no",
+  "Ecuador": "ec",
+  "Japón": "jp",
+  "Suiza": "ch",
+  "Turquía": "tr",
+  "Egipto": "eg",
+  "Corea del Sur": "kr",
+  "Suecia": "se",
+  "Canadá": "ca",
+  "Austria": "at",
+  "Sudáfrica": "za",
+  "Paraguay": "py",
+  "Escocia": "gb-sct",
+  "Ghana": "gh",
+  "República Checa": "cz",
+  "Argelia": "dz",
+  "Irán": "ir",
+  "Arabia Saudita": "sa",
+  "Jordania": "jo",
+  "Bosnia y Herzegovina": "ba",
+  "Costa de Marfil": "ci",
+  "Australia": "au",
+  "Túnez": "tn",
+  "RD Congo": "cd",
+  "Uzbekistán": "uz",
+  "Catar": "qa",
+  "Irak": "iq",
+  "Nueva Zelanda": "nz",
+  "Cabo Verde": "cv",
+  "Panamá": "pa",
+  "Curazao": "cw",
+  "Haití": "ht"
+};
+
+// Banderas emojis nativas para selects
+const TEAM_EMOJIS = {
+  "Francia": "🇫🇷",
+  "España": "🇪🇸",
+  "Argentina": "🇦🇷",
+  "Brasil": "🇧🇷",
+  "Inglaterra": "🏴\u200D󠁢󠁥󠁮󠁧󠁿",
+  "Portugal": "🇵🇹",
+  "Alemania": "🇩🇪",
+  "Países Bajos": "🇳🇱",
+  "Colombia": "🇨🇴",
+  "Senegal": "🇸🇳",
+  "Croacia": "🇭🇷",
+  "Uruguay": "🇺🇾",
+  "Bélgica": "🇧🇪",
+  "Marruecos": "🇲🇦",
+  "Estados Unidos": "🇺🇸",
+  "México": "🇲🇽",
+  "Noruega": "🇳🇴",
+  "Ecuador": "🇪🇨",
+  "Japón": "🇯🇵",
+  "Suiza": "🇨🇭",
+  "Turquía": "🇹🇷",
+  "Egipto": "🇪🇬",
+  "Corea del Sur": "🇰🇷",
+  "Suecia": "🇸🇪",
+  "Canadá": "🇨🇦",
+  "Austria": "🇦🇹",
+  "Sudáfrica": "🇿🇦",
+  "Paraguay": "🇵🇾",
+  "Escocia": "🏴\u200D󠁢󠁳󠁣󠁴󠁿",
+  "Ghana": "🇬🇭",
+  "República Checa": "🇨🇿",
+  "Argelia": "🇩🇿",
+  "Irán": "🇮🇷",
+  "Arabia Saudita": "🇸🇦",
+  "Jordania": "🇯🇴",
+  "Bosnia y Herzegovina": "🇧🇦",
+  "Costa de Marfil": "🇨🇮",
+  "Australia": "🇦🇺",
+  "Túnez": "🇹🇳",
+  "RD Congo": "🇨🇩",
+  "Uzbekistán": "🇺🇿",
+  "Catar": "🇶🇦",
+  "Irak": "🇮🇶",
+  "Nueva Zelanda": "🇳🇿",
+  "Cabo Verde": "🇨🇻",
+  "Panamá": "🇵🇦",
+  "Curazao": "🇨🇼",
+  "Haití": "🇭🇹"
+};
+
+function getTeamFlag(teamName, isLarge = false) {
+  if (!teamName) return "";
+  const code = TEAM_CODES[teamName];
+  if (!code) return "";
+  const imgClass = isLarge 
+    ? "inline-block w-9 h-6 rounded border border-slate-800 shadow-md align-middle" 
+    : "inline-block w-5 h-3.5 rounded-sm border border-slate-900/60 shadow-sm align-middle mr-1.5";
+  return `<img src="https://flagcdn.com/w40/${code}.png" alt="${teamName}" class="${imgClass}" />`;
+}
+
+function getTeamFlagEmoji(teamName) {
+  if (!teamName) return "";
+  return TEAM_EMOJIS[teamName] || "";
+}
+
+// Mapeo detallado de jugadores de la porra (goleadores) a sus selecciones correspondientes
+const PLAYER_TEAMS = {
+  "Kylian Mbappé": "Francia",
+  "Erling Haaland": "Noruega",
+  "Lionel Messi": "Argentina",
+  "Harry Kane": "Inglaterra",
+  "Mikel Oyarzabal": "España",
+  "Cristiano Ronaldo": "Portugal",
+  "Lamine Yamal": "España",
+  "Jude Bellingham": "Inglaterra",
+  "Vinícius Jr.": "Brasil",
+  "Lautaro Martínez": "Argentina",
+  "Luis Díaz": "Colombia",
+  "Darwin Núñez": "Uruguay",
+  "Ousmane Dembélé": "Francia",
+  "Jonathan David": "Canadá",
+  "Kai Havertz": "Alemania",
+  "Raphinha": "Brasil",
+  "Donyell Malen": "Países Bajos",
+  "Bukayo Saka": "Inglaterra",
+  "Leroy Sané": "Alemania",
+  "Arda Güler": "Turquía",
+  "Julian Alvarez": "Argentina",
+  "Ferran Torres": "España",
+  "Kevin De Bruyne": "Bélgica",
+  "Romelu Lukaku": "Bélgica",
+  "Rafael Leao": "Portugal",
+  "Alexander Isak": "Suecia",
+  "Viktor Gyökeres": "Suecia",
+  "Alexander Sørloth": "Noruega",
+  "Antoine Semenyo": "Ghana",
+  "Mohamed Salah": "Egipto"
+};
+
+function getPlayerFlag(playerName, isLarge = false) {
+  if (!playerName) return "";
+  const team = PLAYER_TEAMS[playerName];
+  if (!team) return "";
+  return getTeamFlag(team, isLarge);
+}
+
+function getPlayerFlagEmoji(playerName) {
+  if (!playerName) return "";
+  const team = PLAYER_TEAMS[playerName];
+  if (!team) return "";
+  return getTeamFlagEmoji(team);
+}
+
+// Exponer globalmente para acceso desde admin.js u otros scripts
+window.getTeamFlag = getTeamFlag;
+window.getTeamFlagEmoji = getTeamFlagEmoji;
+window.getPlayerFlag = getPlayerFlag;
+window.getPlayerFlagEmoji = getPlayerFlagEmoji;
+
+// Catálogos dinámicos de consulta explicativa en la sección de reglas
+function renderRulesCatalog() {
+  const gContainer = document.getElementById('rulesGroupsContainer');
+  const sContainer = document.getElementById('rulesScorersContainer');
+  if (!gContainer || !sContainer) return;
+
+  gContainer.innerHTML = '';
+  sContainer.innerHTML = '';
+
+  // Renderizar Grupos de Selecciones (A al F)
+  Object.entries(teams).forEach(([grpName, teamList]) => {
+    let grpHtml = `
+      <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-900 space-y-1.5 shadow-sm text-[11px]">
+        <h5 class="font-black text-amber-400 border-b border-slate-900/60 pb-1 uppercase tracking-widest text-[10px]">Grupo ${grpName}</h5>
+        <div class="space-y-1">
+    `;
+    teamList.forEach(t => {
+      grpHtml += `
+        <div class="flex items-center gap-1 text-slate-350 py-0.5">
+          <span class="shrink-0 flex items-center justify-center">${getTeamFlag(t)}</span>
+          <span class="truncate ml-1.5" title="${t}">${t}</span>
+        </div>
+      `;
+    });
+    grpHtml += `</div></div>`;
+    gContainer.innerHTML += grpHtml;
+  });
+
+  // Renderizar Bombos de Goleadores (J1 al J6)
+  Object.entries(players).forEach(([bomName, playerList]) => {
+    let bomHtml = `
+      <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-900 space-y-1.5 shadow-sm text-[11px]">
+        <h5 class="font-black text-rose-400 border-b border-slate-900/60 pb-1 uppercase tracking-widest text-[10px]">Bombo ${bomName}</h5>
+        <div class="space-y-1">
+    `;
+    playerList.forEach(p => {
+      bomHtml += `
+        <div class="flex items-center gap-1 text-slate-350 py-0.5">
+          <span class="shrink-0 flex items-center justify-center">${getPlayerFlag(p)}</span>
+          <span class="truncate ml-1.5" title="${p}">${p}</span>
+        </div>
+      `;
+    });
+    bomHtml += `</div></div>`;
+    sContainer.innerHTML += bomHtml;
+  });
+}
+
 // Almacena variables filtradas o simuladas por previsualización de admin
 let currentMatches = [];
 let currentActualResults = [];
@@ -18,12 +239,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderLeaderboard();
   renderMatches();
   renderScorers();
+  renderRulesCatalog();
 });
 
 // Desplazamiento dinámico suave
 function scrollToSection(id) {
   const element = document.getElementById(id);
   if (element) {
+    if (id === 'rules' && element.tagName === 'DETAILS') {
+      element.open = true;
+    }
     element.scrollIntoView({ behavior: 'smooth' });
   }
 }
@@ -321,7 +546,7 @@ function showParticipantDetail(id) {
     gList.innerHTML += `
       <div class="flex justify-between items-center bg-slate-900 px-3 py-1.5 rounded border border-slate-800">
         <span class="text-slate-400 font-bold">${jGrp}:</span>
-        <span class="text-white ml-2 flex-1">${playerSelected}</span>
+        <span class="text-white ml-2 flex-1">${getPlayerFlag(playerSelected)} ${playerSelected}</span>
         <span class="badge ${playerGoals > 0 ? 'badge-rose' : 'bg-slate-800'} text-xs font-bold">${playerGoals} ⚽</span>
         ${isPichichiVal ? '<span class="badge badge-warning text-slate-950 font-extrabold text-[9px] ml-1">PICHICHI</span>' : ''}
       </div>
@@ -366,7 +591,7 @@ function showParticipantDetail(id) {
       htmlGroup += `
         <div class="flex flex-col gap-0.5 justify-between py-1 bg-slate-900/40 px-2 rounded border border-slate-900">
           <div class="flex justify-between items-center">
-            <span class="${textClass}">${index + 1}.º ${teamName}</span>
+            <span class="${textClass}">${index + 1}.º ${getTeamFlag(teamName)} ${teamName}</span>
           </div>
           ${statusIndicator ? `<div class="text-right mt-0.5">${statusIndicator}</div>` : ''}
         </div>
@@ -389,7 +614,7 @@ function showParticipantDetail(id) {
     podiumList.innerHTML += `
       <div class="bg-slate-900 border ${isHit ? 'border-emerald-500/50' : 'border-slate-800'} p-2 rounded-lg">
         <span class="text-slate-400 text-[10px] block font-bold">${titles[pos]}</span>
-        <span class="font-extrabold ${isHit ? 'text-emerald-400' : 'text-slate-200'}">${selectedTeam}</span>
+        <span class="font-extrabold ${isHit ? 'text-emerald-400' : 'text-slate-200'}">${getTeamFlag(selectedTeam)} ${selectedTeam}</span>
       </div>
     `;
   });
@@ -454,6 +679,7 @@ function renderMatches() {
       <div class="grid grid-cols-3 items-center text-center">
         <!-- Home -->
         <div class="flex flex-col items-center">
+          <span class="text-2xl mb-1">${getTeamFlag(m.team_home)}</span>
           <span class="font-extrabold text-sm text-slate-100">${m.team_home}</span>
         </div>
         
@@ -463,8 +689,9 @@ function renderMatches() {
         </div>
         
         <!-- Away -->
-        <div class="flex flex-col items-center font-extrabold text-sm text-slate-100">
-          <span>${m.team_away}</span>
+        <div class="flex flex-col items-center">
+          <span class="text-2xl mb-1">${getTeamFlag(m.team_away)}</span>
+          <span class="font-extrabold text-sm text-slate-100">${m.team_away}</span>
         </div>
       </div>
 
@@ -510,7 +737,7 @@ function renderScorers() {
       <div class="flex justify-between items-center py-2.5 text-xs">
         <div class="flex items-center gap-2">
           <span class="font-bold text-slate-500 w-4">${index + 1}.</span>
-          <span class="font-extrabold ${isPichichi ? 'text-amber-400 font-black' : 'text-slate-200'}">${playerName}</span>
+          <span class="font-extrabold ${isPichichi ? 'text-amber-400 font-black' : 'text-slate-200'}">${getPlayerFlag(playerName)} ${playerName}</span>
           ${isPichichi ? '<span class="badge bg-amber-500 text-slate-950 font-black text-[9px] scale-90">PICHICHI</span>' : ''}
         </div>
         <span class="badge badge-sm badge-rose font-bold text-xs">${goals} goles</span>

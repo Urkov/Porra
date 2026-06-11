@@ -9,6 +9,28 @@ async function sha256(message) {
   return hashHex;
 }
 
+// Sincroniza las banderas reales de imagen junto a los selectores en tiempo real
+function synchronizeAdminSelectFlags() {
+  const ids = [
+    { select: 'admHome', flag: 'admHomeFlag', getter: getTeamFlag },
+    { select: 'admAway', flag: 'admAwayFlag', getter: getTeamFlag },
+    { select: 'admWinnerPassed', flag: 'admWinnerPassedFlag', getter: getTeamFlag },
+    { select: 'admPlayer', flag: 'admPlayerFlag', getter: getPlayerFlag },
+    { select: 'admPod1', flag: 'admPod1Flag', getter: getTeamFlag },
+    { select: 'admPod2', flag: 'admPod2Flag', getter: getTeamFlag },
+    { select: 'admPod3', flag: 'admPod3Flag', getter: getTeamFlag },
+    { select: 'admPod4', flag: 'admPod4Flag', getter: getTeamFlag }
+  ];
+
+  ids.forEach(item => {
+    const selEl = document.getElementById(item.select);
+    const flagEl = document.getElementById(item.flag);
+    if (selEl && flagEl) {
+      flagEl.innerHTML = typeof item.getter === 'function' ? item.getter(selEl.value) : '';
+    }
+  });
+}
+
 // Abre el modal de administración rellenando los listados con información fresca
 async function openAdmin() {
   // Protección por contraseña utilizando algoritmo criptográfico SHA-256
@@ -53,7 +75,7 @@ async function openAdmin() {
     flatTeams.forEach(t => {
       const opt = document.createElement('option');
       opt.value = t;
-      opt.text = t;
+      opt.text = t; // Texto plano limpio (sin abreviaciones de SO Windows 'DE/ES')
       sel.appendChild(opt);
     });
   });
@@ -69,10 +91,19 @@ async function openAdmin() {
     flatPlayers.forEach(p => {
       const opt = document.createElement('option');
       opt.value = p;
-      opt.text = p;
+      opt.text = p; // Texto plano limpio (sin abreviaciones de SO Windows)
       pSel.appendChild(opt);
     });
   }
+
+  // Enlazar los eventos onchange para actualizar dinámicamente las banderas de imagen
+  ['admHome', 'admAway', 'admWinnerPassed', 'admPlayer', 'admPod1', 'admPod2', 'admPod3', 'admPod4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.dataset.listenerAttached) {
+      el.addEventListener('change', synchronizeAdminSelectFlags);
+      el.dataset.listenerAttached = "true";
+    }
+  });
 
   // Inicializar posiciones de grupo
   onClassifGroupChange();
@@ -84,6 +115,9 @@ async function openAdmin() {
     if (pod3) pod3.value = currentActualResults.actual_podium.P3 || '';
     if (pod4) pod4.value = currentActualResults.actual_podium.P4 || '';
   }
+
+  // Sincronizar indicadores visuales de banderas reales
+  synchronizeAdminSelectFlags();
 
   modal.showModal();
 }
@@ -122,6 +156,9 @@ function onDecidedChange() {
   } else {
     block.classList.add('hidden');
   }
+  
+  // Sincronizar banderas
+  synchronizeAdminSelectFlags();
 }
 
 // Listado temporal de goleadores agregados al partido en curso
@@ -151,9 +188,10 @@ function renderTempScorers() {
   container.innerHTML = '';
   tempMatchScorers.forEach((sc, idx) => {
     const parts = sc.split(':');
+    const flag = typeof getPlayerFlag === 'function' ? getPlayerFlag(parts[1]) : '';
     container.innerHTML += `
       <span class="badge badge-rose text-white text-[10px] gap-1 font-bold pl-2 pr-1.5 py-2">
-        <span>${parts[1]} (${parts[0]})</span>
+        <span>${flag} ${parts[1]} (${parts[0]})</span>
         <button onclick="removeTempScorer(${idx})" class="hover:text-black font-extrabold focus:outline-none ml-1">✕</button>
       </span>
     `;
@@ -205,11 +243,16 @@ function onClassifGroupChange() {
   const realOrder = currentActualResults.actual_positions[grp] || [...activeTeams];
 
   realOrder.forEach((t, idx) => {
+    const flagImg = typeof getTeamFlag === 'function' ? getTeamFlag(t) : '';
     listContainer.innerHTML += `
       <div class="flex items-center gap-1.5 py-0.5">
         <span class="text-slate-400 font-bold w-4">${idx + 1}.º</span>
+        <span class="shrink-0 w-6 flex justify-center">${flagImg}</span>
         <select data-idx="${idx}" class="select select-bordered select-xs w-full bg-slate-900 mx-1 border-slate-800" onchange="updateClassifOrder('${grp}')">
-          ${realOrder.map(oth => `<option value="${oth}" ${oth === t ? 'selected' : ''}>${oth}</option>`).join('')}
+          ${realOrder.map(oth => {
+            const optFlag = typeof getTeamFlagEmoji === 'function' ? getTeamFlagEmoji(oth) : '';
+            return `<option value="${oth}" ${oth === t ? 'selected' : ''}>${optFlag} ${oth}</option>`;
+          }).join('')}
         </select>
       </div>
     `;
@@ -226,6 +269,9 @@ function updateClassifOrder(grp) {
   });
 
   currentActualResults.actual_positions[grp] = newOrder;
+  
+  // Re-renderizar la clasificación para que las banderas de imágenes junto a los puestos se actualicen al vuelo
+  onClassifGroupChange();
 }
 
 // Aplica todos los cálculos locales y recarga el dashboard al instante como previsualización

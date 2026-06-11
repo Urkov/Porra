@@ -37,17 +37,18 @@
       <button onclick="scrollToSection('leaderboard')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Clasificación</button>
       <button onclick="scrollToSection('matches')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Partidos</button>
       <button onclick="scrollToSection('scorers')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Goleadores</button>
+      <button onclick="scrollToSection('rules')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Reglas</button>
       <button onclick="openAdmin()" class="btn btn-rose btn-sm gap-2">
         <i class="fa-solid fa-lock text-xs"></i> Admin
       </button>
     </div>
   </header>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-12">
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
     
-    <!-- Hero / Info General de Premios -->
-    <section class="card bg-gradient-to-br from-rose-950/40 to-slate-900 border border-rose-500/30 shadow-2xl p-6 md:p-8 rounded-3xl grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-      <div class="space-y-3 md:col-span-2">
+    <!-- Hero / Info General de la Porra -->
+    <section class="card bg-gradient-to-br from-rose-950/40 to-slate-900 border border-rose-500/30 shadow-2xl p-6 md:p-8 rounded-3xl space-y-4">
+      <div class="space-y-3">
         <span class="badge badge-rose font-bold px-3 py-1">Mundial de la FIFA 2026</span>
         <h2 class="text-3xl md:text-5xl font-black text-white leading-tight">🏆 LA GRAN PORRA</h2>
         <p class="text-slate-300 text-sm md:text-base leading-relaxed">
@@ -55,37 +56,243 @@
           Sigue el ranking oficial y observa cómo se recalculan tus aciertos en directo. 
           Un sistema automatizado extrae marcadores oficiales y goles cada mañana.
         </p>
-        
-        <!-- Info de Regla Remarcada -->
-        <div class="alert alert-warning bg-amber-950/40 border-amber-500/40 text-amber-200 text-xs py-2 rounded-xl">
-          <i class="fa-solid fa-circle-info text-amber-400"></i>
-          <span>Los partidos ganados en <strong>tanda de penaltis</strong> cuentan como <strong>empates</strong> para ambos. Los goles en tanda de penaltis no puntúan.</span>
-        </div>
-      </div>
-      
-      <!-- Premios -->
-      <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-inner">
-        <h3 class="font-extrabold text-white text-center text-lg uppercase tracking-wider border-b border-slate-800 pb-2">🥇 Bolsa de Premios</h3>
-        <div class="space-y-3 text-sm">
-          <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-amber-500">
-            <span class="font-semibold text-amber-400">🥇 1.º Clasificado</span>
-            <span class="font-bold text-white text-lg">50%</span>
-          </div>
-          <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-slate-300">
-            <span class="font-semibold text-slate-300">🥈 2.º Clasificado</span>
-            <span class="font-bold text-white text-lg">25%</span>
-          </div>
-          <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-amber-700">
-            <span class="font-semibold text-amber-600">🥉 3.º Clasificado</span>
-            <span class="font-bold text-white text-lg">15%</span>
-          </div>
-          <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-rose-500">
-            <span class="font-semibold text-rose-400">💀 Último Puesto</span>
-            <span class="font-bold text-white text-lg">10%</span>
-          </div>
-        </div>
       </div>
     </section>
+
+    <!-- Reglas y Sistema de Puntuación (Colapsable y arriba de la página) -->
+    <details id="rules" class="collapse collapse-arrow bg-slate-950/40 border border-slate-800 rounded-3xl shadow-xl transition-all duration-300">
+      <summary class="collapse-title text-lg md:text-xl font-bold flex items-center justify-between py-4 px-6 text-white cursor-pointer hover:bg-slate-900/40">
+        <span class="flex items-center gap-3">
+          <i class="fa-solid fa-circle-question text-rose-500"></i> REGLAS Y SISTEMA DE PUNTUACIÓN
+        </span>
+        <span class="text-xs font-normal text-rose-450 mr-8 uppercase tracking-wider hidden sm:inline">Haz clic para ver / esconder las reglas</span>
+      </summary>
+      <div class="collapse-content px-6 pb-6 space-y-6">
+        <p class="text-xs text-slate-400 border-b border-slate-900 pb-3">Consulta detallada de cómo se calculan y se acumulan los puntos, además de los premios asignados</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+          <!-- Tarjeta 1: Bolsa de Premios -->
+          <div class="card bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-xl hover:border-rose-500/30 transition flex flex-col justify-between">
+            <div class="space-y-4">
+              <div class="flex items-center gap-3 border-b border-slate-800 pb-2">
+                <span class="text-2xl">🥇</span>
+                <h3 class="font-extrabold text-white text-sm uppercase tracking-wider">Bolsa de Premios</h3>
+              </div>
+              <p class="text-xs text-slate-400">Reparto porcentual de la bolsa de premios final según la tabla definitiva de posiciones.</p>
+              
+              <div class="space-y-2.5 text-xs">
+                <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-amber-500">
+                  <span class="font-semibold text-amber-400">🥇 1.º clasificado</span>
+                  <span class="font-bold text-white text-base">50%</span>
+                </div>
+                <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-slate-300">
+                  <span class="font-semibold text-slate-300">🥈 2.º clasificado</span>
+                  <span class="font-bold text-white text-base">25%</span>
+                </div>
+                <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-amber-700">
+                  <span class="font-semibold text-amber-600">🥉 3.º clasificado</span>
+                  <span class="font-bold text-white text-base">15%</span>
+                </div>
+                <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-rose-500">
+                  <span class="font-semibold text-rose-450">💀 Último Puesto</span>
+                  <span class="font-bold text-white text-base">10%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarjeta 2: Partidos y Eliminatorias -->
+          <div class="card bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-xl hover:border-rose-500/30 transition flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 border-b border-slate-800 pb-2">
+                <span class="text-2xl">🏟️</span>
+                <h3 class="font-extrabold text-white text-sm uppercase tracking-wider">Partidos y Rondas</h3>
+              </div>
+              <p class="text-xs text-slate-400">Puntos automáticos si tus selecciones elegidas ganan, empatan o pasan de ronda.</p>
+              
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between items-center text-slate-300 gap-2 shrink-0">
+                  <span class="whitespace-nowrap">Victoria base</span>
+                  <span class="badge badge-sm badge-outline font-bold text-rose-400 whitespace-nowrap shrink-0">+6 pts</span>
+                </div>
+                <div class="flex justify-between items-center text-slate-300 gap-2 shrink-0">
+                  <span class="whitespace-nowrap">Empate base</span>
+                  <span class="badge badge-sm badge-outline font-bold text-rose-400 whitespace-nowrap shrink-0">+3 pts</span>
+                </div>
+                <div class="flex justify-between items-center text-slate-300 gap-2 shrink-0">
+                  <span class="whitespace-nowrap">Avanza ronda base</span>
+                  <span class="badge badge-sm badge-outline font-bold text-rose-400 whitespace-nowrap shrink-0">+4 pts</span>
+                </div>
+                
+                <div class="border-t border-slate-900 pt-2 text-[11px] space-y-2">
+                  <p class="font-bold text-white"><i class="fa-solid fa-arrow-up-right-dots text-rose-500 mr-1"></i> Multiplicadores por Grupo:</p>
+                  
+                  <div class="bg-slate-900/50 p-2 rounded-lg border border-slate-800 space-y-2.5 text-[10px]">
+                    <div>
+                      <span class="font-semibold text-amber-400 block mb-1">🔹 Grupos C y D (Puntos extra):</span>
+                      <div class="grid grid-cols-3 gap-1.5 text-center text-slate-300">
+                        <div class="bg-slate-950/60 p-1 rounded border border-slate-900/80">
+                          <span class="text-[9px] text-slate-400 block">Victoria</span>
+                          <span class="font-bold text-rose-450 text-[10px]">+1.0 pt</span>
+                        </div>
+                        <div class="bg-slate-950/60 p-1 rounded border border-slate-900/80">
+                          <span class="text-[9px] text-slate-400 block">Empate</span>
+                          <span class="font-bold text-rose-450 text-[10px]">+0.5 pt</span>
+                        </div>
+                        <div class="bg-slate-950/60 p-1 rounded border border-slate-900/80">
+                          <span class="text-[9px] text-slate-400 block">Ronda</span>
+                          <span class="font-bold text-rose-450 text-[10px]">+2.0 pts</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="border-t border-slate-800 pt-2">
+                      <span class="font-semibold text-amber-400 block mb-1">🔹 Grupos E y F (Puntos extra):</span>
+                      <div class="grid grid-cols-3 gap-1.5 text-center text-slate-300">
+                        <div class="bg-slate-950/60 p-1 rounded border border-slate-900/80">
+                          <span class="text-[9px] text-slate-400 block">Victoria</span>
+                          <span class="font-bold text-rose-450 text-[10px]">+2.0 pts</span>
+                        </div>
+                        <div class="bg-slate-950/60 p-1 rounded border border-slate-900/80">
+                          <span class="text-[9px] text-slate-400 block">Empate</span>
+                          <span class="font-bold text-rose-450 text-[10px]">+1.0 pt</span>
+                        </div>
+                        <div class="bg-slate-950/60 p-1 rounded border border-slate-900/80">
+                          <span class="text-[9px] text-slate-400 block">Ronda</span>
+                          <span class="font-bold text-rose-450 text-[10px]">+4.0 pts</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="alert alert-info bg-slate-900 border-slate-800 text-[10px] py-1 px-2.5 rounded-lg mt-4 text-slate-400">
+              <i class="fa-solid fa-info-circle text-sky-400"></i>
+              <span>Tanda de Penaltis = Valor Empate</span>
+            </div>
+          </div>
+
+          <!-- Tarjeta 3: Goleadores y Pichichi -->
+          <div class="card bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-xl hover:border-rose-500/30 transition flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 border-b border-slate-800 pb-2">
+                <span class="text-2xl">⚽</span>
+                <h3 class="font-extrabold text-white text-sm uppercase tracking-wider">Goleadores</h3>
+              </div>
+              <p class="text-xs text-slate-400">Suma puntos con los goles anotados en el torneo por tus 6 goleadores elegidos.</p>
+              
+              <div class="space-y-4 pt-1 text-xs">
+                <div>
+                  <div class="flex justify-between items-center text-slate-300 gap-2 shrink-0">
+                    <span class="whitespace-nowrap">Cada gol anotado</span>
+                    <span class="badge badge-sm badge-rose font-bold text-xs whitespace-nowrap shrink-0">+2 pts</span>
+                  </div>
+                  <p class="text-[10px] text-rose-500/80 italic mt-1 leading-snug">
+                    *Los goles conseguidos en tanda de penaltis no puntúan en las puntuaciones para los goleadores de cada partido.
+                  </p>
+                </div>
+                
+                <div class="flex justify-between items-center text-slate-300 gap-2 shrink-0">
+                  <span class="whitespace-nowrap">Bono Pichichi</span>
+                  <span class="badge badge-sm badge-warning font-bold text-xs text-slate-950 whitespace-nowrap shrink-0">+6 pts</span>
+                </div>
+                
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                  El bono de <strong class="text-amber-400 font-semibold">+6 puntos</strong> se otorga si alguno de tus 6 goleadores elegidos termina como el bota de oro (Pichichi) definitivo del Mundial.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarjeta 4: Fase de Grupos y Podio Final -->
+          <div class="card bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-xl hover:border-rose-500/30 transition flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-3 border-b border-slate-800 pb-2">
+                <span class="text-2xl">📊</span>
+                <h3 class="font-extrabold text-white text-sm uppercase tracking-wider">Fase de Grupos y Podio</h3>
+              </div>
+              <p class="text-xs text-slate-400">Puntos por posiciones finales en fase de grupos y aciertos en el podio final.</p>
+              
+              <div class="space-y-3">
+                <!-- Fase de Grupos -->
+                <div class="space-y-1 BG bg-slate-900/40 p-2 rounded-lg border border-slate-900">
+                  <span class="font-bold text-amber-400 text-[10px] uppercase tracking-wider block mb-1">Fase de Grupos</span>
+                  <table class="table-xs table-compact w-full text-left text-[11px] text-slate-300">
+                    <thead>
+                      <tr class="border-b border-slate-800 text-slate-400">
+                        <th>Posición Real</th>
+                        <th class="text-right">Puntos</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="border-b border-slate-900/40">
+                        <td class="font-bold text-amber-500">1º Puesto</td>
+                        <td class="text-right text-rose-450 font-bold">+10 pts</td>
+                      </tr>
+                      <tr class="border-b border-slate-900/40">
+                        <td class="font-bold text-slate-300">2º Puesto</td>
+                        <td class="text-right text-rose-450 font-bold">+6 pts</td>
+                      </tr>
+                      <tr>
+                        <td class="font-bold text-amber-700">3º Puesto</td>
+                        <td class="text-right text-rose-450 font-bold">+2 pts</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Podio Final -->
+                <div class="space-y-2 bg-slate-900/40 p-2.5 rounded-lg border border-slate-900 text-xs">
+                  <span class="font-bold text-amber-400 text-[10px] uppercase tracking-wider block mb-1">Podio Final (Top 4)</span>
+                  <div class="grid grid-cols-1 gap-1 text-[11px]">
+                    <div class="flex justify-between items-center text-slate-300">
+                      <span class="font-medium text-amber-500">🏆 Campeón</span>
+                      <span class="font-bold text-rose-450">+20 pts</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-300">
+                      <span class="font-medium text-slate-300">🥈 Subcampeón</span>
+                      <span class="font-bold text-rose-450">+15 pts</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-300">
+                      <span class="font-medium text-amber-700">🥉 3º Puesto</span>
+                      <span class="font-bold text-rose-450">+10 pts</span>
+                    </div>
+                    <div class="flex justify-between items-center text-slate-300">
+                      <span class="font-semibold text-rose-400">💀 4º Puesto</span>
+                      <span class="font-bold text-rose-450">+5 pts</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de Consulta: Equipos y Goleadores -->
+        <div class="border-t border-slate-900 pt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Columna: Grupos de Equipos -->
+          <div class="space-y-3">
+            <h4 class="font-extrabold text-white text-xs uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-people-group text-rose-500"></i> Composición de Grupos de Selecciones
+            </h4>
+            <div id="rulesGroupsContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <!-- Se cargará dinámicamente con JS con banderas -->
+            </div>
+          </div>
+
+          <!-- Columna: Grupos de Goleadores -->
+          <div class="space-y-3">
+            <h4 class="font-extrabold text-white text-xs uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-star text-rose-500"></i> Bombos de Goleadores Elegibles
+            </h4>
+            <div id="rulesScorersContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <!-- Se cargará dinámicamente con JS con banderas -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </details>
 
     <!-- Clasificación General de Participantes -->
     <section id="leaderboard" class="space-y-4">
@@ -135,7 +342,7 @@
             <i class="fa-solid fa-calendar-days text-rose-500"></i> COPA MUNDIAL 2026
           </h2>
           <div class="flex gap-2">
-            <select id="matchPhaseFilter" onchange="renderMatches()" class="select select-bordered select-xs bg-slate-950 border-slate-800">
+            <select id="matchPhaseFilter" onchange="renderMatches()" title="Filtrar por fase de partido" class="select select-bordered select-xs bg-slate-950 border-slate-800">
               <option value="all">Todas las fases</option>
               <option value="groups">Fase de Grupos</option>
               <option value="eliminatorias">Eliminatorias</option>
@@ -171,7 +378,7 @@
   <dialog id="participantModal" class="modal bg-slate-950/80 backdrop-blur-sm">
     <div class="modal-box bg-slate-900 border border-rose-500/30 max-w-4xl p-6 rounded-2xl shadow-2xl relative scrollbar-thin">
       <form method="dialog">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-slate-400 hover:text-white">✕</button>
+        <button type="submit" class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-slate-400 hover:text-white">✕</button>
       </form>
       
       <!-- Cabecera del Participante -->
@@ -277,15 +484,21 @@
           <div class="grid grid-cols-2 gap-3 text-xs">
             <div>
               <label class="label-text text-slate-400">Equipo Local</label>
-              <select id="admHome" class="select select-bordered select-xs w-full mt-1 bg-slate-900"></select>
+              <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded mt-1 px-1.5 h-[26px]">
+                <span id="admHomeFlag" class="shrink-0 flex items-center justify-center"></span>
+                <select id="admHome" class="select select-ghost select-xs w-full bg-slate-900 text-slate-100 pl-0 focus:outline-none -ml-1 [&>option]:bg-slate-900 [&>option]:text-slate-100"></select>
+              </div>
             </div>
             <div>
               <label class="label-text text-slate-400">Equipo Visitante</label>
-              <select id="admAway" class="select select-bordered select-xs w-full mt-1 bg-slate-900"></select>
+              <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded mt-1 px-1.5 h-[26px]">
+                <span id="admAwayFlag" class="shrink-0 flex items-center justify-center"></span>
+                <select id="admAway" class="select select-ghost select-xs w-full bg-slate-900 text-slate-100 pl-0 focus:outline-none -ml-1 [&>option]:bg-slate-900 [&>option]:text-slate-100"></select>
+              </div>
             </div>
             <div>
               <label class="label-text text-slate-400">Fase</label>
-              <select id="admPhase" class="select select-bordered select-xs w-full mt-1 bg-slate-900" onchange="onPhaseChange()">
+              <select id="admPhase" class="select select-bordered select-xs w-full mt-1 bg-slate-900 text-slate-100 [&>option]:bg-slate-900" onchange="onPhaseChange()">
                 <option value="groups">Fase de Grupos</option>
                 <option value="round_of_16">Octavos de Final</option>
                 <option value="quarter_finals">Cuartos de Final</option>
@@ -296,7 +509,7 @@
             </div>
             <div>
               <label class="label-text text-slate-400">Grupo Asociado</label>
-              <select id="admGroup" class="select select-bordered select-xs w-full mt-1 bg-slate-900">
+              <select id="admGroup" class="select select-bordered select-xs w-full mt-1 bg-slate-900 text-slate-100 [&>option]:bg-slate-900">
                 <option value="A">Grupo A</option>
                 <option value="B">Grupo B</option>
                 <option value="C">Grupo C</option>
@@ -308,22 +521,25 @@
             </div>
             <div>
               <label class="label-text text-slate-400">Marcador Local (Goles)</label>
-              <input type="number" id="admScoreHome" value="0" class="input input-bordered input-xs w-full mt-1 bg-slate-900" />
+              <input type="number" id="admScoreHome" value="0" class="input input-bordered input-xs w-full mt-1 bg-slate-900 text-slate-100" />
             </div>
             <div>
               <label class="label-text text-slate-400">Marcador Visitante (Goles)</label>
-              <input type="number" id="admScoreAway" value="0" class="input input-bordered input-xs w-full mt-1 bg-slate-900" />
+              <input type="number" id="admScoreAway" value="0" class="input input-bordered input-xs w-full mt-1 bg-slate-900 text-slate-100" />
             </div>
             <div>
               <label class="label-text text-slate-400">Método de Definición</label>
-              <select id="admDecided" class="select select-bordered select-xs w-full mt-1 bg-slate-900" onchange="onDecidedChange()">
+              <select id="admDecided" class="select select-bordered select-xs w-full mt-1 bg-slate-900 text-slate-100 [&>option]:bg-slate-900" onchange="onDecidedChange()">
                 <option value="regular">Regular / Prórroga</option>
                 <option value="penalties">Tanda de Penaltis</option>
               </select>
             </div>
             <div id="admWinnerBlock" class="hidden">
               <label class="label-text text-slate-400 text-rose-400">Ganador de Penaltis</label>
-              <select id="admWinnerPassed" class="select select-bordered select-xs w-full mt-1 bg-slate-900 border-rose-500/50"></select>
+              <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded mt-1 px-1.5 h-[26px]">
+                <span id="admWinnerPassedFlag" class="shrink-0 flex items-center justify-center"></span>
+                <select id="admWinnerPassed" class="select select-ghost select-xs w-full bg-slate-900 text-slate-100 pl-0 focus:outline-none -ml-1 [&>option]:bg-slate-900 [&>option]:text-slate-100"></select>
+              </div>
             </div>
           </div>
 
@@ -331,7 +547,10 @@
           <div class="border-t border-slate-900 pt-3 text-xs space-y-2">
             <h5 class="font-extrabold text-slate-300">⚽ Autores de Goles (Excluir tanda de penaltis)</h5>
             <div class="flex gap-2">
-              <select id="admPlayer" class="select select-bordered select-xs flex-1 bg-slate-900"></select>
+              <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded flex-1 px-1.5 h-[26px]">
+                <span id="admPlayerFlag" class="shrink-0 flex items-center justify-center"></span>
+                <select id="admPlayer" class="select select-ghost select-xs w-full bg-slate-900 text-slate-100 pl-0 focus:outline-none -ml-1 [&>option]:bg-slate-900 [&>option]:text-slate-100"></select>
+              </div>
               <button onclick="addScorerToMatch()" class="btn btn-xs btn-rose font-bold">Agregar Goleador</button>
             </div>
             <div id="admMatchScorersList" class="flex flex-wrap gap-1.5 p-2 bg-slate-900 rounded-lg min-h-10">
@@ -374,19 +593,31 @@
               <div class="grid grid-cols-2 gap-2.5">
                 <div>
                   <label class="label-text text-slate-400 text-[10px]">🥇 Campeón</label>
-                  <select id="admPod1" class="select select-bordered select-xs w-full bg-slate-900"></select>
+                  <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded mt-1 px-1.5 h-[26px]">
+                    <span id="admPod1Flag" class="shrink-0 flex items-center justify-center"></span>
+                    <select id="admPod1" class="select select-ghost select-xs w-full bg-slate-900 text-slate-100 pl-0 focus:outline-none -ml-1 [&>option]:bg-slate-900 [&>option]:text-slate-100"></select>
+                  </div>
                 </div>
                 <div>
                   <label class="label-text text-slate-400 text-[10px]">🥈 Subcampeón</label>
-                  <select id="admPod2" class="select select-bordered select-xs w-full bg-slate-900"></select>
+                  <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded mt-1 px-1.5 h-[26px]">
+                    <span id="admPod2Flag" class="shrink-0 flex items-center justify-center"></span>
+                    <select id="admPod2" class="select select-ghost select-xs w-full bg-slate-900 text-slate-100 pl-0 focus:outline-none -ml-1 [&>option]:bg-slate-900 [&>option]:text-slate-100"></select>
+                  </div>
                 </div>
                 <div>
                   <label class="label-text text-slate-400 text-[10px]">🥉 Tercero</label>
-                  <select id="admPod3" class="select select-bordered select-xs w-full bg-slate-900"></select>
+                  <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded mt-1 px-1.5 h-[26px]">
+                    <span id="admPod3Flag" class="shrink-0 flex items-center justify-center"></span>
+                    <select id="admPod3" class="select select-ghost select-xs w-full bg-slate-900 text-slate-100 pl-0 focus:outline-none -ml-1 [&>option]:bg-slate-900 [&>option]:text-slate-100"></select>
+                  </div>
                 </div>
                 <div>
                   <label class="label-text text-slate-400 text-[10px]">💀 Cuarto</label>
-                  <select id="admPod4" class="select select-bordered select-xs w-full bg-slate-900"></select>
+                  <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-800 rounded mt-1 px-1.5 h-[26px]">
+                    <span id="admPod4Flag" class="shrink-0 flex items-center justify-center"></span>
+                    <select id="admPod4" class="select select-ghost select-xs w-full bg-slate-900 text-slate-100 pl-0 focus:outline-none -ml-1 [&>option]:bg-slate-900 [&>option]:text-slate-100"></select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -419,7 +650,7 @@
   </dialog>
 
   <!-- Footer -->
-  <footer class="footer footer-center p-6 bg-slate-950 border-t border-slate-900 text-slate-400 text-xs mt-12 gap-2">
+  <footer class="footer footer-center p-6 bg-slate-950 border-t border-slate-900 text-slate-400 text-xs mt-6 gap-2">
     <div>
       <p class="font-black text-rose-500 leading-wider">PORRA MUNDIAL 2026</p>
       <p class="text-[10px] text-slate-500">Diseñado para actualización diaria autónoma de resultados y goleadores oficiales.</p>
@@ -427,6 +658,7 @@
     <div class="flex gap-4 mt-2">
       <a onclick="scrollToSection('leaderboard')" class="link link-hover">Ranking</a>
       <a onclick="scrollToSection('matches')" class="link link-hover">Partidos</a>
+      <a onclick="scrollToSection('rules')" class="link link-hover">Reglas</a>
       <span class="text-slate-700">|</span>
       <a onclick="openAdmin()" class="link link-hover text-rose-400 flex items-center gap-1">
         <i class="fa-solid fa-gears text-[10px]"></i> Editor Admin

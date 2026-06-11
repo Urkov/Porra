@@ -13,5 +13,607 @@
     "P3": "",
     "P4": ""
   },
-  "actual_pichichi": []
+  "actual_pichichi": [],
+  "official_standings": {
+    "A": [
+      {
+        "team": "Corea del Sur",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "México",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "República Checa",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Sudáfrica",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "B": [
+      {
+        "team": "Bosnia y Herzegovina",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Canadá",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Catar",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Suiza",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "C": [
+      {
+        "team": "Brasil",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Escocia",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Haití",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Marruecos",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "D": [
+      {
+        "team": "Australia",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Estados Unidos",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Paraguay",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Turquía",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "E": [
+      {
+        "team": "Alemania",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Costa de Marfil",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Curazao",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Ecuador",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "F": [
+      {
+        "team": "Japón",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Países Bajos",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Suecia",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Túnez",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "G": [
+      {
+        "team": "Bélgica",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Egipto",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Irán",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Nueva Zelanda",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "H": [
+      {
+        "team": "Arabia Saudita",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Cabo Verde",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "España",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Uruguay",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "I": [
+      {
+        "team": "Francia",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Irak",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Noruega",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Senegal",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "J": [
+      {
+        "team": "Argelia",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Argentina",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Austria",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Jordania",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "K": [
+      {
+        "team": "Colombia",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Portugal",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "RD Congo",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Uzbekistán",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ],
+    "L": [
+      {
+        "team": "Croacia",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 1
+      },
+      {
+        "team": "Ghana",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 2
+      },
+      {
+        "team": "Inglaterra",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 3
+      },
+      {
+        "team": "Panamá",
+        "played": 0,
+        "won": 0,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 0,
+        "ga": 0,
+        "gd": 0,
+        "points": 0,
+        "position": 4
+      }
+    ]
+  }
 }

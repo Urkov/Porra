@@ -17,10 +17,12 @@
 
 const fs = require('fs');
 const path = require('path');
+const { computeOfficialGroupStandings } = require('./groupStandings');
 
 // Rutas de archivos
 const MATCHES_PATH = path.join(__dirname, '../data/matches.json');
 const SCORERS_PATH = path.join(__dirname, '../data/scorers.json');
+const ACTUAL_RESULTS_PATH = path.join(__dirname, '../data/actual_results.json');
 const TEAMS_PATH = path.join(__dirname, '../data/teams.json');
 const PLAYERS_PATH = path.join(__dirname, '../data/players.json');
 
@@ -89,12 +91,20 @@ async function scrapeWorldCupData() {
     scorers.max_goals = maxGoals;
     scorers.players = newScorersCount;
 
+    let actualResults = {};
+    if (fs.existsSync(ACTUAL_RESULTS_PATH)) {
+      actualResults = JSON.parse(fs.readFileSync(ACTUAL_RESULTS_PATH, 'utf8'));
+    }
+    actualResults.official_standings = computeOfficialGroupStandings(matches);
+
     // Escribir los datos sincronizados
     fs.writeFileSync(MATCHES_PATH, JSON.stringify(matches, null, 2), 'utf8');
     fs.writeFileSync(SCORERS_PATH, JSON.stringify(scorers, null, 2), 'utf8');
+    fs.writeFileSync(ACTUAL_RESULTS_PATH, JSON.stringify(actualResults, null, 2), 'utf8');
 
     console.log('¡Sincronización de Datos del Scraper Finalizada Exitosamente!');
     console.log(`Pichichi número de goles: ${maxGoals}`);
+    console.log(`Clasificaciones oficiales recalculadas para ${Object.keys(actualResults.official_standings).length} grupos.`);
   } catch (error) {
     console.error('Error durante la ejecución del scraping diario:', error);
     process.exit(1);

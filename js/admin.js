@@ -381,6 +381,7 @@ function applyPrevisualization() {
   // Recalcular puntuaciones virtuales de los participantes
   computeScores();
   renderLeaderboard();
+  renderOfficialGroups();
   renderMatches();
   renderScorers();
 

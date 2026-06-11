@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-node: '20'
+          node-version: '20'
 
       - name: Install dependencies
         run: |
@@ -39,8 +39,8 @@ jobs:
           
           # Verificar si hay cambios en los archivos de datos
           if [[ -n "$(git status --porcelain)" ]]; then
-            git add data/matches.json data/scorers.json
-            git commit -m "Automatizado: Resultados y Goleadores del Mundial 2026 actualizados por Scraper"
+            git add data/matches.json data/scorers.json data/actual_results.json
+            git commit -m "Automatizado: Resultados, goleadores y clasificaciones del Mundial 2026 actualizados por Scraper"
             git push origin main
             echo "Datos actualizados, cambios empujados al repositorio principal."
           else

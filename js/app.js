@@ -258,6 +258,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadDatabase();
   computeScores();
   renderLeaderboard();
+  renderOfficialGroups();
   renderMatches();
   renderScorers();
   renderRulesCatalog();
@@ -656,6 +657,137 @@ function translatePhase(phase, group) {
   if (ph.includes("3rd") || ph.includes("third") || ph.includes("tercer")) return "Tercer Puesto";
   if (ph.includes("final")) return "Gran Final";
   return phase;
+}
+
+function buildOfficialGroupsFromMatches(matchList) {
+  const groups = {};
+  matchList
+    .filter(m => m.phase === 'groups' && m.group)
+    .forEach(m => {
+      if (!groups[m.group]) groups[m.group] = new Set();
+      groups[m.group].add(m.team_home);
+      groups[m.group].add(m.team_away);
+    });
+  return Object.keys(groups)
+    .sort()
+    .map(grp => ({ group: grp, teams: [...groups[grp]].sort() }));
+}
+
+function computeOfficialGroupStandings(matchList) {
+  const standings = {};
+  const officialGroups = buildOfficialGroupsFromMatches(matchList);
+
+  officialGroups.forEach(({ group, teams }) => {
+    const stats = {};
+    teams.forEach(team => {
+      stats[team] = {
+        team,
+        played: 0,
+        won: 0,
+        drawn: 0,
+        lost: 0,
+        gf: 0,
+        ga: 0,
+        gd: 0,
+        points: 0
+      };
+    });
+
+    matchList
+      .filter(m => m.phase === 'groups' && m.group === group && m.status === 'finished')
+      .forEach(m => {
+        const home = stats[m.team_home];
+        const away = stats[m.team_away];
+        if (!home || !away) return;
+
+        const scoreHome = Number(m.score_home) || 0;
+        const scoreAway = Number(m.score_away) || 0;
+
+        home.played++;
+        away.played++;
+        home.gf += scoreHome;
+        home.ga += scoreAway;
+        away.gf += scoreAway;
+        away.ga += scoreHome;
+
+        if (scoreHome > scoreAway) {
+          home.won++;
+          away.lost++;
+          home.points += 3;
+        } else if (scoreHome < scoreAway) {
+          away.won++;
+          home.lost++;
+          away.points += 3;
+        } else {
+          home.drawn++;
+          away.drawn++;
+          home.points += 1;
+          away.points += 1;
+        }
+      });
+
+    const sorted = Object.values(stats)
+      .map(s => ({ ...s, gd: s.gf - s.ga }))
+      .sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        if (b.gd !== a.gd) return b.gd - a.gd;
+        if (b.gf !== a.gf) return b.gf - a.gf;
+        return a.team.localeCompare(b.team, 'es');
+      })
+      .map((s, index) => ({ ...s, position: index + 1 }));
+
+    standings[group] = sorted;
+  });
+
+  return standings;
+}
+
+function getStandingsRowClass(position, hasPlayed) {
+  if (!hasPlayed) return 'border-l-2 border-transparent';
+  if (position <= 2) return 'border-l-2 border-emerald-500/80 bg-emerald-950/20';
+  if (position === 3) return 'border-l-2 border-amber-500/60 bg-amber-950/10';
+  return 'border-l-2 border-transparent';
+}
+
+function renderOfficialGroups() {
+  const container = document.getElementById('officialGroupsContainer');
+  if (!container) return;
+
+  const standings = computeOfficialGroupStandings(currentMatches);
+  const groupKeys = Object.keys(standings).sort();
+  if (groupKeys.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+
+  container.innerHTML = groupKeys.map(group => {
+    const rows = standings[group];
+    const hasPlayed = rows.some(r => r.played > 0);
+
+    return `
+      <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 space-y-1.5 shadow-sm">
+        <h5 class="font-black text-emerald-400 border-b border-slate-900/60 pb-1 uppercase tracking-widest text-[10px]">Grupo ${group}</h5>
+        <div class="space-y-1">
+          ${rows.map(row => `
+            <div class="flex items-center gap-1.5 rounded-md pl-1.5 pr-1 py-1 ${getStandingsRowClass(row.position, hasPlayed)}">
+              <span class="text-[10px] font-black text-slate-500 w-3 shrink-0">${hasPlayed ? row.position : '·'}</span>
+              <span class="shrink-0">${getTeamFlag(row.team, true)}</span>
+              <span class="truncate font-semibold text-slate-200 text-[11px] flex-1" title="${row.team}">${row.team}</span>
+              <div class="text-right shrink-0">
+                <span class="font-black text-emerald-400 text-xs">${row.points}</span>
+                <span class="text-[9px] text-slate-500 ml-0.5">pts</span>
+              </div>
+            </div>
+            ${hasPlayed ? `
+              <div class="text-[9px] text-slate-500 pl-7 -mt-0.5 pb-0.5">
+                ${row.played} PJ · ${row.won}V ${row.drawn}E ${row.lost}D · ${row.gf}-${row.ga} (${row.gd >= 0 ? '+' : ''}${row.gd})
+              </div>
+            ` : ''}
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // RENDER DEL CALENDARIO DE PARTIDOS

@@ -316,11 +316,12 @@
             <tr>
               <th class="w-16 text-center">Pos</th>
               <th>Participante</th>
-              <th class="text-center">Pts Goles</th>
-              <th class="text-center">Pts Partidos</th>
-              <th class="text-center">Pts Grupos</th>
-              <th class="text-center">Pts Podio</th>
-              <th class="bg-rose-950/20 text-rose-300 text-center font-black w-28">PUNTOS</th>
+              <th class="text-center">Partidos</th>
+              <th class="text-center">Goles</th>
+              <th class="text-center"><span class="block">Clasif.</span><span class="block">Fase Grupos</span></th>
+              <th class="text-center"><span class="block">Pasar</span><span class="block">Ronda</span></th>
+              <th class="text-center">Top4</th>
+              <th class="bg-rose-950/20 text-rose-300 text-center font-black w-28"><span class="block">Puntos</span><span class="block">Total</span></th>
             </tr>
           </thead>
           <tbody id="leaderboardBody">
@@ -345,8 +346,8 @@
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div class="space-y-1">
               <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                <i class="fa-solid fa-people-group text-emerald-500"></i> Grupos Oficiales
-              </h3>
+                  <i class="fa-solid fa-people-group text-emerald-500"></i> Grupos Oficiales
+                </h3>
               <p class="text-[10px] text-slate-500 leading-relaxed">
                 Clasificación en vivo según los resultados de fase de grupos. Se recalcula automáticamente con cada actualización del scraper diario.
               </p>
@@ -355,6 +356,9 @@
               Ocultar grupos oficiales
             </button>
           </div>
+
+          
+
           <div id="officialGroupsSection" class="space-y-3">
             <div class="flex flex-wrap gap-3 text-[9px] text-slate-500 pt-0.5">
               <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-emerald-500/80"></span> Clasificados directos (1º-2º)</span>
@@ -366,7 +370,16 @@
           </div>
         </div>
 
-        <div class="space-y-3">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-emerald-500"></i> Calendario
+          </h3>
+          <button id="toggleCalendarBtn" type="button" onclick="toggleCalendar()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
+            Ocultar calendario
+          </button>
+        </div>
+
+        <div id="matchFiltersSection" class="space-y-3">
           <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-2 w-full">
             <select id="matchPhaseFilter" onchange="renderMatches()" title="Filtrar por fase de partido" class="select select-bordered select-xs bg-slate-950 border-slate-800 w-full">
               <option value="all">Todas las fases</option>

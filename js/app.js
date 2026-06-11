@@ -549,9 +549,10 @@ function renderLeaderboard() {
         ${participant.name} ${isLast ? '<span class="text-[10px] text-rose-500 block font-normal">Sótano (10% premio)</span>' : ''}
         ${isFirst ? '<span class="text-[10px] text-amber-400 block font-normal">Líder Provisional (50% premio)</span>' : ''}
       </td>
-      <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.scorers} pts</td>
       <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.matches} pts</td>
+      <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.scorers} pts</td>
       <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.groups} pts</td>
+      <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.rounds} pts</td>
       <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.podium} pts</td>
       <td class="bg-rose-950/20 text-rose-300 text-center font-black text-sm md:text-lg rounded-r-xl">${participant.score_details.total}</td>
     `;
@@ -826,6 +827,17 @@ function toggleOfficialGroups() {
 
   const hidden = section.classList.toggle('hidden');
   button.innerText = hidden ? 'Mostrar grupos oficiales' : 'Ocultar grupos oficiales';
+}
+
+function toggleCalendar() {
+  const container = document.getElementById('matchesContainer');
+  const filters = document.getElementById('matchFiltersSection');
+  const button = document.getElementById('toggleCalendarBtn');
+  if (!container || !button) return;
+
+  const hidden = container.classList.toggle('hidden');
+  if (filters) filters.classList.toggle('hidden', hidden);
+  button.innerText = hidden ? 'Mostrar calendario' : 'Ocultar calendario';
 }
 
 // RENDER DEL CALENDARIO DE PARTIDOS

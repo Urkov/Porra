@@ -76,5 +76,57 @@
       "P3": "Argentina",
       "P4": "Brasil"
     }
+  },
+  {
+    "id": 4,
+    "name": "Alex",
+    "predictions": {
+      "A": ["España", "Portugal", "Argentina"],
+      "B": ["México", "Colombia", "Bélgica"],
+      "C": ["Suiza", "Japón", "Noruega"],
+      "D": ["Austria", "República Checa", "Canadá"],
+      "E": ["Irán", "Costa de Marfil", "Arabia Saudita"],
+      "F": ["Uzbekistán", "Panamá", "Curazao"]
+    },
+    "scorers": {
+      "J1": "Mikel Oyarzabal",
+      "J2": "Cristiano Ronaldo",
+      "J3": "Ousmane Dembélé",
+      "J4": "Raphinha",
+      "J5": "Julian Alvarez",
+      "J6": "Alexander Sørloth"
+    },
+    "podium": {
+      "P1": "España",
+      "P2": "Portugal",
+      "P3": "Francia",
+      "P4": "Argentina"
+    }
+  },
+  {
+    "id": 5,
+    "name": "Urko",
+    "predictions": {
+      "A": ["España", "Portugal", "Inglaterra"],
+      "B": ["Marruecos", "Colombia", "Bélgica"],
+      "C": ["Ecuador", "Turquía", "Noruega"],
+      "D": ["Sudáfrica", "República Checa", "Paraguay"],
+      "E": ["Irán", "Costa de Marfil", "Australia"],
+      "F": ["Uzbekistán", "Catar", "Nueva Zelanda"]
+    },
+    "scorers": {
+      "J1": "Mikel Oyarzabal",
+      "J2": "Cristiano Ronaldo",
+      "J3": "Ousmane Dembélé",
+      "J4": "Raphinha",
+      "J5": "Julian Alvarez",
+      "J6": "Viktor Gyökeres"
+    },
+    "podium": {
+      "P1": "España",
+      "P2": "Portugal",
+      "P3": "Inglaterra",
+      "P4": "Brasil"
+    }
   }
 ]

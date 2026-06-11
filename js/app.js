@@ -6,6 +6,7 @@ let participants = [];
 let matches = [];
 let scorers = {};
 let actualResults = {};
+let areAllSelectionsVisible = false;
 
 // Mapeo detallado de selecciones de fútbol a sus respectivas banderas codes
 const TEAM_CODES = {
@@ -193,6 +194,18 @@ function getPlayerFlagEmoji(playerName) {
   const team = PLAYER_TEAMS[playerName];
   if (!team) return "";
   return getTeamFlagEmoji(team);
+}
+
+function getGroupBadgeClasses(groupName) {
+  switch (groupName) {
+    case 'A': return 'bg-amber-950/70 border-amber-400 text-amber-200';
+    case 'B': return 'bg-sky-950/70 border-sky-400 text-sky-200';
+    case 'C': return 'bg-emerald-950/70 border-emerald-400 text-emerald-200';
+    case 'D': return 'bg-violet-950/70 border-violet-400 text-violet-200';
+    case 'E': return 'bg-fuchsia-950/70 border-fuchsia-400 text-fuchsia-200';
+    case 'F': return 'bg-lime-950/70 border-lime-400 text-lime-200';
+    default: return 'bg-slate-950/70 border-slate-600 text-slate-200';
+  }
 }
 
 // Exponer globalmente para acceso desde admin.js u otros scripts
@@ -559,8 +572,14 @@ function renderLeaderboard() {
         <span class="badge ${badgeClass} badge-sm md:badge-md p-2">${icon}</span>
       </td>
       <td class="font-bold text-white text-sm md:text-base">
-        ${participant.name} ${isLast ? '<span class="text-[10px] text-rose-500 block font-normal">Sótano (10% premio)</span>' : ''}
-        ${isFirst ? '<span class="text-[10px] text-amber-400 block font-normal">Líder Provisional (50% premio)</span>' : ''}
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <div>${participant.name}</div>
+            ${isLast ? '<span class="text-[10px] text-rose-500 block font-normal">Sótano (10% premio)</span>' : ''}
+            ${isFirst ? '<span class="text-[10px] text-amber-400 block font-normal">Líder Provisional (50% premio)</span>' : ''}
+          </div>
+          <button onclick="toggleParticipantSelections(event, ${participant.id})" class="btn btn-ghost btn-xs text-slate-300">Selecciones</button>
+        </div>
       </td>
       <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.matches} pts</td>
       <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.scorers} pts</td>
@@ -570,7 +589,63 @@ function renderLeaderboard() {
       <td class="bg-rose-950/20 text-rose-300 text-center font-black text-sm md:text-lg rounded-r-xl">${participant.score_details.total}</td>
     `;
     tbody.appendChild(tr);
+
+    const detailRow = document.createElement('tr');
+    detailRow.id = `participantSelections-${participant.id}`;
+    detailRow.className = 'hidden bg-slate-950/70 border-b border-slate-900/60';
+    detailRow.innerHTML = `
+      <td colspan="8" class="px-4 py-4 text-[10px] text-slate-300">
+        <div class="space-y-1">
+          <div class="text-slate-400 uppercase tracking-wide text-[9px] font-semibold mb-2">Selecciones + Goleadores</div>
+          <div class="grid gap-1 sm:grid-cols-8">
+            ${Object.entries(participant.predictions).map(([grpName, teamList]) => `
+              <div class="col-span-1 rounded-2xl border-l-4 p-2 ${getGroupBadgeClasses(grpName)} shadow-inner shadow-slate-950/20 min-w-0">
+                <div class="text-[9px] uppercase tracking-[0.24em] font-bold mb-1 text-slate-200">${grpName}</div>
+                <div class="text-slate-100 text-[12px] leading-4 space-y-0.5">
+                  ${teamList.map(team => `<div class="flex items-center gap-1 truncate"><span class="shrink-0">${getTeamFlag(team)}</span><span class="truncate">${team}</span></div>`).join('')}
+                </div>
+              </div>
+            `).join('')}
+            <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-900/80 p-1.5 shadow-inner shadow-slate-950/20 min-w-0">
+              <div class="grid grid-cols-2 gap-1 text-[10px] text-slate-100">
+                ${Object.entries(participant.scorers).map(([jGrp, player]) => `
+                  <div class="inline-flex items-center gap-1 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 truncate">
+                    <span class="shrink-0">${getPlayerFlag(player)}</span>
+                    <span class="truncate">${player}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(detailRow);
   });
+  updateAllSelectionsButton();
+}
+
+function isAllSelectionRowsVisible() {
+  const detailRows = document.querySelectorAll('[id^="participantSelections-"]');
+  if (detailRows.length === 0) return false;
+  return Array.from(detailRows).every(row => !row.classList.contains('hidden') && row.style.display !== 'none');
+}
+
+function updateAllSelectionsButton() {
+  const btn = document.getElementById('toggleAllSelectionsBtn');
+  if (!btn) return;
+  btn.innerText = isAllSelectionRowsVisible() ? 'Ocultar selecciones de todos' : 'Ver selecciones de todos';
+}
+
+function toggleAllSelections() {
+  const detailRows = document.querySelectorAll('[id^="participantSelections-"]');
+  const show = !isAllSelectionRowsVisible();
+  detailRows.forEach(row => {
+    if (show) row.classList.remove('hidden');
+    else row.classList.add('hidden');
+  });
+  areAllSelectionsVisible = show;
+  updateAllSelectionsButton();
 }
 
 // Búsqueda de participantes
@@ -582,6 +657,15 @@ function filterLeaderboard() {
     const text = row.innerText.toLowerCase();
     row.style.display = text.includes(query) ? '' : 'none';
   });
+}
+
+function toggleParticipantSelections(event, participantId) {
+  event.stopPropagation();
+  const detailRow = document.getElementById(`participantSelections-${participantId}`);
+  if (!detailRow) return;
+  detailRow.classList.toggle('hidden');
+  areAllSelectionsVisible = isAllSelectionRowsVisible();
+  updateAllSelectionsButton();
 }
 
 // DETALLES FLOTANTES (MODAL) TIPO PLANILLA ORIGINAL

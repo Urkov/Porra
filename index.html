@@ -302,10 +302,14 @@
           <p class="text-xs text-slate-400">Haz clic en cualquier participante para abrir su hoja detallada de la porra</p>
         </div>
         
-        <!-- Buscador -->
-        <div class="relative w-full md:w-80">
-          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-          <input type="text" id="leaderboardSearch" oninput="filterLeaderboard()" placeholder="Buscar participante..." class="input input-bordered input-sm w-full pl-9 bg-slate-950 border-slate-800 text-slate-100" />
+        <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto items-start md:items-end">
+          <button id="toggleAllSelectionsBtn" type="button" onclick="toggleAllSelections()" class="btn btn-ghost btn-sm text-slate-300 border border-slate-800 hover:bg-slate-900">
+            Ver selecciones de todos
+          </button>
+          <div class="relative w-full md:w-80">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input type="text" id="leaderboardSearch" oninput="filterLeaderboard()" placeholder="Buscar participante..." class="input input-bordered input-sm w-full pl-9 bg-slate-950 border-slate-800 text-slate-100" />
+          </div>
         </div>
       </div>
 

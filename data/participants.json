@@ -24,5 +24,31 @@
       "P3": "Brasil",
       "P4": "España"
     }
+  },
+  {
+    "id": 2,
+    "name": "Kepa",
+    "predictions": {
+      "A": ["España", "Francia", "Portugal"],
+      "B": ["Croacia", "Marruecos", "Colombia"],
+      "C": ["Japón", "Ecuador", "Noruega"],
+      "D": ["Paraguay", "Ghana", "Argelia"],
+      "E": ["Irán", "Arabia Saudita", "Costa de Marfil"],
+      "F": ["Catar", "Irak", "Uzbekistán"]
+    },
+    "scorers": {
+      "J1": "Kylian Mbappé",
+      "J2": "Lautaro Martínez",
+      "J3": "Luis Díaz",
+      "J4": "Bukayo Saka",
+      "J5": "Ferran Torres",
+      "J6": "Antoine Semenyo"
+    },
+    "podium": {
+      "P1": "Francia",
+      "P2": "Portugal",
+      "P3": "España",
+      "P4": "Países Bajos"
+    }
   }
 ]

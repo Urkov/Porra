@@ -198,6 +198,17 @@ function renderTempScorers() {
   });
 }
 
+function getTeamPlaceholder(teamName) {
+  if (!teamName) return null;
+  for (const [group, list] of Object.entries(currentActualResults.actual_positions || {})) {
+    const idx = list.indexOf(teamName);
+    if (idx !== -1) {
+      return `${idx + 1}º Grupo ${group}`;
+    }
+  }
+  return null;
+}
+
 // Guarda un partido en el estado volante de previsualización
 function saveMatchAdmin() {
   const home = document.getElementById('admHome').value;
@@ -209,26 +220,75 @@ function saveMatchAdmin() {
   const decided = document.getElementById('admDecided').value;
   const winner = decided === 'penalties' ? document.getElementById('admWinnerPassed').value : null;
 
-  const newMatch = {
-    id: `custom_${Date.now()}`,
-    phase: phase,
-    group: grp,
-    team_home: home,
-    team_away: away,
-    score_home: sh,
-    score_away: sa,
-    status: "finished",
-    decided_by: decided,
-    winner_passed: winner,
-    scorers: [...tempMatchScorers]
-  };
+  // Intentar buscar un partido existente con estos dos equipos o sus placeholders correspondientes
+  let existingMatch = currentMatches.find(m => 
+    m.phase === phase && 
+    ((m.team_home === home && m.team_away === away) || (m.team_home === away && m.team_away === home))
+  );
 
-  currentMatches.push(newMatch);
-  
+  // Si no se encuentra coincidencia exacta de nombres, intentar resolver placeholders
+  if (!existingMatch) {
+    const homePlaceholder = getTeamPlaceholder(home);
+    const awayPlaceholder = getTeamPlaceholder(away);
+    
+    if (homePlaceholder || awayPlaceholder) {
+      existingMatch = currentMatches.find(m => {
+        if (m.phase !== phase) return false;
+        
+        // Comprobar si el local del partido coincide con el nombre real o con su placeholder (ej: 2º Grupo A)
+        const matchesHome = m.team_home === home || 
+          (homePlaceholder && (m.team_home === homePlaceholder || m.team_home.startsWith(homePlaceholder)));
+          
+        // Comprobar si el visitante del partido coincide con el nombre real o con su placeholder
+        const matchesAway = m.team_away === away || 
+          (awayPlaceholder && (m.team_away === awayPlaceholder || m.team_away.startsWith(awayPlaceholder)));
+          
+        if (matchesHome && matchesAway) return true;
+        
+        // Probar la combinación cruzada (visitante en local y viceversa)
+        const matchesHomeCross = m.team_home === away || 
+          (awayPlaceholder && (m.team_home === awayPlaceholder || m.team_home.startsWith(awayPlaceholder)));
+        const matchesAwayCross = m.team_away === home || 
+          (homePlaceholder && (m.team_away === homePlaceholder || m.team_away.startsWith(homePlaceholder)));
+          
+        return matchesHomeCross && matchesAwayCross;
+      });
+    }
+  }
+
+  if (existingMatch) {
+    // Actualizar el partido existente in-place
+    existingMatch.team_home = home;
+    existingMatch.team_away = away;
+    existingMatch.score_home = sh;
+    existingMatch.score_away = sa;
+    existingMatch.status = "finished";
+    existingMatch.decided_by = decided;
+    existingMatch.winner_passed = winner;
+    existingMatch.scorers = [...tempMatchScorers];
+    alert(`Partido ${home} vs ${away} actualizado con éxito en la previsualización.`);
+  } else {
+    // Si no coincide con ningún partido del fixture, se registra uno nuevo
+    const newMatch = {
+      id: `custom_${Date.now()}`,
+      phase: phase,
+      group: grp,
+      team_home: home,
+      team_away: away,
+      score_home: sh,
+      score_away: sa,
+      status: "finished",
+      decided_by: decided,
+      winner_passed: winner,
+      scorers: [...tempMatchScorers]
+    };
+    currentMatches.push(newMatch);
+    alert(`Partido ${home} vs ${away} registrado como nuevo en la previsualización.`);
+  }
+
   // Limpiar campos
   tempMatchScorers = [];
   renderTempScorers();
-  alert(`Partido ${home} vs ${away} guardado en el buffer temporal.`);
 }
 
 // Administrar clasificaciones reales de la fase de grupos

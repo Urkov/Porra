@@ -111,10 +111,31 @@ const TEAM_EMOJIS = {
   "Haití": "🇭🇹"
 };
 
+const WEEKDAYS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+function getWeekday(dateStr) {
+  if (!dateStr) return "";
+  try {
+    const date = new Date(dateStr + "T00:00:00");
+    return WEEKDAYS[date.getDay()] || "";
+  } catch (e) {
+    return "";
+  }
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const parts = dateStr.split("-");
+  if (parts.length !== 3) return dateStr;
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
 function getTeamFlag(teamName, isLarge = false) {
   if (!teamName) return "";
   const code = TEAM_CODES[teamName];
-  if (!code) return "";
+  if (!code) {
+    const iconClass = isLarge ? "text-2xl text-slate-500 mr-2" : "text-sm text-slate-600 mr-1.5";
+    return `<i class="fa-solid fa-shield-halved ${iconClass} align-middle"></i>`;
+  }
   const imgClass = isLarge 
     ? "inline-block w-9 h-6 rounded border border-slate-800 shadow-md align-middle" 
     : "inline-block w-5 h-3.5 rounded-sm border border-slate-900/60 shadow-sm align-middle mr-1.5";
@@ -622,6 +643,21 @@ function showParticipantDetail(id) {
   document.getElementById('participantModal').showModal();
 }
 
+function translatePhase(phase, group) {
+  if (!phase) return "";
+  const ph = phase.toLowerCase().replace(/[-_]/g, " ");
+  if (ph.includes("group")) {
+    return group ? `Grupo ${group}` : "Fase de Grupos";
+  }
+  if (ph.includes("32")) return "Dieciseisavos de Final";
+  if (ph.includes("16") || ph.includes("round of 16")) return "Octavos de Final";
+  if (ph.includes("quarter") || ph.includes("cuartos")) return "Cuartos de Final";
+  if (ph.includes("semi") || ph.includes("semifinales")) return "Semifinales";
+  if (ph.includes("3rd") || ph.includes("third") || ph.includes("tercer")) return "Tercer Puesto";
+  if (ph.includes("final")) return "Gran Final";
+  return phase;
+}
+
 // RENDER DEL CALENDARIO DE PARTIDOS
 function renderMatches() {
   const container = document.getElementById('matchesContainer');
@@ -649,17 +685,16 @@ function renderMatches() {
 
   filtered.forEach(m => {
     const isFinished = m.status === 'finished';
-    const isGroupMatch = m.phase === 'groups';
 
     const card = document.createElement('div');
     card.className = `card bg-slate-950 border ${isFinished ? 'border-slate-850' : 'border-rose-500/20'} p-4 rounded-xl flex flex-col justify-between shadow-lg space-y-3`;
 
-    let scoreSection = `<span class="badge badge-sm bg-slate-900 text-slate-400 font-bold">Proximamente</span>`;
+    let scoreSection = `<span class="badge badge-sm bg-slate-900 border-slate-800 text-slate-400 font-bold px-2 py-0.5">VS</span>`;
     if (isFinished) {
       if (m.decided_by === 'penalties') {
         scoreSection = `
           <div class="flex flex-col items-center gap-1">
-            <span class="text-xs text-rose-400 font-bold">Empate (Ganó Pen. ${m.winner_passed})</span>
+            <span class="text-[9px] text-rose-400 font-bold uppercase tracking-wider">Ganó Pen. ${m.winner_passed}</span>
             <span class="text-xl font-black text-rose-500">${m.score_home} - ${m.score_away}</span>
           </div>
         `;
@@ -670,39 +705,53 @@ function renderMatches() {
       }
     }
 
+    let statusText = 'Próximamente';
+    let statusClass = 'text-slate-400';
+    if (m.status === 'finished') {
+      statusText = 'Finalizado';
+      statusClass = 'text-slate-500';
+    } else if (m.status === 'live') {
+      statusText = 'En Vivo';
+      statusClass = 'text-emerald-400 animate-pulse font-bold';
+    }
+
     card.innerHTML = `
       <div class="flex justify-between text-[10px] text-slate-400 border-b border-slate-900 pb-1.5 uppercase font-bold tracking-wider">
-        <span>${isGroupMatch ? `Grupo ${m.group}` : `${m.phase}`}</span>
-        <span class="${isFinished ? 'text-slate-500' : 'text-emerald-400 animate-pulse'}">${isFinished ? 'Finalizado' : 'En Vivo'}</span>
+        <span>${translatePhase(m.phase, m.group)}</span>
+        <span class="${statusClass}">${statusText}</span>
       </div>
       
-      <div class="grid grid-cols-3 items-center text-center">
+      <div class="grid grid-cols-3 items-center text-center py-1">
         <!-- Home -->
         <div class="flex flex-col items-center">
           <span class="text-2xl mb-1">${getTeamFlag(m.team_home)}</span>
-          <span class="font-extrabold text-sm text-slate-100">${m.team_home}</span>
+          <span class="font-extrabold text-xs text-slate-100 text-center leading-tight min-h-8 flex items-center justify-center">${m.team_home}</span>
         </div>
         
         <!-- Score -->
-        <div class="flex justify-center">
+        <div class="flex justify-center items-center">
           ${scoreSection}
         </div>
         
         <!-- Away -->
         <div class="flex flex-col items-center">
           <span class="text-2xl mb-1">${getTeamFlag(m.team_away)}</span>
-          <span class="font-extrabold text-sm text-slate-100">${m.team_away}</span>
+          <span class="font-extrabold text-xs text-slate-100 text-center leading-tight min-h-8 flex items-center justify-center">${m.team_away}</span>
         </div>
       </div>
 
-      ${isFinished && m.scorers && m.scorers.length > 0 ? `
-        <div class="border-t border-slate-900/60 pt-2 text-[10px] text-slate-400 space-y-0.5">
-          <div class="flex items-center gap-1.5">
-            <span>⚽ Goles:</span>
-            <span class="text-slate-300 font-medium">${m.scorers.map(s => s.split(':')[1]).join(', ')}</span>
-          </div>
+      <div class="border-t border-slate-900/60 pt-2 text-[10px] text-slate-400 flex flex-col gap-1">
+        <div class="flex justify-between items-center text-slate-450 gap-2">
+          <span class="shrink-0"><i class="fa-solid fa-calendar-day mr-1.5 text-rose-500/80"></i>${getWeekday(m.date)}, ${formatDate(m.date)} - ${m.time}</span>
+          <span class="truncate max-w-[130px] sm:max-w-[180px]" title="${m.venue || ''}"><i class="fa-solid fa-location-dot mr-1.5 text-rose-500/80"></i>${m.venue || 'Por definir'}</span>
         </div>
-      ` : ''}
+        ${isFinished && m.scorers && m.scorers.length > 0 ? `
+          <div class="flex items-center gap-1.5 border-t border-slate-900/40 pt-1.5 mt-0.5">
+            <span class="font-bold">⚽ Goles:</span>
+            <span class="text-slate-350 font-medium">${m.scorers.map(s => s.split(':')[1]).join(', ')}</span>
+          </div>
+        ` : ''}
+      </div>
     `;
 
     container.appendChild(card);

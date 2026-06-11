@@ -13,23 +13,26 @@
     "P3": "",
     "P4": ""
   },
-  "actual_pichichi": [],
+  "actual_pichichi": [
+    "Julián Quiñones",
+    "Raúl Jiménez"
+  ],
   "official_standings": {
     "A": [
       {
-        "team": "Corea del Sur",
-        "played": 0,
-        "won": 0,
+        "team": "México",
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "gf": 0,
+        "gf": 2,
         "ga": 0,
-        "gd": 0,
-        "points": 0,
+        "gd": 2,
+        "points": 3,
         "position": 1
       },
       {
-        "team": "México",
+        "team": "Corea del Sur",
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -54,13 +57,13 @@
       },
       {
         "team": "Sudáfrica",
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "ga": 2,
+        "gd": -2,
         "points": 0,
         "position": 4
       }
@@ -615,5 +618,6 @@
         "position": 4
       }
     ]
-  }
+  },
+  "lastUpdate": "2026-06-11T21:22:50.117Z"
 }

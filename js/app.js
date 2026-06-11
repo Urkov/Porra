@@ -668,6 +668,133 @@ function toggleParticipantSelections(event, participantId) {
   updateAllSelectionsButton();
 }
 
+function addTeamPoint(teamPoints, teamName, category, points) {
+  if (!teamName || !teamPoints[teamName] || !points) return;
+  teamPoints[teamName][category] += points;
+  teamPoints[teamName].total += points;
+}
+
+function computeParticipantTeamPoints(participant) {
+  const teamPoints = {};
+  const chosenTeams = new Set();
+
+  Object.values(participant.predictions).forEach(teamList => {
+    teamList.forEach(teamName => {
+      chosenTeams.add(teamName);
+      if (!teamPoints[teamName]) {
+        teamPoints[teamName] = {
+          matches: 0,
+          groups: 0,
+          exact: 0,
+          rounds: 0,
+          total: 0
+        };
+      }
+    });
+  });
+
+  const roundsPassedByTeamsByPhase = {};
+
+  currentMatches.forEach(match => {
+    if (match.status !== 'finished') return;
+
+    const isHomeChosen = chosenTeams.has(match.team_home);
+    const isAwayChosen = chosenTeams.has(match.team_away);
+    if (!isHomeChosen && !isAwayChosen) return;
+
+    const isDraw = match.decided_by === 'penalties' || match.score_home === match.score_away;
+    const isWinHome = !isDraw && (match.score_home > match.score_away);
+    const isWinAway = !isDraw && (match.score_away > match.score_home);
+
+    if (isHomeChosen) {
+      const gp = getTeamGroup(match.team_home);
+      let pts = 0;
+      if (isDraw) {
+        pts = rules.points.draw_base;
+        if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.draw;
+        if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.draw;
+      } else if (isWinHome) {
+        pts = rules.points.win_base;
+        if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.win;
+        if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.win;
+      }
+      addTeamPoint(teamPoints, match.team_home, 'matches', pts);
+    }
+
+    if (isAwayChosen) {
+      const gp = getTeamGroup(match.team_away);
+      let pts = 0;
+      if (isDraw) {
+        pts = rules.points.draw_base;
+        if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.draw;
+        if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.draw;
+      } else if (isWinAway) {
+        pts = rules.points.win_base;
+        if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.win;
+        if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.win;
+      }
+      addTeamPoint(teamPoints, match.team_away, 'matches', pts);
+    }
+
+    if (match.phase !== 'groups') {
+      const winner = match.decided_by === 'penalties' ? match.winner_passed : (match.score_home > match.score_away ? match.team_home : match.team_away);
+      if (winner && chosenTeams.has(winner)) {
+        if (!roundsPassedByTeamsByPhase[match.phase]) {
+          roundsPassedByTeamsByPhase[match.phase] = new Set();
+        }
+
+        if (!roundsPassedByTeamsByPhase[match.phase].has(winner)) {
+          roundsPassedByTeamsByPhase[match.phase].add(winner);
+          const gp = getTeamGroup(winner);
+          let pts = rules.points.round_passed_base;
+          if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.round_passed;
+          if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.round_passed;
+          addTeamPoint(teamPoints, winner, 'rounds', pts);
+        }
+      }
+    }
+  });
+
+  Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
+    const realOrder = currentActualResults.actual_positions[grpName] || [];
+
+    predictedList.forEach((teamName, index) => {
+      const realIdx = realOrder.indexOf(teamName);
+      if (realIdx === -1) return;
+
+      const realPosNumber = realIdx + 1;
+      if (realPosNumber === 1) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["1"]);
+      else if (realPosNumber === 2) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["2"]);
+      else if (realPosNumber === 3) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["3"]);
+
+      const predIndexNumber = index + 1;
+      if (predIndexNumber === realPosNumber) {
+        if (realPosNumber === 1) addTeamPoint(teamPoints, teamName, 'exact', rules.points.prediction_match["1"]);
+        else if (realPosNumber === 2) addTeamPoint(teamPoints, teamName, 'exact', rules.points.prediction_match["2"]);
+        else if (realPosNumber === 3) addTeamPoint(teamPoints, teamName, 'exact', rules.points.prediction_match["3"]);
+      }
+    });
+  });
+
+  return teamPoints;
+}
+
+function formatPointsLabel(points) {
+  return Number.isInteger(points) ? String(points) : String(points).replace('.', ',');
+}
+
+function renderTeamPointsBadge(points) {
+  const value = points && points.total ? points.total : 0;
+  const title = points
+    ? `Partidos: ${formatPointsLabel(points.matches)} | Grupos: ${formatPointsLabel(points.groups)} | Exacta: ${formatPointsLabel(points.exact)} | Rondas: ${formatPointsLabel(points.rounds)}`
+    : '';
+  const classes = value > 0
+    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200'
+    : 'bg-slate-900 border-slate-800 text-slate-500';
+
+  return `<span class="order-2 ml-auto shrink-0 rounded-md border px-1.5 py-0.5 text-[10px] font-black ${classes}" title="${title}">${formatPointsLabel(value)} pts</span>`;
+}
+
 // DETALLES FLOTANTES (MODAL) TIPO PLANILLA ORIGINAL
 function showParticipantDetail(id) {
   const p = participants.find(item => item.id === id);
@@ -713,6 +840,7 @@ function showParticipantDetail(id) {
   // Los 6 grupos de de selecciones en la maqueta
   const groupsContainer = document.getElementById('modalGroupsContainer');
   groupsContainer.innerHTML = '';
+  const teamPoints = computeParticipantTeamPoints(p);
 
   Object.entries(p.predictions).forEach(([grpName, teamList]) => {
     const realOrder = currentActualResults.actual_positions[grpName] || [];
@@ -759,7 +887,8 @@ function showParticipantDetail(id) {
 
       htmlGroup += `
         <div class="flex flex-col gap-0.5 justify-between py-1 bg-slate-900/40 px-2 rounded border border-slate-900">
-          <div class="flex justify-between items-center">
+          <div class="flex justify-between items-center gap-2">
+            ${renderTeamPointsBadge(teamPoints[teamName])}
             <span class="${textClass}">${index + 1}.º ${getTeamFlag(teamName)} ${teamName}</span>
           </div>
           ${statusIndicator ? `<div class="text-right mt-0.5">${statusIndicator}</div>` : ''}

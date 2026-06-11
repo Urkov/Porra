@@ -1,114 +1,461 @@
 /**
- * SCRAPER DE RESULTADOS DEL MUNDIAL 2026 E INTEGRACIÓN DE GOLEADORES
- * 
- * Este script corre diariamente a las 8:00 AM mediante GitHub Actions.
- * Para efectos de demostración y confiabilidad a lo largo del tiempo, utiliza un parser resiliente:
- * intenta extraer información de una API deportiva gratuita (por ejemplo, FD.ORG o canónica),
- * y de forma complementaria (fallback de scraping) con un feeder estructurado de contingencia.
- * 
- * El scraper garantiza:
- * 1. La obtención de marcadores (goles local y visitante).
- * 2. Identificar si el partido se decidió por tanda de penaltis ("decided_by": "penalties")
- *    e identificar el equipo que avanzó de ronda ("winner_passed").
- * 3. Identificar los autores de los goles marcados durante el juego reglamentario o prórroga,
- *    descartando estrictamente los goles anotados en la tanda de penaltis.
- * 4. Actualizar data/matches.json, data/scorers.json de forma consistente.
+ * Daily World Cup 2026 scraper for GitHub Actions.
+ *
+ * Source:
+ * - Season page: https://www.thesportsdb.com/season/4429-fifa-world-cup/2026
+ * - Event page/API: https://www.thesportsdb.com/event/<id>
+ *
+ * It updates:
+ * - data/matches.json
+ * - data/scorers.json
+ * - data/actual_results.json
  */
 
 const fs = require('fs');
 const path = require('path');
 const { computeOfficialGroupStandings } = require('./groupStandings');
 
-// Rutas de archivos
 const MATCHES_PATH = path.join(__dirname, '../data/matches.json');
 const SCORERS_PATH = path.join(__dirname, '../data/scorers.json');
 const ACTUAL_RESULTS_PATH = path.join(__dirname, '../data/actual_results.json');
 const TEAMS_PATH = path.join(__dirname, '../data/teams.json');
-const PLAYERS_PATH = path.join(__dirname, '../data/players.json');
 
-// Cargar catálogos locales para validar nombres y grupos de procedencia
-const teamsData = JSON.parse(fs.readFileSync(TEAMS_PATH, 'utf8'));
-const playersData = JSON.parse(fs.readFileSync(PLAYERS_PATH, 'utf8'));
+const SEASON_URL = 'https://www.thesportsdb.com/season/4429-fifa-world-cup/2026';
+const API_KEY = process.env.TSDB_API_KEY || '123';
+const API_BASE = `https://www.thesportsdb.com/api/v1/json/${API_KEY}`;
+const REQUEST_DELAY_MS = Number(process.env.TSDB_REQUEST_DELAY_MS || 1000);
 
-// Retorna de qué grupo de selecciones es un equipo (A, B, C, D, E o F)
-function getTeamGroup(teamName) {
-  for (const [group, list] of Object.entries(teamsData)) {
-    if (list.includes(teamName)) return group;
+const fetchFn = global.fetch;
+
+const localTeams = JSON.parse(fs.readFileSync(TEAMS_PATH, 'utf8'));
+const localTeamNames = new Set(Object.values(localTeams).flat());
+
+const TEAM_ALIASES = {
+  algeria: 'Argelia',
+  argentina: 'Argentina',
+  australia: 'Australia',
+  austria: 'Austria',
+  belgium: 'Belgica',
+  belgica: 'Belgica',
+  bosnia: 'Bosnia y Herzegovina',
+  'bosnia and herzegovina': 'Bosnia y Herzegovina',
+  brazil: 'Brasil',
+  brasil: 'Brasil',
+  canada: 'Canada',
+  'cape verde': 'Cabo Verde',
+  colombia: 'Colombia',
+  croatia: 'Croacia',
+  curacao: 'Curazao',
+  curazao: 'Curazao',
+  'czech republic': 'Republica Checa',
+  czechia: 'Republica Checa',
+  'dr congo': 'RD Congo',
+  'democratic republic of the congo': 'RD Congo',
+  'congo dr': 'RD Congo',
+  ecuador: 'Ecuador',
+  egypt: 'Egipto',
+  england: 'Inglaterra',
+  france: 'Francia',
+  germany: 'Alemania',
+  ghana: 'Ghana',
+  haiti: 'Haiti',
+  iran: 'Iran',
+  iraq: 'Irak',
+  'ivory coast': 'Costa de Marfil',
+  'cote d ivoire': 'Costa de Marfil',
+  japan: 'Japon',
+  jordan: 'Jordania',
+  mexico: 'Mexico',
+  morocco: 'Marruecos',
+  netherlands: 'Paises Bajos',
+  'new zealand': 'Nueva Zelanda',
+  norway: 'Noruega',
+  panama: 'Panama',
+  paraguay: 'Paraguay',
+  portugal: 'Portugal',
+  qatar: 'Catar',
+  'saudi arabia': 'Arabia Saudita',
+  scotland: 'Escocia',
+  senegal: 'Senegal',
+  'south africa': 'Sudafrica',
+  'south korea': 'Corea del Sur',
+  spain: 'Espana',
+  sweden: 'Suecia',
+  switzerland: 'Suiza',
+  tunisia: 'Tunez',
+  turkey: 'Turquia',
+  turkiye: 'Turquia',
+  usa: 'Estados Unidos',
+  'united states': 'Estados Unidos',
+  'united states of america': 'Estados Unidos',
+  uruguay: 'Uruguay',
+  uzbekistan: 'Uzbekistan'
+};
+
+function readJson(filePath, fallback) {
+  if (!fs.existsSync(filePath)) return fallback;
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+}
+
+function writeJson(filePath, data) {
+  fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function normalizeName(name) {
+  return String(name || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
+function localizeTeamName(name) {
+  if (!name) return '';
+
+  const exact = [...localTeamNames].find(team => normalizeName(team) === normalizeName(name));
+  if (exact) return exact;
+
+  const alias = TEAM_ALIASES[normalizeName(name)];
+  if (!alias) return name.trim();
+
+  return [...localTeamNames].find(team => normalizeName(team) === normalizeName(alias)) || alias;
+}
+
+function parseScore(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const score = Number.parseInt(value, 10);
+  return Number.isFinite(score) ? score : null;
+}
+
+function getEventDateTime(event) {
+  const date = event.dateEventLocal || event.dateEvent || '';
+  const rawTime = event.strTimeLocal || event.strTime || '';
+  const time = rawTime ? rawTime.slice(0, 5) : '';
+  return { date, time };
+}
+
+function cleanScorerName(rawDetail) {
+  return String(rawDetail || '')
+    .replace(/\([^)]*\)/g, ' ')
+    .replace(/\b(?:pen|og|own goal)\b/gi, ' ')
+    .replace(/\d+\s*(?:\+\s*\d+)?\s*['’`]?/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function parseGoalDetails(goalDetails, teamName) {
+  if (!goalDetails) return [];
+
+  return String(goalDetails)
+    .split(/;|\r?\n/)
+    .map(cleanScorerName)
+    .filter(Boolean)
+    .map(playerName => `${teamName}:${playerName}`);
+}
+
+function extractEventIdsFromHtml(html) {
+  const ids = new Set();
+  const regexes = [
+    /\/event\/(\d+)(?:[-/"'?#\s<]|$)/g,
+    /lookupevent\.php\?id=(\d+)/g,
+    /data-id=["'](\d+)["']/g
+  ];
+
+  for (const regex of regexes) {
+    let match;
+    while ((match = regex.exec(html))) {
+      ids.add(match[1]);
+    }
   }
-  return null;
+
+  return [...ids];
+}
+
+async function fetchJson(url) {
+  const res = await fetchFn(url, { headers: { 'User-Agent': 'PorraBot/1.0 (+GitHub Actions)' } });
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return res.json();
+}
+
+async function fetchText(url) {
+  const res = await fetchFn(url, { headers: { 'User-Agent': 'PorraBot/1.0 (+GitHub Actions)' } });
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+  return res.text();
+}
+
+async function getSeasonEvents() {
+  const eventsById = new Map();
+  let seasonApiRateLimited = false;
+
+  try {
+    const html = await fetchText(SEASON_URL);
+    extractEventIdsFromHtml(html).forEach(id => eventsById.set(id, { idEvent: id, htmlOnly: true }));
+    console.log(`IDs found in season page: ${eventsById.size}`);
+  } catch (error) {
+    console.warn(`Could not read season page: ${error.message}`);
+  }
+
+  try {
+    const seasonJson = await fetchJson(`${API_BASE}/eventsseason.php?id=4429&s=2026`);
+    for (const event of seasonJson.events || []) {
+      if (event.idEvent) eventsById.set(event.idEvent, event);
+    }
+    console.log(`Events after eventsseason API: ${eventsById.size}`);
+  } catch (error) {
+    seasonApiRateLimited = error.message.includes('429');
+    console.warn(`Could not read eventsseason API: ${error.message}`);
+  }
+
+  const events = [...eventsById.values()];
+  events.seasonApiRateLimited = seasonApiRateLimited;
+  return events;
+}
+
+async function getEvent(id) {
+  const json = await fetchJson(`${API_BASE}/lookupevent.php?id=${id}`);
+  return json && json.events && json.events[0] ? json.events[0] : null;
+}
+
+function findLocalMatch(matches, event, eventId) {
+  const home = localizeTeamName(event.strHomeTeam || event.strHome || '');
+  const away = localizeTeamName(event.strAwayTeam || event.strAway || '');
+  const eventDate = event.dateEventLocal || event.dateEvent || '';
+  const homeNorm = normalizeName(home);
+  const awayNorm = normalizeName(away);
+
+  return matches.find(match => {
+    if (String(match.idEvent || '') === String(eventId)) return true;
+
+    const matchHomeNorm = normalizeName(match.team_home);
+    const matchAwayNorm = normalizeName(match.team_away);
+    const sameTeams =
+      matchHomeNorm === homeNorm && matchAwayNorm === awayNorm;
+    const reversedTeams =
+      matchHomeNorm === awayNorm && matchAwayNorm === homeNorm;
+
+    if (!sameTeams && !reversedTeams) return false;
+    if (!eventDate || !match.date) return true;
+    return match.date === eventDate;
+  });
+}
+
+function updateMatchFromEvent(match, event, eventId) {
+  const apiHome = localizeTeamName(event.strHomeTeam || event.strHome || '');
+  const apiAway = localizeTeamName(event.strAwayTeam || event.strAway || '');
+  const homeScore = parseScore(event.intHomeScore);
+  const awayScore = parseScore(event.intAwayScore);
+  //const { date, time } = getEventDateTime(event);
+
+  const localIsReversed =
+    normalizeName(match.team_home) === normalizeName(apiAway) &&
+    normalizeName(match.team_away) === normalizeName(apiHome);
+
+  const home = localIsReversed ? apiAway : apiHome;
+  const away = localIsReversed ? apiHome : apiAway;
+  const scoreHome = localIsReversed ? awayScore : homeScore;
+  const scoreAway = localIsReversed ? homeScore : awayScore;
+
+  const homeScorers = parseGoalDetails(event.strHomeGoalDetails, apiHome);
+  const awayScorers = parseGoalDetails(event.strAwayGoalDetails, apiAway);
+  const scorers = localIsReversed
+    ? [...awayScorers, ...homeScorers]
+    : [...homeScorers, ...awayScorers];
+
+  match.idEvent = String(eventId);
+  match.team_home = home || match.team_home;
+  match.team_away = away || match.team_away;
+  //if (date) match.date = date;
+  //if (time) match.time = time;
+  //if (event.strVenue) match.venue = event.strVenue;
+
+  if (scoreHome !== null && scoreAway !== null) {
+    match.score_home = scoreHome;
+    match.score_away = scoreAway;
+    match.status = 'finished';
+    if (scorers.length > 0 || !Array.isArray(match.scorers)) {
+      match.scorers = scorers;
+    }
+    match.lastUpdate = new Date().toISOString();
+    return true;
+  }
+
+  if (match.status !== 'finished') {
+    match.status = event.strStatus && /live|in play/i.test(event.strStatus) ? 'live' : 'upcoming';
+  }
+
+  return false;
+}
+
+function rebuildScorers(matches) {
+  const players = {};
+
+  for (const match of matches) {
+    if (match.status !== 'finished' || !Array.isArray(match.scorers)) continue;
+
+    for (const scorerSpec of match.scorers) {
+      const [, ...nameParts] = String(scorerSpec).split(':');
+      const playerName = nameParts.join(':').trim();
+      if (playerName) players[playerName] = (players[playerName] || 0) + 1;
+    }
+  }
+
+  const maxGoals = Math.max(0, ...Object.values(players));
+  return { max_goals: maxGoals, players };
+}
+
+function updateActualResults(actualResults, matches, scorers, hasFreshSourceData) {
+  actualResults.official_standings = computeOfficialGroupStandings(matches);
+  actualResults.actual_pichichi = Object.entries(scorers.players)
+    .filter(([, goals]) => goals === scorers.max_goals && goals > 0)
+    .map(([playerName]) => playerName)
+    .sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+
+  actualResults.actual_positions = actualResults.actual_positions || {};
+  for (const [group, rows] of Object.entries(actualResults.official_standings)) {
+    const groupMatches = matches.filter(match => match.phase === 'groups' && match.group === group);
+    const finishedGroupMatches = groupMatches.filter(match => match.status === 'finished');
+    if (groupMatches.length > 0 && finishedGroupMatches.length === groupMatches.length) {
+      actualResults.actual_positions[group] = rows.map(row => row.team);
+    }
+  }
+
+  if (hasFreshSourceData) {
+    actualResults.lastUpdate = new Date().toISOString();
+  }
+
+  return actualResults;
+}
+
+function isFinishedWithCachedData(match) {
+  return match &&
+    match.status === 'finished' &&
+    match.score_home !== undefined &&
+    match.score_away !== undefined &&
+    Array.isArray(match.scorers) &&
+    match.scorers.length > 0;
+}
+
+function shouldFetchHtmlOnlyEvent(seasonEvent, matches, seasonApiRateLimited) {
+  if (!seasonEvent.htmlOnly) return true;
+  if (!seasonApiRateLimited) return true;
+
+  const linkedMatch = matches.find(match => String(match.idEvent || '') === String(seasonEvent.idEvent));
+  if (!linkedMatch) return false;
+  if (isFinishedWithCachedData(linkedMatch)) return false;
+
+  const today = new Date().toISOString().slice(0, 10);
+  return !linkedMatch.date || linkedMatch.date <= today;
+}
+
+function shouldFetchEventDetails(seasonEvent, matches) {
+  const hasEnoughSeasonData = seasonEvent.strHomeTeam || seasonEvent.strAwayTeam || seasonEvent.strHome || seasonEvent.strAway;
+  if (hasEnoughSeasonData) return true;
+
+  const linkedMatch = matches.find(match => String(match.idEvent || '') === String(seasonEvent.idEvent));
+  if (!linkedMatch) return false;
+  if (isFinishedWithCachedData(linkedMatch)) return false;
+
+  const today = new Date().toISOString().slice(0, 10);
+  return !linkedMatch.date || linkedMatch.date <= today;
+}
+
+function shouldUpdateFromSeasonEvent(seasonEvent, matches) {
+  const linkedMatch = matches.find(match => String(match.idEvent || '') === String(seasonEvent.idEvent));
+  return !isFinishedWithCachedData(linkedMatch);
 }
 
 async function scrapeWorldCupData() {
-  console.log('Iniciando Scraping del Mundial 2026...');
-
-  try {
-    // Para entornos sin conexión o caídas del servicio de la API, leemos partidos existentes
-    // y simulamos la recolección de updates desde la fuente oficial confiable.
-    // Esto asegura que el script nunca falle en el despliegue automático de GitHub Actions.
-    
-    let matches = [];
-    if (fs.existsSync(MATCHES_PATH)) {
-      matches = JSON.parse(fs.readFileSync(MATCHES_PATH, 'utf8'));
-    }
-
-    let scorers = { max_goals: 0, players: {} };
-    if (fs.existsSync(SCORERS_PATH)) {
-      scorers = JSON.parse(fs.readFileSync(SCORERS_PATH, 'utf8'));
-    }
-
-    console.log(`Se cargaron ${matches.length} partidos del historial local.`);
-
-    // --- Lógica del Scraper de Fallback o Integración API ---
-    // En producción, aquí se haría un fetch() a la API del Mundial:
-    // const res = await fetch('https://api.football-data.org/v4/competitions/WC/matches', { headers: { 'X-Auth-Token': 'YOUR_KEY' } });
-    // const data = await res.json();
-    // Nosotros procesamos las novedades y las sincronizamos.
-    
-    // Recalcular tabla de goleadores oficiales basada exclusivamente en 'scorers' del juego
-    // de todos los partidos finalizados de forma segura, excluyendo tandas de penaltis ("decided_by": "penalties")
-    const newScorersCount = {};
-    matches.forEach(match => {
-      if (match.status === 'finished' && match.scorers) {
-        match.scorers.forEach(scSpec => {
-          // El formato es "Seleccion:Nombre Jugador"
-          const parts = scSpec.split(':');
-          if (parts.length === 2) {
-            const playerName = parts[1].trim();
-            if (playerName) {
-              newScorersCount[playerName] = (newScorersCount[playerName] || 0) + 1;
-            }
-          }
-        });
-      }
-    });
-
-    // Encontrar el valor máximo de goles para determinar el Pichichi
-    let maxGoals = 0;
-    for (const goals of Object.values(newScorersCount)) {
-      if (goals > maxGoals) maxGoals = goals;
-    }
-
-    scorers.max_goals = maxGoals;
-    scorers.players = newScorersCount;
-
-    let actualResults = {};
-    if (fs.existsSync(ACTUAL_RESULTS_PATH)) {
-      actualResults = JSON.parse(fs.readFileSync(ACTUAL_RESULTS_PATH, 'utf8'));
-    }
-    actualResults.official_standings = computeOfficialGroupStandings(matches);
-
-    // Escribir los datos sincronizados
-    fs.writeFileSync(MATCHES_PATH, JSON.stringify(matches, null, 2), 'utf8');
-    fs.writeFileSync(SCORERS_PATH, JSON.stringify(scorers, null, 2), 'utf8');
-    fs.writeFileSync(ACTUAL_RESULTS_PATH, JSON.stringify(actualResults, null, 2), 'utf8');
-
-    console.log('¡Sincronización de Datos del Scraper Finalizada Exitosamente!');
-    console.log(`Pichichi número de goles: ${maxGoals}`);
-    console.log(`Clasificaciones oficiales recalculadas para ${Object.keys(actualResults.official_standings).length} grupos.`);
-  } catch (error) {
-    console.error('Error durante la ejecución del scraping diario:', error);
-    process.exit(1);
+  if (!fetchFn) {
+    throw new Error('This script needs Node 18+ native fetch. GitHub Actions uses Node 20 in this repo.');
   }
+
+  console.log('Starting World Cup 2026 daily scraper...');
+  console.log(`TheSportsDB key: ${API_KEY === '123' ? 'public test key' : 'repository secret'}`);
+
+  const matches = readJson(MATCHES_PATH, []);
+  const actualResults = readJson(ACTUAL_RESULTS_PATH, {});
+  const seasonEvents = await getSeasonEvents();
+  const seasonApiRateLimited = Boolean(seasonEvents.seasonApiRateLimited);
+
+  if (seasonEvents.length === 0) {
+    throw new Error('No TheSportsDB event IDs were found.');
+  }
+
+  let matched = 0;
+  let finishedUpdated = 0;
+  let skipped = 0;
+  let errors = 0;
+
+  for (const seasonEvent of seasonEvents) {
+    const eventId = seasonEvent.idEvent;
+    if (!shouldUpdateFromSeasonEvent(seasonEvent, matches)) {
+      skipped++;
+      continue;
+    }
+
+    if (!shouldFetchHtmlOnlyEvent(seasonEvent, matches, seasonApiRateLimited)) {
+      skipped++;
+      continue;
+    }
+
+    if (!shouldFetchEventDetails(seasonEvent, matches)) {
+      skipped++;
+      continue;
+    }
+
+    try {
+      const hasEnoughSeasonData = seasonEvent.strHomeTeam || seasonEvent.strAwayTeam || seasonEvent.strHome || seasonEvent.strAway;
+      const event = hasEnoughSeasonData ? seasonEvent : await getEvent(eventId);
+      if (!event) {
+        skipped++;
+        continue;
+      }
+
+      const match = findLocalMatch(matches, event, eventId);
+      if (!match) {
+        skipped++;
+        continue;
+      }
+
+      matched++;
+      if (updateMatchFromEvent(match, event, eventId)) {
+        finishedUpdated++;
+        console.log(`Finished: ${match.team_home} ${match.score_home}-${match.score_away} ${match.team_away}`);
+      }
+    } catch (error) {
+      errors++;
+      console.warn(`Could not update event ${eventId}: ${error.message}`);
+    }
+
+    if (!(seasonEvent.strHomeTeam || seasonEvent.strAwayTeam || seasonEvent.strHome || seasonEvent.strAway)) {
+      await sleep(REQUEST_DELAY_MS);
+    }
+  }
+
+  const scorers = rebuildScorers(matches);
+  updateActualResults(actualResults, matches, scorers, matched > 0);
+
+  writeJson(MATCHES_PATH, matches);
+  writeJson(SCORERS_PATH, scorers);
+  writeJson(ACTUAL_RESULTS_PATH, actualResults);
+
+  console.log('Scraper finished.');
+  console.log(`Events found: ${seasonEvents.length}`);
+  console.log(`Matches linked: ${matched}`);
+  console.log(`Finished matches updated: ${finishedUpdated}`);
+  console.log(`Skipped events: ${skipped}`);
+  console.log(`Errors: ${errors}`);
+  console.log(`Scorers in table: ${Object.keys(scorers.players).length}`);
 }
 
-scrapeWorldCupData();
+scrapeWorldCupData().catch(error => {
+  console.error('Scraper failed:', error);
+  process.exit(1);
+});

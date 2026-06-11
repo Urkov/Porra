@@ -5,10 +5,18 @@
     "group": "A",
     "team_home": "México",
     "team_away": "Sudáfrica",
-    "status": "upcoming",
+    "status": "finished",
     "date": "2026-06-11",
     "time": "21:00",
-    "venue": "Estadio Azteca, Ciudad de México"
+    "venue": "Estadio Azteca, Ciudad de México",
+    "idEvent": "2391728",
+    "score_home": 2,
+    "score_away": 0,
+    "scorers": [
+      "México:Julián Quiñones",
+      "México:Raúl Jiménez"
+    ],
+    "lastUpdate": "2026-06-11T21:14:57.054Z"
   },
   {
     "id": 2,
@@ -51,8 +59,9 @@
     "team_away": "Escocia",
     "status": "upcoming",
     "date": "2026-06-13",
-    "time": "18:00",
-    "venue": "Gillette Stadium, Boston"
+    "time": "21:00",
+    "venue": "Gillette Stadium",
+    "idEvent": "2391731"
   },
   {
     "id": 6,
@@ -84,8 +93,9 @@
     "team_away": "Suiza",
     "status": "upcoming",
     "date": "2026-06-13",
-    "time": "21:00",
-    "venue": "Levi's Stadium, San Francisco"
+    "time": "12:00",
+    "venue": "Levi's Stadium",
+    "idEvent": "2391732"
   },
   {
     "id": 9,
@@ -96,7 +106,8 @@
     "status": "upcoming",
     "date": "2026-06-14",
     "time": "19:00",
-    "venue": "Lincoln Financial Field, Filadelfia"
+    "venue": "Lincoln Financial Field",
+    "idEvent": "2391734"
   },
   {
     "id": 10,
@@ -106,8 +117,9 @@
     "team_away": "Curazao",
     "status": "upcoming",
     "date": "2026-06-14",
-    "time": "19:00",
-    "venue": "NRG Stadium, Houston"
+    "time": "12:00",
+    "venue": "Reliant Stadium",
+    "idEvent": "2391733"
   },
   {
     "id": 11,
@@ -117,8 +129,9 @@
     "team_away": "Japón",
     "status": "upcoming",
     "date": "2026-06-14",
-    "time": "22:00",
-    "venue": "AT&T Stadium, Dallas"
+    "time": "15:00",
+    "venue": "AT&T Stadium",
+    "idEvent": "2391735"
   },
   {
     "id": 12,
@@ -150,8 +163,9 @@
     "team_away": "Cabo Verde",
     "status": "upcoming",
     "date": "2026-06-15",
-    "time": "18:00",
-    "venue": "Mercedes-Benz Stadium, Atlanta"
+    "time": "12:00",
+    "venue": "Mercedes-Benz Stadium",
+    "idEvent": "2391739"
   },
   {
     "id": 15,
@@ -172,8 +186,9 @@
     "team_away": "Egipto",
     "status": "upcoming",
     "date": "2026-06-15",
-    "time": "21:00",
-    "venue": "Lumen Field, Seattle"
+    "time": "12:00",
+    "venue": "Lumen Field",
+    "idEvent": "2391736"
   },
   {
     "id": 17,
@@ -183,8 +198,9 @@
     "team_away": "Senegal",
     "status": "upcoming",
     "date": "2026-06-16",
-    "time": "21:00",
-    "venue": "MetLife Stadium, Nueva Jersey"
+    "time": "15:00",
+    "venue": "MetLife Stadium",
+    "idEvent": "2391742"
   },
   {
     "id": 18,
@@ -194,8 +210,9 @@
     "team_away": "Noruega",
     "status": "upcoming",
     "date": "2026-06-16",
-    "time": "24:00",
-    "venue": "Gillette Stadium, Boston"
+    "time": "18:00",
+    "venue": "Gillette Stadium",
+    "idEvent": "2461107"
   },
   {
     "id": 19,
@@ -228,7 +245,8 @@
     "status": "upcoming",
     "date": "2026-06-17",
     "time": "19:00",
-    "venue": "BMO Field, Toronto"
+    "venue": "BMO Field",
+    "idEvent": "2391744"
   },
   {
     "id": 22,
@@ -238,8 +256,9 @@
     "team_away": "Croacia",
     "status": "upcoming",
     "date": "2026-06-17",
-    "time": "22:00",
-    "venue": "AT&T Stadium, Dallas"
+    "time": "15:00",
+    "venue": "AT&T Stadium",
+    "idEvent": "2391743"
   },
   {
     "id": 23,
@@ -249,8 +268,9 @@
     "team_away": "RD Congo",
     "status": "upcoming",
     "date": "2026-06-17",
-    "time": "19:00",
-    "venue": "NRG Stadium, Houston"
+    "time": "12:00",
+    "venue": "Reliant Stadium",
+    "idEvent": "2461108"
   },
   {
     "id": 24,
@@ -271,8 +291,9 @@
     "team_away": "Sudáfrica",
     "status": "upcoming",
     "date": "2026-06-18",
-    "time": "18:00",
-    "venue": "Mercedes-Benz Stadium, Atlanta"
+    "time": "12:00",
+    "venue": "Mercedes-Benz Stadium",
+    "idEvent": "2461109"
   },
   {
     "id": 26,
@@ -326,8 +347,9 @@
     "team_away": "Marruecos",
     "status": "upcoming",
     "date": "2026-06-19",
-    "time": "24:00",
-    "venue": "Gillette Stadium, Boston"
+    "time": "18:00",
+    "venue": "Gillette Stadium",
+    "idEvent": "2391749"
   },
   {
     "id": 31,
@@ -348,8 +370,9 @@
     "team_away": "Australia",
     "status": "upcoming",
     "date": "2026-06-19",
-    "time": "21:00",
-    "venue": "Lumen Field, Seattle"
+    "time": "12:00",
+    "venue": "Lumen Field",
+    "idEvent": "2391750"
   },
   {
     "id": 33,
@@ -359,8 +382,9 @@
     "team_away": "Costa de Marfil",
     "status": "upcoming",
     "date": "2026-06-20",
-    "time": "22:00",
-    "venue": "BMO Field, Toronto"
+    "time": "16:00",
+    "venue": "BMO Field",
+    "idEvent": "2391752"
   },
   {
     "id": 34,
@@ -381,8 +405,9 @@
     "team_away": "Suecia",
     "status": "upcoming",
     "date": "2026-06-20",
-    "time": "19:00",
-    "venue": "NRG Stadium, Houston"
+    "time": "12:00",
+    "venue": "Reliant Stadium",
+    "idEvent": "2461112"
   },
   {
     "id": 36,
@@ -403,8 +428,9 @@
     "team_away": "Cabo Verde",
     "status": "upcoming",
     "date": "2026-06-21",
-    "time": "24:00",
-    "venue": "Hard Rock Stadium, Miami"
+    "time": "18:00",
+    "venue": "Hard Rock Stadium",
+    "idEvent": "2391757"
   },
   {
     "id": 38,
@@ -414,8 +440,9 @@
     "team_away": "Arabia Saudita",
     "status": "upcoming",
     "date": "2026-06-21",
-    "time": "18:00",
-    "venue": "Mercedes-Benz Stadium, Atlanta"
+    "time": "12:00",
+    "venue": "Mercedes-Benz Stadium",
+    "idEvent": "2391756"
   },
   {
     "id": 39,
@@ -425,8 +452,9 @@
     "team_away": "Irán",
     "status": "upcoming",
     "date": "2026-06-21",
-    "time": "21:00",
-    "venue": "SoFi Stadium, Los Ángeles"
+    "time": "12:00",
+    "venue": "SoFi Stadium",
+    "idEvent": "2391754"
   },
   {
     "id": 40,
@@ -458,8 +486,9 @@
     "team_away": "Irak",
     "status": "upcoming",
     "date": "2026-06-22",
-    "time": "23:00",
-    "venue": "Lincoln Financial Field, Filadelfia"
+    "time": "17:00",
+    "venue": "Lincoln Financial Field",
+    "idEvent": "2461113"
   },
   {
     "id": 43,
@@ -469,8 +498,9 @@
     "team_away": "Austria",
     "status": "upcoming",
     "date": "2026-06-22",
-    "time": "19:00",
-    "venue": "AT&T Stadium, Dallas"
+    "time": "12:00",
+    "venue": "AT&T Stadium",
+    "idEvent": "2391758"
   },
   {
     "id": 44,
@@ -491,8 +521,9 @@
     "team_away": "Ghana",
     "status": "upcoming",
     "date": "2026-06-23",
-    "time": "22:00",
-    "venue": "Gillette Stadium, Boston"
+    "time": "16:00",
+    "venue": "Gillette Stadium",
+    "idEvent": "2391761"
   },
   {
     "id": 46,
@@ -513,8 +544,9 @@
     "team_away": "Uzbekistán",
     "status": "upcoming",
     "date": "2026-06-23",
-    "time": "19:00",
-    "venue": "NRG Stadium, Houston"
+    "time": "12:00",
+    "venue": "Reliant Stadium",
+    "idEvent": "2391763"
   },
   {
     "id": 48,
@@ -535,8 +567,9 @@
     "team_away": "Brasil",
     "status": "upcoming",
     "date": "2026-06-24",
-    "time": "24:00",
-    "venue": "Hard Rock Stadium, Miami"
+    "time": "18:00",
+    "venue": "Hard Rock Stadium",
+    "idEvent": "2391765"
   },
   {
     "id": 50,
@@ -546,8 +579,9 @@
     "team_away": "Haití",
     "status": "upcoming",
     "date": "2026-06-24",
-    "time": "24:00",
-    "venue": "Mercedes-Benz Stadium, Atlanta"
+    "time": "18:00",
+    "venue": "Mercedes-Benz Stadium",
+    "idEvent": "2391764"
   },
   {
     "id": 51,
@@ -557,8 +591,9 @@
     "team_away": "Canadá",
     "status": "upcoming",
     "date": "2026-06-24",
-    "time": "21:00",
-    "venue": "BC Place, Vancouver"
+    "time": "12:00",
+    "venue": "BC Place",
+    "idEvent": "2391767"
   },
   {
     "id": 52,
@@ -601,8 +636,9 @@
     "team_away": "Costa de Marfil",
     "status": "upcoming",
     "date": "2026-06-25",
-    "time": "22:00",
-    "venue": "Lincoln Financial Field, Filadelfia"
+    "time": "16:00",
+    "venue": "Lincoln Financial Field",
+    "idEvent": "2391768"
   },
   {
     "id": 56,

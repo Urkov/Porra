@@ -39,8 +39,8 @@ function computeOfficialGroupStandings(matches) {
         const away = stats[m.team_away];
         if (!home || !away) return;
 
-        const scoreHome = Number(m.score_home) || 0;
-        const scoreAway = Number(m.score_away) || 0;
+        const scoreHome = Number(m.score_home ?? m.homeScore ?? 0);
+        const scoreAway = Number(m.score_away ?? m.awayScore ?? 0);
 
         home.played++;
         away.played++;

@@ -2,20 +2,19 @@ name: Daily World Cup Scraper & Update
 
 on:
   schedule:
-    # 8:00 AM de España corresponde a las 6:00 AM UTC (Horario de Verano, UTC+2)
-    # Ejecutar todos los días
+    # 08:00 in Spain during summer time (UTC+2).
     - cron: '0 6 * * *'
-  workflow_dispatch: # Permite ejecutar el flujo de manera manual desde GitHub
+  workflow_dispatch:
 
 permissions:
-  contents: write # Para que el bot pueda subir los cambios JSON al repositorio
+  contents: write
 
 jobs:
   scrape-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -23,26 +22,21 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: |
-          # Si en el futuro necesitas axios, cheerio u otras dependencias, se instalan aquí:
-          # npm install
-          echo "No external dependencies needed yet."
-
-      - name: Run Scraper Script
+      - name: Run scraper
         run: node scripts/scrape.js
+        env:
+          TSDB_API_KEY: ${{ secrets.TSDB_API_KEY || '123' }}
 
-      - name: Commit & Push updated data
+      - name: Commit and push updated data
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Verificar si hay cambios en los archivos de datos
-          if [[ -n "$(git status --porcelain)" ]]; then
+
+          if [[ -n "$(git status --porcelain -- data/matches.json data/scorers.json data/actual_results.json)" ]]; then
             git add data/matches.json data/scorers.json data/actual_results.json
-            git commit -m "Automatizado: Resultados, goleadores y clasificaciones del Mundial 2026 actualizados por Scraper"
-            git push origin main
-            echo "Datos actualizados, cambios empujados al repositorio principal."
+            git commit -m "Update World Cup results and scorers"
+            git push
+            echo "Data updated and pushed."
           else
-            echo "No se detectaron novedades ni modificaciones en los resultados del Mundial."
+            echo "No result or scorer changes."
           fi

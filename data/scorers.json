@@ -1,4 +1,7 @@
 {
-  "max_goals": 0,
-  "players": {}
+  "max_goals": 1,
+  "players": {
+    "Julián Quiñones": 1,
+    "Raúl Jiménez": 1
+  }
 }

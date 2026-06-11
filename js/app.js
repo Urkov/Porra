@@ -606,7 +606,7 @@ function showParticipantDetail(id) {
   const podiumList = document.getElementById('modalPodiumList');
   podiumList.innerHTML = '';
   const orderList = ["P1", "P2", "P3", "P4"];
-  const titles = { P1: "🥇 1.º", P2: "🥈 2.º", P3: "🥉 3.º", P4: "💀 4.º" };
+  const titles = { P1: "🥇 1.º", P2: "🥈 2.º", P3: "🥉 3.º", P4: "4️⃣ 4.º" };
 
   orderList.forEach(pos => {
     const selectedTeam = p.podium[pos];

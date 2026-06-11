@@ -50,5 +50,31 @@
       "P3": "España",
       "P4": "Países Bajos"
     }
+  },
+  {
+    "id": 3,
+    "name": "Erketz",
+    "predictions": {
+      "A": ["España", "Argentina", "Portugal"],
+      "B": ["Senegal", "Bélgica", "Marruecos"],
+      "C": ["Japón", "Egipto", "Suecia"],
+      "D": ["Sudáfrica", "Ghana", "Argelia"],
+      "E": ["Arabia Saudita", "Costa de Marfil", "RD Congo"],
+      "F": ["Irak", "Cabo Verde", "Panamá"]
+    },
+    "scorers": {
+      "J1": "Mikel Oyarzabal",
+      "J2": "Vinícius Jr.",
+      "J3": "Ousmane Dembélé",
+      "J4": "Raphinha",
+      "J5": "Julián Álvarez",
+      "J6": "Mohamed Salah"
+    },
+    "podium": {
+      "P1": "Portugal",
+      "P2": "España",
+      "P3": "Argentina",
+      "P4": "Brasil"
+    }
   }
 ]

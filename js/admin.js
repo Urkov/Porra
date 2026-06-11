@@ -1,7 +1,27 @@
 // Funciones de Panel de Administrador e integración sin Base de Datos
 
+// Función auxiliar para calcular el hash SHA-256 de un texto usando Web Crypto API
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashHex;
+}
+
 // Abre el modal de administración rellenando los listados con información fresca
-function openAdmin() {
+async function openAdmin() {
+  // Protección por contraseña utilizando algoritmo criptográfico SHA-256
+  // La contraseña en texto claro es "xurrut", su hash SHA-256 es "44a3c7b5ebf28b7cab1bddf7cf86010e1aaed556142e18c614656e5627329704"
+  const pass = prompt('Introduce la contraseña de administrador para abrir el panel:');
+  if (pass === null) return; // Canceló
+
+  const hash = await sha256(pass);
+  if (hash !== '44a3c7b5ebf28b7cab1bddf7cf86010e1aaed556142e18c614656e5627329704') {
+    alert('Contraseña incorrecta.');
+    return;
+  }
+
   const modal = document.getElementById('adminModal');
   if (!modal) return;
 

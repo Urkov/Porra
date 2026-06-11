@@ -596,7 +596,8 @@ function showParticipantDetail(id) {
   document.getElementById('modalBreakdownScorers').innerText = `${p.score_details.scorers} pts`;
   document.getElementById('modalBreakdownMatches').innerText = `${p.score_details.matches} pts`;
   document.getElementById('modalBreakdownGroups').innerText = `${p.score_details.groups} pts`;
-  document.getElementById('modalBreakdownExact').innerText = `${p.score_details.exact} pts`;
+  const exactEl = document.getElementById('modalBreakdownExact');
+  if (exactEl) exactEl.innerText = `${p.score_details.exact} pts`;
   document.getElementById('modalBreakdownRounds').innerText = `${p.score_details.rounds} pts`;
   document.getElementById('modalBreakdownPodium').innerText = `${p.score_details.podium} pts`;
   document.getElementById('modalBreakdownPichichi').innerText = `${p.score_details.pichichi} pts`;
@@ -608,12 +609,19 @@ function showParticipantDetail(id) {
   Object.entries(p.scorers).forEach(([jGrp, playerSelected]) => {
     const playerGoals = scorers.players && scorers.players[playerSelected] || 0;
     const isPichichiVal = currentActualResults.actual_pichichi && currentActualResults.actual_pichichi.includes(playerSelected);
+    // Validación: el jugador seleccionado debe pertenecer al bombo correspondiente
+    const bomPlayers = players[jGrp] || [];
+    const isValidScorer = bomPlayers.includes(playerSelected);
+    const invalidClass = isValidScorer ? '' : 'border border-rose-500 bg-rose-950/5';
+    const invalidBadge = isValidScorer ? '' : '<span class="badge badge-error text-slate-950 font-bold text-[9px] ml-1">Inválido</span>';
+
     gList.innerHTML += `
-      <div class="flex justify-between items-center bg-slate-900 px-3 py-1.5 rounded border border-slate-800">
+      <div class="flex justify-between items-center px-3 py-1.5 rounded ${invalidClass}">
         <span class="text-slate-400 font-bold">${jGrp}:</span>
         <span class="text-white ml-2 flex-1">${getPlayerFlag(playerSelected)} ${playerSelected}</span>
         <span class="badge ${playerGoals > 0 ? 'badge-rose' : 'bg-slate-800'} text-xs font-bold">${playerGoals} ⚽</span>
         ${isPichichiVal ? '<span class="badge badge-warning text-slate-950 font-extrabold text-[9px] ml-1">PICHICHI</span>' : ''}
+        ${invalidBadge}
       </div>
     `;
   });
@@ -625,9 +633,14 @@ function showParticipantDetail(id) {
   Object.entries(p.predictions).forEach(([grpName, teamList]) => {
     const realOrder = currentActualResults.actual_positions[grpName] || [];
     
+    // Validación del número de selecciones por grupo (deberían ser 3)
+    const expectedCount = 3;
+    const groupInvalid = teamList.length !== expectedCount;
+    const groupInvalidClass = groupInvalid ? 'border border-rose-500 bg-rose-950/5' : '';
+
     let htmlGroup = `
-      <div class="bg-slate-950 p-3 rounded-lg border border-slate-850 space-y-2">
-        <h5 class="text-white text-xs font-black uppercase tracking-widest border-b border-rose-500/20 pb-1">Grupo ${grpName}</h5>
+      <div class="bg-slate-950 p-3 rounded-lg ${groupInvalidClass} space-y-2">
+        <h5 class="text-white text-xs font-black uppercase tracking-widest border-b border-rose-500/20 pb-1">Grupo ${grpName} ${groupInvalid ? '<span class="badge badge-error ml-2 text-[10px]">Selecciones inválidas</span>' : ''}</h5>
         <div class="space-y-1 text-[11px]">
     `;
 
@@ -636,6 +649,13 @@ function showParticipantDetail(id) {
       const posRealIndex = realOrder.indexOf(teamName);
       let statusIndicator = '';
       let textClass = 'text-slate-300';
+
+      // Validación: el equipo debe pertenecer al grupo oficial
+      const isTeamOfficial = teams[grpName] && teams[grpName].includes(teamName);
+      if (!isTeamOfficial) {
+        textClass = 'text-rose-400 font-bold';
+        statusIndicator = `<span class="badge badge-error text-slate-950 font-bold text-[9px]">Inválido</span>`;
+      }
 
       if (posRealIndex !== -1) {
         const realPosNumber = posRealIndex + 1;

@@ -1,0 +1,8 @@
+{
+  "A": ["Francia", "España", "Argentina", "Brasil", "Inglaterra", "Portugal", "Alemania", "Países Bajos"],
+  "B": ["Colombia", "Senegal", "Croacia", "Uruguay", "Bélgica", "Marruecos", "Estados Unidos", "México"],
+  "C": ["Noruega", "Ecuador", "Japón", "Suiza", "Turquía", "Egipto", "Corea del Sur", "Suecia"],
+  "D": ["Canadá", "Austria", "Sudáfrica", "Paraguay", "Escocia", "Ghana", "República Checa", "Argelia"],
+  "E": ["Irán", "Arabia Saudita", "Jordania", "Bosnia y Herzegovina", "Costa de Marfil", "Australia", "Túnez", "RD Congo"],
+  "F": ["Uzbekistán", "Catar", "Irak", "Nueva Zelanda", "Cabo Verde", "Panamá", "Curazao", "Haití"]
+}

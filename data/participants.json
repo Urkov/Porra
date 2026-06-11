@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "name": "Jon Zabala (Ejemplo)",
+    "predictions": {
+      "A": ["Francia", "España", "Argentina"],
+      "B": ["Colombia", "Senegal", "Uruguay"],
+      "C": ["Noruega", "Ecuador", "Japón"],
+      "D": ["Canadá", "Austria", "Ghana"],
+      "E": ["Irán", "Arabia Saudita", "Australia"],
+      "F": ["Uzbekistán", "Catar", "Panamá"]
+    },
+    "scorers": {
+      "J1": "Kylian Mbappé",
+      "J2": "Lamine Yamal",
+      "J3": "Luis Díaz",
+      "J4": "Bukayo Saka",
+      "J5": "Kevin De Bruyne",
+      "J6": "Mohamed Salah"
+    },
+    "podium": {
+      "P1": "Francia",
+      "P2": "España",
+      "P3": "Argentina",
+      "P4": "Brasil"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Manten (Ejemplo)",
+    "predictions": {
+      "A": ["España", "Francia", "Brasil"],
+      "B": ["Uruguay", "Colombia", "Bélgica"],
+      "C": ["Japón", "Noruega", "Suiza"],
+      "D": ["Austria", "Canadá", "República Checa"],
+      "E": ["Costa de Marfil", "Australia", "Irán"],
+      "F": ["Catar", "Uzbekistán", "Haití"]
+    },
+    "scorers": {
+      "J1": "Erling Haaland",
+      "J2": "Vinícius Jr.",
+      "J3": "Jonathan David",
+      "J4": "Arda Güler",
+      "J5": "Rafael Leao",
+      "J6": "Alexander Isak"
+    },
+    "podium": {
+      "P1": "España",
+      "P2": "Colombia",
+      "P3": "Uruguay",
+      "P4": "Francia"
+    }
+  }
+]

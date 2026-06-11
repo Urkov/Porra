@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏆 PORRA MUNDIAL 2026 - Resultados, Goleadores y Clasificación</title>
+  
+  <!-- Tailwind CSS & DaisyUI (UI moderna, responsiva y veloz de forma estática) -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Estilos personalizados para mejorar el diseño simulando la plantilla de la porra */
+    .bg-paper {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen bg-paper flex flex-col font-sans">
+
+  <!-- Navbar -->
+  <header class="navbar bg-slate-800/80 backdrop-blur border-b border-rose-500/20 sticky top-0 z-50 px-4 md:px-8">
+    <div class="flex-1">
+      <a class="flex items-center gap-3 cursor-pointer">
+        <span class="text-3xl">⚽</span>
+        <div>
+          <h1 class="font-black text-xl tracking-tight text-white">PORRA MUNDIAL 2026</h1>
+          <p class="text-xs text-rose-400 font-medium">Actualizado: diario a las 8:00 AM</p>
+        </div>
+      </a>
+    </div>
+    <div class="flex-none gap-2">
+      <button onclick="scrollToSection('leaderboard')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Clasificación</button>
+      <button onclick="scrollToSection('matches')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Partidos</button>
+      <button onclick="scrollToSection('scorers')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Goleadores</button>
+      <button onclick="openAdmin()" class="btn btn-rose btn-sm gap-2">
+        <i class="fa-solid fa-lock text-xs"></i> Admin
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-12">
+    
+    <!-- Hero / Info General de Premios -->
+    <section class="card bg-gradient-to-br from-rose-950/40 to-slate-900 border border-rose-500/30 shadow-2xl p-6 md:p-8 rounded-3xl grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+      <div class="space-y-3 md:col-span-2">
+        <span class="badge badge-rose font-bold px-3 py-1">Mundial de la FIFA 2026</span>
+        <h2 class="text-3xl md:text-5xl font-black text-white leading-tight">🏆 LA GRAN PORRA</h2>
+        <p class="text-slate-300 text-sm md:text-base leading-relaxed">
+          Elige 3 selecciones de cada grupo y un goleador de cada tanda. 
+          Sigue el ranking oficial y observa cómo se recalculan tus aciertos en directo. 
+          Un sistema automatizado extrae marcadores oficiales y goles cada mañana.
+        </p>
+        
+        <!-- Info de Regla Remarcada -->
+        <div class="alert alert-warning bg-amber-950/40 border-amber-500/40 text-amber-200 text-xs py-2 rounded-xl">
+          <i class="fa-solid fa-circle-info text-amber-400"></i>
+          <span>Los partidos ganados en <strong>tanda de penaltis</strong> cuentan como <strong>empates</strong> para ambos. Los goles en tanda de penaltis no puntúan.</span>
+        </div>
+      </div>
+      
+      <!-- Premios -->
+      <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-inner">
+        <h3 class="font-extrabold text-white text-center text-lg uppercase tracking-wider border-b border-slate-800 pb-2">🥇 Bolsa de Premios</h3>
+        <div class="space-y-3 text-sm">
+          <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-amber-500">
+            <span class="font-semibold text-amber-400">🥇 1.º Clasificado</span>
+            <span class="font-bold text-white text-lg">50%</span>
+          </div>
+          <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-slate-300">
+            <span class="font-semibold text-slate-300">🥈 2.º Clasificado</span>
+            <span class="font-bold text-white text-lg">25%</span>
+          </div>
+          <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-amber-700">
+            <span class="font-semibold text-amber-600">🥉 3.º Clasificado</span>
+            <span class="font-bold text-white text-lg">15%</span>
+          </div>
+          <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border-l-4 border-rose-500">
+            <span class="font-semibold text-rose-400">💀 Último Puesto</span>
+            <span class="font-bold text-white text-lg">10%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Clasificación General de Participantes -->
+    <section id="leaderboard" class="space-y-4">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-3">
+        <div>
+          <h2 class="text-2xl font-black text-white flex items-center gap-3">
+            <i class="fa-solid fa-ranking-star text-rose-500"></i> CLASIFICACIÓN GENERAL
+          </h2>
+          <p class="text-xs text-slate-400">Haz clic en cualquier participante para abrir su hoja detallada de la porra</p>
+        </div>
+        
+        <!-- Buscador -->
+        <div class="relative w-full md:w-80">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+          <input type="text" id="leaderboardSearch" oninput="filterLeaderboard()" placeholder="Buscar participante..." class="input input-bordered input-sm w-full pl-9 bg-slate-950 border-slate-800 text-slate-100" />
+        </div>
+      </div>
+
+      <!-- Tabla Principal -->
+      <div class="overflow-x-auto shadow-2xl rounded-2xl border border-slate-800 bg-slate-950/40 backdrop-blur-md">
+        <table class="table table-zebra w-full text-left">
+          <thead class="bg-slate-900/80 text-slate-300 font-bold border-b border-slate-800 text-xs uppercase tracking-wider">
+            <tr>
+              <th class="w-16 text-center">Pos</th>
+              <th>Participante</th>
+              <th class="text-center">Pts Goles</th>
+              <th class="text-center">Pts Partidos</th>
+              <th class="text-center">Pts Grupos</th>
+              <th class="text-center">Pts Podio</th>
+              <th class="bg-rose-950/20 text-rose-300 text-center font-black w-28">PUNTOS</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <!-- Se carga dinámicamente mediante JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Partidos y Resultados + Goleadores (2 Columnas) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Columna Partidos (8 Cols) -->
+      <section id="matches" class="lg:col-span-8 space-y-4">
+        <div class="flex justify-between items-center">
+          <h2 class="text-2xl font-black text-white flex items-center gap-3">
+            <i class="fa-solid fa-calendar-days text-rose-500"></i> COPA MUNDIAL 2026
+          </h2>
+          <div class="flex gap-2">
+            <select id="matchPhaseFilter" onchange="renderMatches()" class="select select-bordered select-xs bg-slate-950 border-slate-800">
+              <option value="all">Todas las fases</option>
+              <option value="groups">Fase de Grupos</option>
+              <option value="eliminatorias">Eliminatorias</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="matchesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Carga vía JS -->
+        </div>
+      </section>
+
+      <!-- Columna Goleadores (4 Cols) -->
+      <section id="scorers" class="lg:col-span-4 space-y-4">
+        <h2 class="text-2xl font-black text-white flex items-center gap-3">
+          <i class="fa-solid fa-shoe-prints text-rose-500"></i> BOTA DE ORO (PICHICHI)
+        </h2>
+        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4 shadow-xl space-y-3">
+          <div class="text-xs text-rose-400 font-bold tracking-widest border-b border-slate-850 pb-2 flex justify-between">
+            <span>MÁXIMOS ANOTADORES</span>
+            <span>GOLES</span>
+          </div>
+          <div class="divide-y divide-slate-900/60 max-h-[480px] overflow-y-auto pr-1" id="scorersList">
+            <!-- Carga dinámica por JS -->
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Modal Detallado de Participante -->
+  <dialog id="participantModal" class="modal bg-slate-950/80 backdrop-blur-sm">
+    <div class="modal-box bg-slate-900 border border-rose-500/30 max-w-4xl p-6 rounded-2xl shadow-2xl relative scrollbar-thin">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-slate-400 hover:text-white">✕</button>
+      </form>
+      
+      <!-- Cabecera del Participante -->
+      <div class="flex items-center gap-4 mb-6 border-b border-slate-800 pb-4">
+        <span class="text-4xl" id="modalPartIcon">🧐</span>
+        <div>
+          <h3 class="text-2xl font-black text-white" id="modalPartName">Participante</h3>
+          <p class="text-sm text-slate-400">Puntuación Total en directo: <span class="badge badge-rose font-bold text-sm" id="modalPartRank">0 Ptos</span></p>
+        </div>
+      </div>
+
+      <!-- Resumen de Puntos y la Hoja que replica el papel -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Resumen de casillas y totales -->
+        <div class="space-y-4">
+          <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 shadow-inner">
+            <h4 class="font-bold text-white text-sm mb-2 border-b border-slate-850 pb-1">📊 Desglose de Puntos</h4>
+            <div class="space-y-2 text-xs">
+              <div class="flex justify-between">
+                <span class="text-slate-400">Puntos por Goles (2 pts/gol)</span>
+                <span class="font-semibold text-white" id="modalBreakdownScorers">0 pts</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Puntos por Partidos</span>
+                <span class="font-semibold text-white" id="modalBreakdownMatches">0 pts</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Puntos por Clasif. de Grupo</span>
+                <span class="font-semibold text-white" id="modalBreakdownGroups">0 pts</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Puntos por Posicionamiento</span>
+                <span class="font-semibold text-white" id="modalBreakdownExact">0 pts</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Puntos por Rondas Superadas</span>
+                <span class="font-semibold text-white" id="modalBreakdownRounds">0 pts</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Clasificación Final (Top 4)</span>
+                <span class="font-semibold text-white" id="modalBreakdownPodium">0 pts</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Bono Pichichi (+6 pts)</span>
+                <span class="font-semibold text-white" id="modalBreakdownPichichi">0 pts</span>
+              </div>
+              <div class="border-t border-slate-800 pt-2 flex justify-between font-extrabold text-rose-400">
+                <span>TOTAL ACUMULADO</span>
+                <span id="modalBreakdownTotal">0 pts</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pichichi Elegido -->
+          <div class="bg-slate-950 rounded-xl p-4 border border-slate-800 text-xs space-y-2">
+            <h4 class="font-bold text-white text-xs mb-1 uppercase tracking-wider">⚽ Goleadores Seleccionados</h4>
+            <div class="space-y-1.5" id="modalGoleadoresList">
+              <!-- Carga dinámica -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Réplica de Hoja (Grupos de Equipos) (Ocupa 2 Cols) -->
+        <div class="md:col-span-2 space-y-4">
+          <h4 class="font-bold text-slate-300 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-list text-rose-500"></i> Selecciones Elegidas por Grupo
+          </h4>
+          
+          <div class="grid grid-cols-2 gap-3" id="modalGroupsContainer">
+            <!-- Los 6 grupos de selecciones se pintan en una cuadrícula idéntica a la hoja -->
+          </div>
+
+          <!-- Predicción Top 4 -->
+          <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-4 space-y-2">
+            <h4 class="font-bold text-white text-xs uppercase tracking-wider">🔮 Pronóstico de Clasificación Final (Top 4)</h4>
+            <div class="grid grid-cols-4 gap-2 text-center text-xs" id="modalPodiumList">
+              <!-- Carga de P1, P2, P3, P4 -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal del Administrador (Para actualizar manualmente y descargar archivos sin DB) -->
+  <dialog id="adminModal" class="modal bg-slate-950/90">
+    <div class="modal-box bg-slate-900 border border-rose-500/30 max-w-4xl p-6 rounded-2xl relative">
+      <button onclick="closeAdmin()" class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-slate-400">✕</button>
+      
+      <div class="border-b border-rose-500/20 pb-4 mb-4">
+        <h3 class="text-xl font-black text-rose-500 flex items-center gap-2">
+          <i class="fa-solid fa-gears"></i> PANEL DE CONTROL INTERNO
+        </h3>
+        <p class="text-xs text-slate-400">Actualiza marcadores, goles y posiciones para recalcular al instante y generar el JSON.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <!-- Columna Izquierda: Formulario Agregar Match -->
+        <div class="md:col-span-7 bg-slate-950 p-4 rounded-xl border border-slate-850 space-y-4">
+          <h4 class="font-bold text-white text-sm">🔄 Registrar / Editar Partido</h4>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="label-text text-slate-400">Equipo Local</label>
+              <select id="admHome" class="select select-bordered select-xs w-full mt-1 bg-slate-900"></select>
+            </div>
+            <div>
+              <label class="label-text text-slate-400">Equipo Visitante</label>
+              <select id="admAway" class="select select-bordered select-xs w-full mt-1 bg-slate-900"></select>
+            </div>
+            <div>
+              <label class="label-text text-slate-400">Fase</label>
+              <select id="admPhase" class="select select-bordered select-xs w-full mt-1 bg-slate-900" onchange="onPhaseChange()">
+                <option value="groups">Fase de Grupos</option>
+                <option value="round_of_16">Octavos de Final</option>
+                <option value="quarter_finals">Cuartos de Final</option>
+                <option value="semi_finals">Semifinales</option>
+                <option value="third_place">Tercer Puesto</option>
+                <option value="final">Gran Final</option>
+              </select>
+            </div>
+            <div>
+              <label class="label-text text-slate-400">Grupo Asociado</label>
+              <select id="admGroup" class="select select-bordered select-xs w-full mt-1 bg-slate-900">
+                <option value="A">Grupo A</option>
+                <option value="B">Grupo B</option>
+                <option value="C">Grupo C</option>
+                <option value="D">Grupo D</option>
+                <option value="E">Grupo E</option>
+                <option value="F">Grupo F</option>
+                <option value="null">Ninguno (Fase Eliminatoria)</option>
+              </select>
+            </div>
+            <div>
+              <label class="label-text text-slate-400">Marcador Local (Goles)</label>
+              <input type="number" id="admScoreHome" value="0" class="input input-bordered input-xs w-full mt-1 bg-slate-900" />
+            </div>
+            <div>
+              <label class="label-text text-slate-400">Marcador Visitante (Goles)</label>
+              <input type="number" id="admScoreAway" value="0" class="input input-bordered input-xs w-full mt-1 bg-slate-900" />
+            </div>
+            <div>
+              <label class="label-text text-slate-400">Método de Definición</label>
+              <select id="admDecided" class="select select-bordered select-xs w-full mt-1 bg-slate-900" onchange="onDecidedChange()">
+                <option value="regular">Regular / Prórroga</option>
+                <option value="penalties">Tanda de Penaltis</option>
+              </select>
+            </div>
+            <div id="admWinnerBlock" class="hidden">
+              <label class="label-text text-slate-400 text-rose-400">Ganador de Penaltis</label>
+              <select id="admWinnerPassed" class="select select-bordered select-xs w-full mt-1 bg-slate-900 border-rose-500/50"></select>
+            </div>
+          </div>
+
+          <!-- Agregar Goleadores del Partido -->
+          <div class="border-t border-slate-900 pt-3 text-xs space-y-2">
+            <h5 class="font-extrabold text-slate-300">⚽ Autores de Goles (Excluir tanda de penaltis)</h5>
+            <div class="flex gap-2">
+              <select id="admPlayer" class="select select-bordered select-xs flex-1 bg-slate-900"></select>
+              <button onclick="addScorerToMatch()" class="btn btn-xs btn-rose font-bold">Agregar Goleador</button>
+            </div>
+            <div id="admMatchScorersList" class="flex flex-wrap gap-1.5 p-2 bg-slate-900 rounded-lg min-h-10">
+              <!-- Chips de goleadores agregados -->
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-2">
+            <button onclick="saveMatchAdmin()" class="btn btn-sm btn-rose w-full">Guardar Partido en la Previsualización</button>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Clasificaciones de Grupo, Pichichi y Descargar JSON -->
+        <div class="md:col-span-5 flex flex-col justify-between space-y-4">
+          <!-- Clasificación Real de Grupo -->
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-850 space-y-3 text-xs">
+            <h4 class="font-bold text-white">🏆 Definir Posición Clasificatoria Real</h4>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="label-text text-slate-400">Seleccionar Grupo</label>
+                <select id="admClassifGroup" class="select select-bordered select-xs w-full mt-1 bg-slate-900" onchange="onClassifGroupChange()">
+                  <option value="A">Grupo A</option>
+                  <option value="B">Grupo B</option>
+                  <option value="C">Grupo C</option>
+                  <option value="D">Grupo D</option>
+                  <option value="E">Grupo E</option>
+                  <option value="F">Grupo F</option>
+                </select>
+              </div>
+              <div class="space-y-1">
+                <span class="text-xs text-rose-400 font-extrabold block">Orden del Grupo</span>
+                <div id="admClassifList" class="space-y-1 max-h-40 overflow-y-auto">
+                  <!-- Inputs para ordenar de 1 a 8 -->
+                </div>
+              </div>
+            </div>
+            
+            <div class="border-t border-slate-900 pt-2 space-y-2">
+              <h4 class="font-bold text-white text-xs uppercase tracking-wider">🔮 Podio Final Real</h4>
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="label-text text-slate-400 text-[10px]">🥇 Campeón</label>
+                  <select id="admPod1" class="select select-bordered select-xs w-full bg-slate-900"></select>
+                </div>
+                <div>
+                  <label class="label-text text-slate-400 text-[10px]">🥈 Subcampeón</label>
+                  <select id="admPod2" class="select select-bordered select-xs w-full bg-slate-900"></select>
+                </div>
+                <div>
+                  <label class="label-text text-slate-400 text-[10px]">🥉 Tercero</label>
+                  <select id="admPod3" class="select select-bordered select-xs w-full bg-slate-900"></select>
+                </div>
+                <div>
+                  <label class="label-text text-slate-400 text-[10px]">💀 Cuarto</label>
+                  <select id="admPod4" class="select select-bordered select-xs w-full bg-slate-900"></select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exportar Datos Actualizados (SIN DB) -->
+          <div class="bg-gradient-to-br from-rose-950/20 to-slate-950 border border-rose-500/20 p-4 rounded-xl space-y-3 shadow-inner">
+            <h4 class="font-extrabold text-white text-xs uppercase text-center tracking-wider">💾 exportar actualización</h4>
+            <p class="text-[10px] text-slate-400 leading-relaxed">
+              Dibuja los cambios que necesites y pulsa un botón para descargar el archivo. 
+              Súbelo a la carpeta <strong>data/</strong> en la web de GitHub en 3 clics y tendrás la porra al día de inmediato.
+            </p>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="exportDataFile('matches')" class="btn btn-xs btn-outline text-slate-300 gap-1 text-[10px]">
+                <i class="fa-solid fa-download text-[9px]"></i> match.json
+              </button>
+              <button onclick="exportDataFile('actual_results')" class="btn btn-xs btn-outline text-slate-300 gap-1 text-[10px]">
+                <i class="fa-solid fa-download text-[9px]"></i> results.json
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-action border-t border-slate-800 pt-3">
+        <button onclick="applyPrevisualization()" class="btn btn-sm btn-rose text-white">Aplicar Previsualización en Vivo</button>
+        <button onclick="closeAdmin()" class="btn btn-sm btn-ghost">Cerrar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Footer -->
+  <footer class="footer footer-center p-6 bg-slate-950 border-t border-slate-900 text-slate-400 text-xs mt-12 gap-2">
+    <div>
+      <p class="font-black text-rose-500 leading-wider">PORRA MUNDIAL 2026</p>
+      <p class="text-[10px] text-slate-500">Diseñado para actualización diaria autónoma de resultados y goleadores oficiales.</p>
+    </div>
+    <div class="flex gap-4 mt-2">
+      <a onclick="scrollToSection('leaderboard')" class="link link-hover">Ranking</a>
+      <a onclick="scrollToSection('matches')" class="link link-hover">Partidos</a>
+      <span class="text-slate-700">|</span>
+      <a onclick="openAdmin()" class="link link-hover text-rose-400 flex items-center gap-1">
+        <i class="fa-solid fa-gears text-[10px]"></i> Editor Admin
+      </a>
+    </div>
+  </footer>
+
+  <!-- Lógica JavaScript Principal -->
+  <script src="js/app.js"></script>
+  <!-- Lógica del Panel de Administrador -->
+  <script src="js/admin.js"></script>
+</body>
+</html>

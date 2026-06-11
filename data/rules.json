@@ -1,0 +1,36 @@
+{
+  "points": {
+    "win_base": 6,
+    "draw_base": 3,
+    "group_position": {
+      "1": 10,
+      "2": 6,
+      "3": 2,
+      "others": 0
+    },
+    "prediction_match": {
+      "1": 6,
+      "2": 3,
+      "3": 1
+    },
+    "round_passed_base": 4,
+    "group_cd_extra": {
+      "win": 1,
+      "draw": 0.5,
+      "round_passed": 2
+    },
+    "group_ef_extra": {
+      "win": 2,
+      "draw": 1,
+      "round_passed": 4
+    },
+    "goal_pts": 2,
+    "pichichi_bonus": 6,
+    "final_classification": {
+      "P1": 20,
+      "P2": 15,
+      "P3": 10,
+      "P4": 5
+    }
+  }
+}

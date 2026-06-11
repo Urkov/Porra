@@ -1,0 +1,48 @@
+name: Daily World Cup Scraper & Update
+
+on:
+  schedule:
+    # 8:00 AM de España corresponde a las 6:00 AM UTC (Horario de Verano, UTC+2)
+    # Ejecutar todos los días
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Permite ejecutar el flujo de manera manual desde GitHub
+
+permissions:
+  contents: write # Para que el bot pueda subir los cambios JSON al repositorio
+
+jobs:
+  scrape-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-node: '20'
+
+      - name: Install dependencies
+        run: |
+          # Si en el futuro necesitas axios, cheerio u otras dependencias, se instalan aquí:
+          # npm install
+          echo "No external dependencies needed yet."
+
+      - name: Run Scraper Script
+        run: node scripts/scrape.js
+
+      - name: Commit & Push updated data
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Verificar si hay cambios en los archivos de datos
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add data/matches.json data/scorers.json
+            git commit -m "Automatizado: Resultados y Goleadores del Mundial 2026 actualizados por Scraper"
+            git push origin main
+            echo "Datos actualizados, cambios empujados al repositorio principal."
+          else
+            echo "No se detectaron novedades ni modificaciones en los resultados del Mundial."
+          fi

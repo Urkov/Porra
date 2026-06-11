@@ -1,0 +1,51 @@
+[
+  {
+    "id": "match_1",
+    "phase": "groups",
+    "group": "A",
+    "team_home": "Francia",
+    "team_away": "España",
+    "score_home": 2,
+    "score_away": 1,
+    "status": "finished",
+    "decided_by": "regular",
+    "scorers": ["Francia:Kylian Mbappé", "España:Mikel Oyarzabal", "Francia:Kylian Mbappé"]
+  },
+  {
+    "id": "match_2",
+    "phase": "groups",
+    "group": "C",
+    "team_home": "Noruega",
+    "team_away": "Ecuador",
+    "score_home": 1,
+    "score_away": 1,
+    "status": "finished",
+    "decided_by": "regular",
+    "scorers": ["Noruega:Erling Haaland", "Ecuador:Enner Valencia"]
+  },
+  {
+    "id": "match_3",
+    "phase": "groups",
+    "group": "E",
+    "team_home": "Irán",
+    "team_away": "Arabia Saudita",
+    "score_home": 3,
+    "score_away": 2,
+    "status": "finished",
+    "decided_by": "regular",
+    "scorers": ["Irán:Mehdi Taremi", "Arabia Saudita:Salem Al-Dawsari", "Irán:Mehdi Taremi", "Irán:Sardar Azmoun", "Arabia Saudita:Salem Al-Dawsari"]
+  },
+  {
+    "id": "match_4",
+    "phase": "round_of_16",
+    "group": null,
+    "team_home": "España",
+    "team_away": "Bélgica",
+    "score_home": 1,
+    "score_away": 1,
+    "status": "finished",
+    "decided_by": "penalties",
+    "winner_passed": "España",
+    "scorers": ["España:Lamine Yamal", "Bélgica:Romelu Lukaku"]
+  }
+]

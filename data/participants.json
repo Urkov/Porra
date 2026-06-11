@@ -128,5 +128,57 @@
       "P3": "Inglaterra",
       "P4": "Brasil"
     }
+  },
+  {
+    "id": 6,
+    "name": "David Pixa",
+    "predictions": {
+      "A": ["España", "Francia", "Portugal"],
+      "B": ["Marruecos", "Colombia", "Bélgica"],
+      "C": ["Noruega", "Japón", "Suecia"],
+      "D": ["Ghana", "Austria", "Canadá"],
+      "E": ["Arabia Saudita", "Costa de Marfil", "Australia"],
+      "F": ["Catar", "Nueva Zelanda", "Panamá"]
+    },
+    "scorers": {
+      "J1": "Mikel Oyarzabal",
+      "J2": "Cristiano Ronaldo",
+      "J3": "Ousmane Dembélé",
+      "J4": "Raphinha",
+      "J5": "Kevin De Bruyne",
+      "J6": "Antoine Semenyo"
+    },
+    "podium": {
+      "P1": "Portugal",
+      "P2": "España",
+      "P3": "Francia",
+      "P4": "Colombia"
+    }
+  },
+  {
+    "id": 7,
+    "name": "Mikel Arizaga",
+    "predictions": {
+      "A": ["España", "Francia", "Portugal"],
+      "B": ["Marruecos", "Senegal", "Uruguay"],
+      "C": ["Japón", "Noruega", "Egipto"],
+      "D": ["Austria", "Ghana", "Escocia"],
+      "E": ["Costa de Marfil", "Australia", "Irán"],
+      "F": ["Uzbekistán", "Nueva Zelanda", "Catar"]
+    },
+    "scorers": {
+      "J1": "Kylian Mbappé",
+      "J2": "Vinícius Jr.",
+      "J3": "Ousmane Dembélé",
+      "J4": "Raphinha",
+      "J5": "Julian Alvarez",
+      "J6": "Mohamed Salah"
+    },
+    "podium": {
+      "P1": "España",
+      "P2": "Francia",
+      "P3": "Portugal",
+      "P4": "Argentina"
+    }
   }
 ]

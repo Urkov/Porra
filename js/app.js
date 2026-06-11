@@ -1056,11 +1056,40 @@ function renderMatches() {
           <span class="shrink-0"><i class="fa-solid fa-calendar-day mr-1.5 text-rose-500/80"></i>${getWeekday(m.date)}, ${formatDate(m.date)} - ${m.time}</span>
           <span class="truncate max-w-[130px] sm:max-w-[180px]" title="${m.venue || ''}"><i class="fa-solid fa-location-dot mr-1.5 text-rose-500/80"></i>${m.venue || 'Por definir'}</span>
         </div>
-        ${isFinished && m.scorers && m.scorers.length > 0 ? `
-          <div class="flex items-center gap-1.5 border-t border-slate-900/40 pt-1.5 mt-0.5">
-            <span class="font-bold">⚽ Goles:</span>
-            <span class="text-slate-350 font-medium">${m.scorers.map(s => s.split(':')[1]).join(', ')}</span>
-          </div>
+        ${isFinished && Array.isArray(m.scorers) && m.scorers.length > 0 ? `
+          ${(() => {
+            const selectedScorers = new Set(participants.flatMap(p => Object.values(p.scorers).map(name => name.trim())));
+            const parsedScorers = m.scorers.map(sc => {
+              const parts = sc.split(':');
+              return {
+                team: parts[0]?.trim() || '',
+                player: parts.slice(1).join(':').trim() || ''
+              };
+            }).filter(sc => sc.team && sc.player);
+            const homeScorers = parsedScorers.filter(sc => sc.team === m.team_home);
+            const awayScorers = parsedScorers.filter(sc => sc.team === m.team_away);
+            const renderScorer = sc => {
+              const picked = selectedScorers.has(sc.player);
+              return `
+                <span class="inline-flex items-center gap-1 rounded-full px-2 py-1 ${picked ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-200' : 'bg-slate-900/80 border border-slate-800 text-slate-300'} text-[10px] truncate">
+                  ${getPlayerFlag(sc.player)}
+                  <span class="truncate">${sc.player}</span>
+                </span>
+              `;
+            };
+            return `
+              <div class="grid gap-2 sm:grid-cols-2 border-t border-slate-900/40 pt-2">
+                <div class="space-y-1">
+                  <div class="uppercase tracking-[0.18em] text-[9px] text-slate-500 font-semibold">${m.team_home}</div>
+                  <div class="flex flex-wrap gap-1">${homeScorers.length > 0 ? homeScorers.map(renderScorer).join('') : '<span class="text-slate-500">-</span>'}</div>
+                </div>
+                <div class="space-y-1">
+                  <div class="uppercase tracking-[0.18em] text-[9px] text-slate-500 font-semibold">${m.team_away}</div>
+                  <div class="flex flex-wrap gap-1">${awayScorers.length > 0 ? awayScorers.map(renderScorer).join('') : '<span class="text-slate-500">-</span>'}</div>
+                </div>
+              </div>
+            `;
+          })()}
         ` : ''}
       </div>
     `;

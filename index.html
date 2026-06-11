@@ -52,9 +52,7 @@
         <span class="badge badge-rose font-bold px-3 py-1">Mundial de la FIFA 2026</span>
         <h2 class="text-3xl md:text-5xl font-black text-white leading-tight">🏆 LA GRAN PORRA</h2>
         <p class="text-slate-300 text-sm md:text-base leading-relaxed">
-          Elige 3 selecciones de cada grupo y 1 goleador de cada bombo. Ademas pronostica el campeon, subcampeon, 3º y 4º puesto final.
-          Sigue el ranking oficial y observa cómo se recalculan tus aciertos en directo. 
-          Un sistema automatizado extrae marcadores oficiales y goles cada mañana.
+          Sigue el ranking oficial y observa cómo se recalculan tus aciertos en directo. Un sistema automatizado extrae marcadores oficiales y goles cada mañana.
         </p>
       </div>
     </section>
@@ -69,7 +67,7 @@
       </summary>
       <div class="collapse-content px-6 pb-6 space-y-6">
         <p class="text-xs text-slate-400 border-b border-slate-900 pb-3">Consulta detallada de cómo se calculan y se acumulan los puntos, además de los premios asignados</p>
-        
+        <p class="text-sm text-slate-300">En esta porra eliges 3 selecciones de cada grupo, 1 goleador de cada bombo y pronostica el campeón, subcampeón, 3.º y 4.º puesto final.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
           <!-- Tarjeta 1: Bolsa de Premios -->
           <div class="card bg-slate-950 border border-slate-800 p-5 rounded-2xl shadow-xl hover:border-rose-500/30 transition flex flex-col justify-between">
@@ -341,30 +339,57 @@
           <h2 class="text-2xl font-black text-white flex items-center gap-3">
             <i class="fa-solid fa-calendar-days text-rose-500"></i> COPA MUNDIAL 2026
           </h2>
-          <div class="flex gap-2">
-            <select id="matchPhaseFilter" onchange="renderMatches()" title="Filtrar por fase de partido" class="select select-bordered select-xs bg-slate-950 border-slate-800">
-              <option value="all">Todas las fases</option>
-              <option value="groups">Fase de Grupos</option>
-              <option value="eliminatorias">Eliminatorias</option>
-            </select>
-          </div>
         </div>
 
-        <div id="officialGroupsSection" class="space-y-3">
-          <div class="space-y-1">
-            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <i class="fa-solid fa-people-group text-emerald-500"></i> Grupos Oficiales
-            </h3>
-            <p class="text-[10px] text-slate-500 leading-relaxed">
-              Clasificación en vivo según los resultados de fase de grupos. Se recalcula automáticamente con cada actualización del scraper diario.
-            </p>
+        <div class="space-y-3">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div class="space-y-1">
+              <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <i class="fa-solid fa-people-group text-emerald-500"></i> Grupos Oficiales
+              </h3>
+              <p class="text-[10px] text-slate-500 leading-relaxed">
+                Clasificación en vivo según los resultados de fase de grupos. Se recalcula automáticamente con cada actualización del scraper diario.
+              </p>
+            </div>
+            <button id="toggleOfficialGroupsBtn" type="button" onclick="toggleOfficialGroups()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
+              Ocultar grupos oficiales
+            </button>
+          </div>
+          <div id="officialGroupsSection" class="space-y-3">
             <div class="flex flex-wrap gap-3 text-[9px] text-slate-500 pt-0.5">
               <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-emerald-500/80"></span> Clasificados directos (1º-2º)</span>
               <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-sm bg-amber-500/60"></span> Posible mejor 3º</span>
             </div>
+            <div id="officialGroupsContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+              <!-- Carga vía JS -->
+            </div>
           </div>
-          <div id="officialGroupsContainer" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            <!-- Carga vía JS -->
+        </div>
+
+        <div class="space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-2 w-full">
+            <select id="matchPhaseFilter" onchange="renderMatches()" title="Filtrar por fase de partido" class="select select-bordered select-xs bg-slate-950 border-slate-800 w-full">
+              <option value="all">Todas las fases</option>
+              <option value="groups">Fase de Grupos</option>
+              <option value="eliminatorias">Eliminatorias</option>
+              <option value="dieciseisavos">Dieciseisavos</option>
+              <option value="octavos">Octavos</option>
+              <option value="cuartos">Cuartos</option>
+              <option value="semifinal">Semifinal</option>
+              <option value="final">Final y 3er y 4to puesto</option>
+            </select>
+            <select id="matchGroupFilter" onchange="renderMatches()" title="Filtrar por grupo" class="select select-bordered select-xs bg-slate-950 border-slate-800 w-full">
+              <option value="all">Todos los grupos</option>
+            </select>
+            <select id="matchTeamFilter" onchange="renderMatches()" title="Filtrar por selección" class="select select-bordered select-xs bg-slate-950 border-slate-800 w-full">
+              <option value="all">Todas las selecciones</option>
+            </select>
+            <select id="matchDateFilter" onchange="renderMatches()" title="Filtrar por día" class="select select-bordered select-xs bg-slate-950 border-slate-800 w-full">
+              <option value="all">Todos los días</option>
+            </select>
+            <select id="matchVenueFilter" onchange="renderMatches()" title="Filtrar por sede" class="select select-bordered select-xs bg-slate-950 border-slate-800 w-full">
+              <option value="all">Todas las sedes</option>
+            </select>
           </div>
         </div>
 

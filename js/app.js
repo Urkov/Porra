@@ -256,6 +256,7 @@ let currentActualResults = [];
 // Inicialización de la pantalla al cargar la página
 document.addEventListener('DOMContentLoaded', async () => {
   await loadDatabase();
+  populateMatchFilters();
   computeScores();
   renderLeaderboard();
   renderOfficialGroups();
@@ -310,6 +311,34 @@ function getTeamGroup(team) {
     if (teamList.includes(team)) return groupName;
   }
   return null;
+}
+
+function formatMatchDate(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(`${dateStr}T00:00:00`);
+  return date.toLocaleDateString('es-ES', {
+    weekday: 'short',
+    day: '2-digit',
+    month: 'short'
+  });
+}
+
+function populateMatchFilters() {
+  const groupSelect = document.getElementById('matchGroupFilter');
+  const teamSelect = document.getElementById('matchTeamFilter');
+  const dateSelect = document.getElementById('matchDateFilter');
+  const venueSelect = document.getElementById('matchVenueFilter');
+  if (!groupSelect || !teamSelect || !dateSelect || !venueSelect) return;
+
+  const groups = [...new Set(matches.filter(m => m.group).map(m => m.group))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true }));
+  const teamsSet = new Set(Object.values(teams).flat());
+  const dates = [...new Set(matches.map(m => m.date))].sort();
+  const venues = [...new Set(matches.map(m => m.venue))].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+
+  groupSelect.innerHTML = `<option value="all">Todos los grupos</option>` + groups.map(group => `<option value="${group}">${group}</option>`).join('');
+  teamSelect.innerHTML = `<option value="all">Todas las selecciones</option>` + [...teamsSet].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' })).map(team => `<option value="${team}">${team}</option>`).join('');
+  dateSelect.innerHTML = `<option value="all">Todos los días</option>` + dates.map(date => `<option value="${date}">${formatMatchDate(date)}</option>`).join('');
+  venueSelect.innerHTML = `<option value="all">Todas las sedes</option>` + venues.map(venue => `<option value="${venue}">${venue}</option>`).join('');
 }
 
 // ALGORITMO INTEGRAL DEL MOTOR DE CÁLCULO DE LA PORRA
@@ -790,19 +819,40 @@ function renderOfficialGroups() {
   }).join('');
 }
 
+function toggleOfficialGroups() {
+  const section = document.getElementById('officialGroupsSection');
+  const button = document.getElementById('toggleOfficialGroupsBtn');
+  if (!section || !button) return;
+
+  const hidden = section.classList.toggle('hidden');
+  button.innerText = hidden ? 'Mostrar grupos oficiales' : 'Ocultar grupos oficiales';
+}
+
 // RENDER DEL CALENDARIO DE PARTIDOS
 function renderMatches() {
   const container = document.getElementById('matchesContainer');
   if (!container) return;
 
   const phaseFilter = document.getElementById('matchPhaseFilter').value;
-  
-  let filtered = currentMatches;
-  if (phaseFilter === 'groups') {
-    filtered = currentMatches.filter(m => m.phase === 'groups');
-  } else if (phaseFilter === 'eliminatorias') {
-    filtered = currentMatches.filter(m => m.phase !== 'groups');
-  }
+  const groupFilter = document.getElementById('matchGroupFilter').value;
+  const teamFilter = document.getElementById('matchTeamFilter').value;
+  const dateFilter = document.getElementById('matchDateFilter').value;
+  const venueFilter = document.getElementById('matchVenueFilter').value;
+
+  const filtered = currentMatches.filter(m => {
+    if (phaseFilter === 'groups' && m.phase !== 'groups') return false;
+    if (phaseFilter === 'eliminatorias' && m.phase === 'groups') return false;
+    if (phaseFilter === 'dieciseisavos' && m.phase !== 'Round of 32') return false;
+    if (phaseFilter === 'octavos' && m.phase !== 'Round of 16') return false;
+    if (phaseFilter === 'cuartos' && m.phase !== 'Quarter-finals') return false;
+    if (phaseFilter === 'semifinal' && m.phase !== 'Semi-finals') return false;
+    if (phaseFilter === 'final' && m.phase !== 'Final' && m.phase !== '3rd_place') return false;
+    if (groupFilter !== 'all' && m.group !== groupFilter) return false;
+    if (teamFilter !== 'all' && m.team_home !== teamFilter && m.team_away !== teamFilter) return false;
+    if (dateFilter !== 'all' && m.date !== dateFilter) return false;
+    if (venueFilter !== 'all' && m.venue !== venueFilter) return false;
+    return true;
+  });
 
   container.innerHTML = '';
 

@@ -362,11 +362,24 @@ function computeScores() {
     });
 
     // 2. EXTRA POR PICHICHI (+6 PUNTOS)
-    // El Pichichi del mundial real se encuentra en actualResults.actual_pichichi (puede haber varios compartidos)
-    if (currentActualResults.actual_pichichi) {
-      const hitPichichi = participantPlayers.some(pName => currentActualResults.actual_pichichi.includes(pName));
-      if (hitPichichi) {
-        scorePichichi = rules.points.pichichi_bonus;
+    // El bono se otorga sólo si la Final ya se ha disputado y el (los) máximo(s) goleador(es) reales
+    // pertenece(n) a la lista de goleadores elegibles de la porra. Si el máximo goleador no es elegible,
+    // nadie recibe el bono.
+    // Construir conjunto de elegibles a partir de los bombos
+    const eligibleSet = new Set();
+    Object.values(players).forEach(list => list.forEach(p => eligibleSet.add(p)));
+
+    const finalPlayed = currentMatches.some(m => m.phase === 'Final' && m.status === 'finished');
+    if (finalPlayed && currentActualResults.actual_pichichi && currentActualResults.actual_pichichi.length > 0) {
+      // Filtrar los pichichis reales que además son elegibles en la porra
+      const eligibleRealPichichis = currentActualResults.actual_pichichi.filter(p => eligibleSet.has(p));
+      if (eligibleRealPichichis.length > 0) {
+        // Otorgar bono a los participantes que hayan elegido alguno de los pichichis reales elegibles
+        const hitPichichi = participantPlayers.some(pName => eligibleRealPichichis.includes(pName));
+        if (hitPichichi) scorePichichi = rules.points.pichichi_bonus;
+      } else {
+        // Ningún pichichi real es elegible → nadie recibe el bonus
+        scorePichichi = 0;
       }
     }
 
@@ -968,20 +981,32 @@ function renderScorers() {
     return;
   }
 
-  // Ordenar de mayor a menor número de goles
-  const sortedPlayers = Object.entries(scorers.players)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10); // Ver los 10 primeros de mayor relevancia
+  // Construir conjunto de goleadores elegibles (bombos de la porra)
+  const eligibleSet = new Set();
+  Object.values(players).forEach(list => list.forEach(p => eligibleSet.add(p)));
 
-  sortedPlayers.forEach(([playerName, goals], index) => {
-    const isPichichi = index === 0;
+  const onlyEligible = document.getElementById('scorersEligibleToggle')?.checked;
+
+  // Ordenar de mayor a menor número de goles y mostrar todos los goleadores registrados
+  const sortedPlayers = Object.entries(scorers.players)
+    .sort((a, b) => b[1] - a[1]);
+
+  let rank = 0;
+  sortedPlayers.forEach(([playerName, goals]) => {
+    // Si está el filtro activo y el jugador no es elegible, saltar
+    if (onlyEligible && !eligibleSet.has(playerName)) return;
+
+    rank += 1;
+    const isPichichi = rank === 1;
+    const isEligible = eligibleSet.has(playerName);
 
     container.innerHTML += `
       <div class="flex justify-between items-center py-2.5 text-xs">
         <div class="flex items-center gap-2">
-          <span class="font-bold text-slate-500 w-4">${index + 1}.</span>
+          <span class="font-bold text-slate-500 w-4">${rank}.</span>
           <span class="font-extrabold ${isPichichi ? 'text-amber-400 font-black' : 'text-slate-200'}">${getPlayerFlag(playerName)} ${playerName}</span>
           ${isPichichi ? '<span class="badge bg-amber-500 text-slate-950 font-black text-[9px] scale-90">PICHICHI</span>' : ''}
+          ${isEligible ? '<span class="badge badge-sm badge-success font-bold text-xs ml-2">Elegible</span>' : ''}
         </div>
         <span class="badge badge-sm badge-rose font-bold text-xs">${goals} goles</span>
       </div>

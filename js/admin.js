@@ -63,7 +63,7 @@ async function openAdmin() {
   [homeSel, awaySel, winnerSel, pod1, pod2, pod3, pod4].forEach(sel => {
     if (!sel) return;
     sel.innerHTML = '';
-    
+
     // Agregar opción por defecto para winner
     if (sel === winnerSel) {
       const optDef = document.createElement('option');
@@ -156,7 +156,7 @@ function onDecidedChange() {
   } else {
     block.classList.add('hidden');
   }
-  
+
   // Sincronizar banderas
   synchronizeAdminSelectFlags();
 }
@@ -168,7 +168,7 @@ function addScorerToMatch() {
   const player = document.getElementById('admPlayer').value;
   const home = document.getElementById('admHome').value;
   const away = document.getElementById('admAway').value;
-  
+
   // Preguntar de qué equipo procede el gol
   const teamSource = getTeamGroup(home) ? home : (getTeamGroup(away) ? away : home);
 
@@ -221,8 +221,8 @@ function saveMatchAdmin() {
   const winner = decided === 'penalties' ? document.getElementById('admWinnerPassed').value : null;
 
   // Intentar buscar un partido existente con estos dos equipos o sus placeholders correspondientes
-  let existingMatch = currentMatches.find(m => 
-    m.phase === phase && 
+  let existingMatch = currentMatches.find(m =>
+    m.phase === phase &&
     ((m.team_home === home && m.team_away === away) || (m.team_home === away && m.team_away === home))
   );
 
@@ -230,27 +230,27 @@ function saveMatchAdmin() {
   if (!existingMatch) {
     const homePlaceholder = getTeamPlaceholder(home);
     const awayPlaceholder = getTeamPlaceholder(away);
-    
+
     if (homePlaceholder || awayPlaceholder) {
       existingMatch = currentMatches.find(m => {
         if (m.phase !== phase) return false;
-        
+
         // Comprobar si el local del partido coincide con el nombre real o con su placeholder (ej: 2º Grupo A)
-        const matchesHome = m.team_home === home || 
+        const matchesHome = m.team_home === home ||
           (homePlaceholder && (m.team_home === homePlaceholder || m.team_home.startsWith(homePlaceholder)));
-          
+
         // Comprobar si el visitante del partido coincide con el nombre real o con su placeholder
-        const matchesAway = m.team_away === away || 
+        const matchesAway = m.team_away === away ||
           (awayPlaceholder && (m.team_away === awayPlaceholder || m.team_away.startsWith(awayPlaceholder)));
-          
+
         if (matchesHome && matchesAway) return true;
-        
+
         // Probar la combinación cruzada (visitante en local y viceversa)
-        const matchesHomeCross = m.team_home === away || 
+        const matchesHomeCross = m.team_home === away ||
           (awayPlaceholder && (m.team_home === awayPlaceholder || m.team_home.startsWith(awayPlaceholder)));
-        const matchesAwayCross = m.team_away === home || 
+        const matchesAwayCross = m.team_away === home ||
           (homePlaceholder && (m.team_away === homePlaceholder || m.team_away.startsWith(homePlaceholder)));
-          
+
         return matchesHomeCross && matchesAwayCross;
       });
     }
@@ -310,9 +310,9 @@ function onClassifGroupChange() {
         <span class="shrink-0 w-6 flex justify-center">${flagImg}</span>
         <select data-idx="${idx}" class="select select-bordered select-xs w-full bg-slate-900 mx-1 border-slate-800" onchange="updateClassifOrder('${grp}')">
           ${realOrder.map(oth => {
-            const optFlag = typeof getTeamFlagEmoji === 'function' ? getTeamFlagEmoji(oth) : '';
-            return `<option value="${oth}" ${oth === t ? 'selected' : ''}>${optFlag} ${oth}</option>`;
-          }).join('')}
+      const optFlag = typeof getTeamFlagEmoji === 'function' ? getTeamFlagEmoji(oth) : '';
+      return `<option value="${oth}" ${oth === t ? 'selected' : ''}>${optFlag} ${oth}</option>`;
+    }).join('')}
         </select>
       </div>
     `;
@@ -329,7 +329,7 @@ function updateClassifOrder(grp) {
   });
 
   currentActualResults.actual_positions[grp] = newOrder;
-  
+
   // Re-renderizar la clasificación para que las banderas de imágenes junto a los puestos se actualicen al vuelo
   onClassifGroupChange();
 }
@@ -351,8 +351,10 @@ function applyPrevisualization() {
       m.scorers.forEach(scSpec => {
         const parts = scSpec.split(':');
         if (parts.length === 2) {
+          const teamSource = parts[0].trim();
           const playerName = parts[1].trim();
-          newScRep[playerName] = (newScRep[playerName] || 0) + 1;
+          const key = `${teamSource}:${playerName}`;
+          newScRep[key] = (newScRep[key] || 0) + 1;
         }
       });
     }
@@ -369,8 +371,8 @@ function applyPrevisualization() {
 
   // Calcular Pichichis reales
   const pichichis = [];
-  Object.entries(newScRep).forEach(([pName, gls]) => {
-    if (gls === maxGoals && maxGoals > 0) pichichis.push(pName);
+  Object.entries(newScRep).forEach(([key, gls]) => {
+    if (gls === maxGoals && maxGoals > 0) pichichis.push(key);
   });
   currentActualResults.actual_pichichi = pichichis;
 

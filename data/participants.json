@@ -180,5 +180,31 @@
       "P3": "Portugal",
       "P4": "Argentina"
     }
+  },
+  {
+    "id": 8,
+    "name": "Potxo",
+    "predictions": {
+      "A": ["España", "Francia", "Portugal"],
+      "B": ["Marruecos", "Bélgica", "Senegal"],
+      "C": ["Noruega", "Japón", "Turquía"],
+      "D": ["Paraguay", "Austria", "República Checa"],
+      "E": ["Bosnia y Herzegovina", "Costa de Marfil", "Australia"],
+      "F": ["Irak", "Nueva Zelanda", "Panamá"]
+    },
+    "scorers": {
+      "J1": "Mikel Oyarzabal",
+      "J2": "Vinícius Jr.",
+      "J3": "Ousmane Dembélé",
+      "J4": "Raphinha",
+      "J5": "Julian Alvarez",
+      "J6": "Alexander Sørloth"
+    },
+    "podium": {
+      "P1": "España",
+      "P2": "Portugal",
+      "P3": "Francia",
+      "P4": "Brasil"
+    }
   }
 ]

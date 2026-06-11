@@ -137,8 +137,8 @@ function getTeamFlag(teamName, isLarge = false) {
     const iconClass = isLarge ? "text-2xl text-slate-500 mr-2" : "text-sm text-slate-600 mr-1.5";
     return `<i class="fa-solid fa-shield-halved ${iconClass} align-middle"></i>`;
   }
-  const imgClass = isLarge 
-    ? "inline-block w-9 h-6 rounded border border-slate-800 shadow-md align-middle" 
+  const imgClass = isLarge
+    ? "inline-block w-9 h-6 rounded border border-slate-800 shadow-md align-middle"
     : "inline-block w-5 h-3.5 rounded-sm border border-slate-900/60 shadow-sm align-middle mr-1.5";
   return `<img src="https://flagcdn.com/w40/${code}.png" alt="${teamName}" class="${imgClass}" />`;
 }
@@ -369,8 +369,11 @@ function computeScores() {
     // Se recorre cada uno de sus 6 jugadores elegidos
     const participantPlayers = Object.values(participant.scorers);
     participantPlayers.forEach(pName => {
-      if (scorers.players && scorers.players[pName]) {
-        scoreGoles += scorers.players[pName] * rules.points.goal_pts;
+      const team = PLAYER_TEAMS[pName];
+      const key = team ? `${team}:${pName}` : pName;
+      const goals = (scorers.players && (scorers.players[key] || scorers.players[pName])) || 0;
+      if (goals > 0) {
+        scoreGoles += goals * rules.points.goal_pts;
       }
     });
 
@@ -385,7 +388,10 @@ function computeScores() {
     const finalPlayed = currentMatches.some(m => m.phase === 'Final' && m.status === 'finished');
     if (finalPlayed && currentActualResults.actual_pichichi && currentActualResults.actual_pichichi.length > 0) {
       // Filtrar los pichichis reales que además son elegibles en la porra
-      const eligibleRealPichichis = currentActualResults.actual_pichichi.filter(p => eligibleSet.has(p));
+      const eligibleRealPichichis = currentActualResults.actual_pichichi.map(pKey => {
+        const parts = pKey.split(':');
+        return parts.length > 1 ? parts[1] : pKey;
+      }).filter(p => eligibleSet.has(p));
       if (eligibleRealPichichis.length > 0) {
         // Otorgar bono a los participantes que hayan elegido alguno de los pichichis reales elegibles
         const hitPichichi = participantPlayers.some(pName => eligibleRealPichichis.includes(pName));
@@ -456,7 +462,7 @@ function computeScores() {
       // Evaluar si es ronda de eliminatoria y hay clasificado
       if (match.phase !== 'groups') {
         const winner = match.decided_by === 'penalties' ? match.winner_passed : (match.score_home > match.score_away ? match.team_home : match.team_away);
-        
+
         if (winner && chosenTeams.has(winner)) {
           if (!roundsPassedByTeamsByPhase[match.phase]) {
             roundsPassedByTeamsByPhase[match.phase] = new Set();
@@ -486,7 +492,7 @@ function computeScores() {
         const realIdx = realOrder.indexOf(team_pred);
         if (realIdx !== -1) {
           const realPosNumber = realIdx + 1;
-          
+
           // Clasificación fase de grupos
           if (realPosNumber === 1) scoreGroups += rules.points.group_position["1"];
           else if (realPosNumber === 2) scoreGroups += rules.points.group_position["2"];
@@ -534,7 +540,7 @@ function renderLeaderboard() {
   const sorted = [...participants].sort((a, b) => b.score_details.total - a.score_details.total);
 
   tbody.innerHTML = '';
-  
+
   sorted.forEach((participant, idx) => {
     const isFirst = idx === 0;
     const isSecond = idx === 1;
@@ -566,7 +572,7 @@ function renderLeaderboard() {
     const tr = document.createElement('tr');
     tr.className = `hover:bg-slate-900 border-b border-slate-900/60 cursor-pointer transition ${highlightClass}`;
     tr.onclick = () => showParticipantDetail(participant.id);
-    
+
     tr.innerHTML = `
       <td class="text-center font-bold text-sm w-16">
         <span class="badge ${badgeClass} badge-sm md:badge-md p-2">${icon}</span>
@@ -597,16 +603,16 @@ function renderLeaderboard() {
       <td colspan="8" class="px-4 py-4 text-[10px] text-slate-300">
         <div class="space-y-1">
           <div class="text-slate-400 uppercase tracking-wide text-[9px] font-semibold mb-2">Selecciones + Goleadores</div>
-          <div class="grid gap-1 sm:grid-cols-8">
+          <div class="grid gap-1 sm:grid-cols-12">
             ${Object.entries(participant.predictions).map(([grpName, teamList]) => `
               <div class="col-span-1 rounded-2xl border-l-4 p-2 ${getGroupBadgeClasses(grpName)} shadow-inner shadow-slate-950/20 min-w-0">
                 <div class="text-[9px] uppercase tracking-[0.24em] font-bold mb-1 text-slate-200">${grpName}</div>
                 <div class="text-slate-100 text-[12px] leading-4 space-y-0.5">
-                  ${teamList.map(team => `<div class="flex items-center gap-1 truncate"><span class="shrink-0">${getTeamFlag(team)}</span><span class="truncate">${team}</span></div>`).join('')}
+                  ${teamList.map(team => `<div class="flex items-center gap-1 min-w-0"><span class="shrink-0 flex items-center">${getTeamFlag(team)}</span><span class="truncate">${team}</span></div>`).join('')}
                 </div>
               </div>
             `).join('')}
-            <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-900/80 p-1.5 shadow-inner shadow-slate-950/20 min-w-0">
+            <div class="col-span-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-1.5 shadow-inner shadow-slate-950/20 min-w-0">
               <div class="grid grid-cols-2 gap-1 text-[10px] text-slate-100">
                 ${Object.entries(participant.scorers).map(([jGrp, player]) => `
                   <div class="inline-flex items-center gap-1 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 truncate">
@@ -818,21 +824,32 @@ function showParticipantDetail(id) {
   const gList = document.getElementById('modalGoleadoresList');
   gList.innerHTML = '';
   Object.entries(p.scorers).forEach(([jGrp, playerSelected]) => {
-    const playerGoals = scorers.players && scorers.players[playerSelected] || 0;
-    const isPichichiVal = currentActualResults.actual_pichichi && currentActualResults.actual_pichichi.includes(playerSelected);
+    const team = PLAYER_TEAMS[playerSelected];
+    const key = team ? `${team}:${playerSelected}` : playerSelected;
+    const playerGoals = (scorers.players && (scorers.players[key] || scorers.players[playerSelected])) || 0;
+    const ptsEarned = playerGoals * (rules.points.goal_pts || 2);
+    
+    const isPichichiVal = currentActualResults.actual_pichichi && currentActualResults.actual_pichichi.some(pKey => {
+      const parts = pKey.split(':');
+      return (parts.length > 1 ? parts[1] : pKey) === playerSelected;
+    });
+
     // Validación: el jugador seleccionado debe pertenecer al bombo correspondiente
     const bomPlayers = players[jGrp] || [];
     const isValidScorer = bomPlayers.includes(playerSelected);
     const invalidClass = isValidScorer ? '' : 'border border-rose-500 bg-rose-950/5';
-    const invalidBadge = isValidScorer ? '' : '<span class="badge badge-error text-slate-950 font-bold text-[9px] ml-1">Inválido</span>';
+    const invalidBadge = isValidScorer ? '' : '<span class="badge badge-error text-slate-950 font-bold text-[9px]">Inválido</span>';
 
     gList.innerHTML += `
-      <div class="flex justify-between items-center px-3 py-1.5 rounded ${invalidClass}">
-        <span class="text-slate-400 font-bold">${jGrp}:</span>
-        <span class="text-white ml-2 flex-1">${getPlayerFlag(playerSelected)} ${playerSelected}</span>
-        <span class="badge ${playerGoals > 0 ? 'badge-rose' : 'bg-slate-800'} text-xs font-bold">${playerGoals} ⚽</span>
-        ${isPichichiVal ? '<span class="badge badge-warning text-slate-950 font-extrabold text-[9px] ml-1">PICHICHI</span>' : ''}
-        ${invalidBadge}
+      <div class="flex items-center gap-1.5 px-2 py-1.5 rounded ${invalidClass}">
+        <span class="${isPichichiVal ? 'text-amber-400 font-black' : 'text-slate-400 font-bold'} w-4 shrink-0 text-xs">${jGrp}</span>
+        <span class="text-white truncate flex-1 text-xs">${getPlayerFlag(playerSelected)} ${playerSelected}</span>
+        <div class="flex items-center gap-1 shrink-0">
+          <span class="badge ${playerGoals > 0 ? 'badge-rose' : 'bg-slate-800'} text-[10px] font-bold px-1.5 whitespace-nowrap">
+            ${playerGoals} ⚽ ${playerGoals > 0 ? `<span class="ml-0.5 text-rose-200">(+${ptsEarned} pts)</span>` : ''}
+          </span>
+          ${invalidBadge}
+        </div>
       </div>
     `;
   });
@@ -844,7 +861,7 @@ function showParticipantDetail(id) {
 
   Object.entries(p.predictions).forEach(([grpName, teamList]) => {
     const realOrder = currentActualResults.actual_positions[grpName] || [];
-    
+
     // Validación del número de selecciones por grupo (deberían ser 3)
     const expectedCount = 3;
     const groupInvalid = teamList.length !== expectedCount;
@@ -909,10 +926,13 @@ function showParticipantDetail(id) {
   orderList.forEach(pos => {
     const selectedTeam = p.podium[pos];
     const isHit = currentActualResults.actual_podium && currentActualResults.actual_podium[pos] === selectedTeam;
+    const ptsEarned = isHit ? rules.points.final_classification[pos] : 0;
+
     podiumList.innerHTML += `
-      <div class="bg-slate-900 border ${isHit ? 'border-emerald-500/50' : 'border-slate-800'} p-2 rounded-lg">
+      <div class="bg-slate-900 border ${isHit ? 'border-emerald-500/50' : 'border-slate-800'} p-2 rounded-lg flex flex-col items-center justify-center text-center">
         <span class="text-slate-400 text-[10px] block font-bold">${titles[pos]}</span>
         <span class="font-extrabold ${isHit ? 'text-emerald-400' : 'text-slate-200'}">${getTeamFlag(selectedTeam)} ${selectedTeam}</span>
+        <span class="text-[9px] font-bold mt-0.5 ${isHit ? 'text-emerald-400' : 'text-slate-500'}">+${ptsEarned} pts</span>
       </div>
     `;
   });
@@ -1187,26 +1207,26 @@ function renderMatches() {
         </div>
         ${isFinished && Array.isArray(m.scorers) && m.scorers.length > 0 ? `
           ${(() => {
-            const selectedScorers = new Set(participants.flatMap(p => Object.values(p.scorers).map(name => name.trim())));
-            const parsedScorers = m.scorers.map(sc => {
-              const parts = sc.split(':');
-              return {
-                team: parts[0]?.trim() || '',
-                player: parts.slice(1).join(':').trim() || ''
-              };
-            }).filter(sc => sc.team && sc.player);
-            const homeScorers = parsedScorers.filter(sc => sc.team === m.team_home);
-            const awayScorers = parsedScorers.filter(sc => sc.team === m.team_away);
-            const renderScorer = sc => {
-              const picked = selectedScorers.has(sc.player);
-              return `
+          const selectedScorers = new Set(participants.flatMap(p => Object.values(p.scorers).map(name => name.trim())));
+          const parsedScorers = m.scorers.map(sc => {
+            const parts = sc.split(':');
+            return {
+              team: parts[0]?.trim() || '',
+              player: parts.slice(1).join(':').trim() || ''
+            };
+          }).filter(sc => sc.team && sc.player);
+          const homeScorers = parsedScorers.filter(sc => sc.team === m.team_home);
+          const awayScorers = parsedScorers.filter(sc => sc.team === m.team_away);
+          const renderScorer = sc => {
+            const picked = selectedScorers.has(sc.player);
+            return `
                 <span class="inline-flex items-center gap-1 rounded-full px-2 py-1 ${picked ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-200' : 'bg-slate-900/80 border border-slate-800 text-slate-300'} text-[10px] truncate">
                   ${getPlayerFlag(sc.player)}
                   <span class="truncate">${sc.player}</span>
                 </span>
               `;
-            };
-            return `
+          };
+          return `
               <div class="grid gap-2 sm:grid-cols-2 border-t border-slate-900/40 pt-2">
                 <div class="space-y-1">
                   <div class="uppercase tracking-[0.18em] text-[9px] text-slate-500 font-semibold">${m.team_home}</div>
@@ -1218,7 +1238,7 @@ function renderMatches() {
                 </div>
               </div>
             `;
-          })()}
+        })()}
         ` : ''}
       </div>
     `;
@@ -1233,7 +1253,7 @@ function renderScorers() {
   if (!container) return;
 
   container.innerHTML = '';
-  
+
   if (!scorers.players || Object.keys(scorers.players).length === 0) {
     container.innerHTML = `
       <div class="text-center py-6 text-slate-500 text-xs">
@@ -1254,23 +1274,30 @@ function renderScorers() {
     .sort((a, b) => b[1] - a[1]);
 
   let rank = 0;
-  sortedPlayers.forEach(([playerName, goals]) => {
+  sortedPlayers.forEach(([key, goals]) => {
+    const parts = key.split(':');
+    const teamName = parts.length > 1 ? parts[0] : null;
+    const playerName = parts.length > 1 ? parts[1] : key;
+
     // Si está el filtro activo y el jugador no es elegible, saltar
     if (onlyEligible && !eligibleSet.has(playerName)) return;
 
     rank += 1;
     const isPichichi = rank === 1;
     const isEligible = eligibleSet.has(playerName);
+    
+    const flagHtml = teamName ? getTeamFlag(teamName) : getPlayerFlag(playerName);
+
+    const badgeColor = isEligible ? 'badge-success' : 'badge-rose';
 
     container.innerHTML += `
-      <div class="flex justify-between items-center py-2.5 text-xs">
-        <div class="flex items-center gap-2">
-          <span class="font-bold text-slate-500 w-4">${rank}.</span>
-          <span class="font-extrabold ${isPichichi ? 'text-amber-400 font-black' : 'text-slate-200'}">${getPlayerFlag(playerName)} ${playerName}</span>
-          ${isPichichi ? '<span class="badge bg-amber-500 text-slate-950 font-black text-[9px] scale-90">PICHICHI</span>' : ''}
-          ${isEligible ? '<span class="badge badge-sm badge-success font-bold text-xs ml-2">Elegible</span>' : ''}
+      <div class="flex justify-between items-center py-2.5 text-xs gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="font-bold text-slate-500 w-4 shrink-0">${rank}.</span>
+          <span class="font-extrabold truncate ${isPichichi ? 'text-amber-400 font-black' : 'text-slate-200'}">${flagHtml} ${playerName}</span>
+          ${isPichichi ? '<span class="badge bg-amber-500 text-slate-950 font-black text-[9px] scale-90 shrink-0">PICHICHI</span>' : ''}
         </div>
-        <span class="badge badge-sm badge-rose font-bold text-xs">${goals} goles</span>
+        <span class="badge badge-sm ${badgeColor} font-bold text-xs shrink-0 whitespace-nowrap">${goals} goles</span>
       </div>
     `;
   });

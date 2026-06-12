@@ -39,6 +39,7 @@ const TEAM_ALIASES = {
   belgica: 'Belgica',
   bosnia: 'Bosnia y Herzegovina',
   'bosnia and herzegovina': 'Bosnia y Herzegovina',
+  'bosnia herzegovina': 'Bosnia y Herzegovina',
   brazil: 'Brasil',
   brasil: 'Brasil',
   canada: 'Canada',
@@ -79,6 +80,9 @@ const TEAM_ALIASES = {
   senegal: 'Senegal',
   'south africa': 'Sudafrica',
   'south korea': 'Corea del Sur',
+  'korea republic': 'Corea del Sur',
+  korea: 'Corea del Sur',
+  'republic of korea': 'Corea del Sur',
   spain: 'Espana',
   sweden: 'Suecia',
   switzerland: 'Suiza',
@@ -178,6 +182,82 @@ function extractEventIdsFromHtml(html) {
   return [...ids];
 }
 
+/**
+ * Scrape goal scorer names from the event HTML page.
+ * Fallback when the JSON API doesn't populate strHomeGoalDetails.
+ * The HTML has two 'spoiler-main-timeline' divs: home and away.
+ */
+function decodeHtmlEntities(text) {
+  return String(text || '')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCodePoint(parseInt(code, 16)))
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ');
+}
+
+function scrapeGoalScorersFromHtml(html) {
+  const timelines = [];
+  // Quote-agnostic and order-agnostic: matches class="spoiler-main-timeline"
+  // or class='spoiler-main-timeline' even with other attributes around it.
+  const timelineRegex = /<div[^>]*class=["'][^"']*spoiler-main-timeline[^"']*["'][^>]*>([\s\S]*?)<\/div>/g;
+  let m;
+  while ((m = timelineRegex.exec(html))) {
+    timelines.push(m[1]);
+  }
+
+  function extractNames(timelineHtml) {
+    const names = [];
+    // Split into rows that contain a goal icon
+    const rows = timelineHtml.split(/goal-soccer\.svg/);
+    // Skip first chunk (before first goal icon)
+    for (let i = 1; i < rows.length; i++) {
+      // Find all <a> tags with pure text content (no <img> child)
+      const linkRegex = /<a[^>]*>([^<]+)<\/a>/g;
+      let lm;
+      while ((lm = linkRegex.exec(rows[i]))) {
+        const name = decodeHtmlEntities(lm[1]).trim();
+        if (name && name.length > 1) {
+          names.push(name);
+          break; // Only take the first text-only <a> per goal entry
+        }
+      }
+    }
+    return names;
+  }
+
+  return {
+    home: timelines.length > 0 ? extractNames(timelines[0]) : [],
+    away: timelines.length > 1 ? extractNames(timelines[1]) : []
+  };
+}
+
+async function scrapeGoalScorersFromPage(eventId) {
+  const url = `https://www.thesportsdb.com/event/${eventId}`;
+  const html = await fetchText(url);
+  const result = scrapeGoalScorersFromHtml(html);
+
+  // Diagnostics: if we found nothing, log clues so we can fix the regex
+  // without needing to guess what the real HTML looks like.
+  if (result.home.length === 0 && result.away.length === 0) {
+    const hasTimelineClass = /spoiler-main-timeline/.test(html);
+    console.warn(
+      `  [debug] event ${eventId}: html length=${html.length}, ` +
+      `contains 'spoiler-main-timeline'=${hasTimelineClass}`
+    );
+    if (process.env.TSDB_DEBUG_HTML) {
+      const debugPath = path.join(__dirname, `../data/debug_event_${eventId}.html`);
+      fs.writeFileSync(debugPath, html, 'utf8');
+      console.warn(`  [debug] raw HTML written to ${debugPath}`);
+    }
+  }
+
+  return result;
+}
+
 async function fetchJson(url) {
   const res = await fetchFn(url, { headers: { 'User-Agent': 'PorraBot/1.0 (+GitHub Actions)' } });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
@@ -242,7 +322,11 @@ function findLocalMatch(matches, event, eventId) {
 
     if (!sameTeams && !reversedTeams) return false;
     if (!eventDate || !match.date) return true;
-    return match.date === eventDate;
+
+    // Allow ±1 day tolerance: matches.json dates are in Spanish time (CEST)
+    // but the API returns venue-local dates (US/Mexico/Canada timezones).
+    const diffMs = Math.abs(new Date(match.date) - new Date(eventDate));
+    return diffMs <= 86400000; // 1 day in ms
   });
 }
 
@@ -262,15 +346,15 @@ function updateMatchFromEvent(match, event, eventId) {
   const scoreHome = localIsReversed ? awayScore : homeScore;
   const scoreAway = localIsReversed ? homeScore : awayScore;
 
-  const homeScorers = parseGoalDetails(event.strHomeGoalDetails, apiHome);
-  const awayScorers = parseGoalDetails(event.strAwayGoalDetails, apiAway);
+  const localHome = localIsReversed ? match.team_away : match.team_home;
+  const localAway = localIsReversed ? match.team_home : match.team_away;
+  const homeScorers = parseGoalDetails(event.strHomeGoalDetails, localHome || apiHome);
+  const awayScorers = parseGoalDetails(event.strAwayGoalDetails, localAway || apiAway);
   const scorers = localIsReversed
     ? [...awayScorers, ...homeScorers]
     : [...homeScorers, ...awayScorers];
 
   match.idEvent = String(eventId);
-  match.team_home = home || match.team_home;
-  match.team_away = away || match.team_away;
   //if (date) match.date = date;
   //if (time) match.time = time;
   //if (event.strVenue) match.venue = event.strVenue;
@@ -300,9 +384,8 @@ function rebuildScorers(matches) {
     if (match.status !== 'finished' || !Array.isArray(match.scorers)) continue;
 
     for (const scorerSpec of match.scorers) {
-      const [, ...nameParts] = String(scorerSpec).split(':');
-      const playerName = nameParts.join(':').trim();
-      if (playerName) players[playerName] = (players[playerName] || 0) + 1;
+      const key = String(scorerSpec).trim();
+      if (key) players[key] = (players[key] || 0) + 1;
     }
   }
 
@@ -410,9 +493,14 @@ async function scrapeWorldCupData() {
       continue;
     }
 
+    const isFinishedEvent = parseScore(seasonEvent.intHomeScore) !== null && parseScore(seasonEvent.intAwayScore) !== null;
+
     try {
       const hasEnoughSeasonData = seasonEvent.strHomeTeam || seasonEvent.strAwayTeam || seasonEvent.strHome || seasonEvent.strAway;
-      const event = hasEnoughSeasonData ? seasonEvent : await getEvent(eventId);
+
+      // Always fetch full event details for finished matches to get goal scorers
+      // (the season list endpoint doesn't include strHomeGoalDetails)
+      const event = (!hasEnoughSeasonData || isFinishedEvent) ? await getEvent(eventId) || seasonEvent : seasonEvent;
       if (!event) {
         skipped++;
         continue;
@@ -430,6 +518,24 @@ async function scrapeWorldCupData() {
       matched++;
       if (updateMatchFromEvent(match, event, eventId)) {
         finishedUpdated++;
+
+        // Fallback: if API didn't have goal details, scrape the event HTML page
+        if ((!match.scorers || match.scorers.length === 0) && (match.score_home + match.score_away) > 0) {
+          try {
+            await sleep(REQUEST_DELAY_MS);
+            const htmlGoals = await scrapeGoalScorersFromPage(eventId);
+            const homeScorers = htmlGoals.home.map(name => `${match.team_home}:${name}`);
+            const awayScorers = htmlGoals.away.map(name => `${match.team_away}:${name}`);
+            const allScorers = [...homeScorers, ...awayScorers];
+            if (allScorers.length > 0) {
+              match.scorers = allScorers;
+              console.log(`  Scorers from HTML: ${allScorers.join(', ')}`);
+            }
+          } catch (scrapeErr) {
+            console.warn(`  Could not scrape goal details: ${scrapeErr.message}`);
+          }
+        }
+
         console.log(`Finished: ${match.team_home} ${match.score_home}-${match.score_away} ${match.team_away}`);
       }
     } catch (error) {
@@ -437,7 +543,7 @@ async function scrapeWorldCupData() {
       console.warn(`Could not update event ${eventId}: ${error.message}`);
     }
 
-    if (!(seasonEvent.strHomeTeam || seasonEvent.strAwayTeam || seasonEvent.strHome || seasonEvent.strAway)) {
+    if (!(seasonEvent.strHomeTeam || seasonEvent.strAwayTeam || seasonEvent.strHome || seasonEvent.strAway) || isFinishedEvent) {
       await sleep(REQUEST_DELAY_MS);
     }
   }

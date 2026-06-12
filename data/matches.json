@@ -24,10 +24,19 @@
     "group": "A",
     "team_home": "Corea del Sur",
     "team_away": "República Checa",
-    "status": "upcoming",
+    "status": "finished",
     "date": "2026-06-12",
     "time": "04:00",
-    "venue": "Estadio Akron, Guadalajara"
+    "venue": "Estadio Akron, Guadalajara",
+    "idEvent": "2461103",
+    "score_home": 2,
+    "score_away": 1,
+    "scorers": [
+      "Corea del Sur:Hwang",
+      "Corea del Sur:Oh",
+      "República Checa:Krejčí"
+    ],
+    "lastUpdate": "2026-06-12T09:09:25.655Z"
   },
   {
     "id": 3,
@@ -38,7 +47,8 @@
     "status": "upcoming",
     "date": "2026-06-12",
     "time": "21:00",
-    "venue": "BMO Field, Toronto"
+    "venue": "BMO Field, Toronto",
+    "idEvent": "2461104"
   },
   {
     "id": 4,
@@ -49,7 +59,8 @@
     "status": "upcoming",
     "date": "2026-06-13",
     "time": "03:00",
-    "venue": "SoFi Stadium, Los Ángeles"
+    "venue": "SoFi Stadium, Los Ángeles",
+    "idEvent": "2391729"
   },
   {
     "id": 5,
@@ -72,7 +83,8 @@
     "status": "upcoming",
     "date": "2026-06-14",
     "time": "06:00",
-    "venue": "BC Place, Vancouver"
+    "venue": "BC Place, Vancouver",
+    "idEvent": "2461105"
   },
   {
     "id": 7,
@@ -83,7 +95,8 @@
     "status": "upcoming",
     "date": "2026-06-14",
     "time": "00:00",
-    "venue": "MetLife Stadium, Nueva Jersey"
+    "venue": "MetLife Stadium, Nueva Jersey",
+    "idEvent": "2391730"
   },
   {
     "id": 8,
@@ -142,7 +155,8 @@
     "status": "upcoming",
     "date": "2026-06-15",
     "time": "04:00",
-    "venue": "Estadio BBVA, Monterrey"
+    "venue": "Estadio BBVA, Monterrey",
+    "idEvent": "2461106"
   },
   {
     "id": 13,
@@ -153,7 +167,8 @@
     "status": "upcoming",
     "date": "2026-06-16",
     "time": "00:00",
-    "venue": "Hard Rock Stadium, Miami"
+    "venue": "Hard Rock Stadium, Miami",
+    "idEvent": "2391738"
   },
   {
     "id": 14,

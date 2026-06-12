@@ -14,8 +14,11 @@
     "P4": ""
   },
   "actual_pichichi": [
+    "Corea del Sur:Hwang",
+    "Corea del Sur:Oh",
     "México:Julián Quiñones",
-    "México:Raúl Jiménez"
+    "México:Raúl Jiménez",
+    "República Checa:Krejčí"
   ],
   "official_standings": {
     "A": [
@@ -619,5 +622,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-12T09:05:27.180Z"
+  "lastUpdate": "2026-06-12T09:09:27.799Z"
 }

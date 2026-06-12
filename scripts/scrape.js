@@ -420,6 +420,9 @@ async function scrapeWorldCupData() {
 
       const match = findLocalMatch(matches, event, eventId);
       if (!match) {
+        console.log(
+          `[SKIP] No local match found for ${event.strHomeTeam} vs ${event.strAwayTeam}`
+        );
         skipped++;
         continue;
       }

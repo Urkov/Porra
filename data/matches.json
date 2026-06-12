@@ -44,11 +44,18 @@
     "group": "B",
     "team_home": "Canadá",
     "team_away": "Bosnia y Herzegovina",
-    "status": "upcoming",
+    "status": "finished",
     "date": "2026-06-12",
     "time": "21:00",
     "venue": "BMO Field, Toronto",
-    "idEvent": "2461104"
+    "idEvent": "2461104",
+    "score_home": 1,
+    "score_away": 1,
+    "scorers": [
+      "Canadá:Larin",
+      "Bosnia y Herzegovina:Lukić"
+    ],
+    "lastUpdate": "2026-06-12T22:10:43.311Z"
   },
   {
     "id": 4,

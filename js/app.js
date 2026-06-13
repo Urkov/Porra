@@ -1215,8 +1215,14 @@ function renderMatches() {
               player: parts.slice(1).join(':').trim() || ''
             };
           }).filter(sc => sc.team && sc.player);
-          const homeScorers = parsedScorers.filter(sc => sc.team === m.team_home);
-          const awayScorers = parsedScorers.filter(sc => sc.team === m.team_away);
+         const homeScorers = parsedScorers.filter(sc => {
+            const isOwnGoal = sc.player.endsWith('(p.p.)');
+            return isOwnGoal ? sc.team === m.team_away : sc.team === m.team_home;
+          });
+          const awayScorers = parsedScorers.filter(sc => {
+            const isOwnGoal = sc.player.endsWith('(p.p.)');
+            return isOwnGoal ? sc.team === m.team_home : sc.team === m.team_away;
+          });
           const renderScorer = sc => {
             const picked = selectedScorers.has(sc.player);
             return `

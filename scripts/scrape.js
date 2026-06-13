@@ -120,6 +120,20 @@ function normalizeName(name) {
     .replace(/\s+/g, ' ');
 }
 
+function playerBelongsTo(name, players) {
+  const normalized = normalizeName(name);
+
+  return players.some(player => {
+    const p = normalizeName(player);
+
+    return (
+      p === normalized ||
+      p.includes(normalized) ||
+      normalized.includes(p)
+    );
+  });
+}
+
 function localizeTeamName(name) {
   if (!name) return '';
 
@@ -145,23 +159,45 @@ function getEventDateTime(event) {
   return { date, time };
 }
 
+// Matches "(OG)", "(O.G.)", "(og)" or a standalone "OG" token used by
+// TheSportsDB to mark own goals inside strHomeGoalDetails / strAwayGoalDetails.
+const OWN_GOAL_REGEX = /\((?:o\.?g\.?|own goal)\)|\bog\b/i;
+
+function isOwnGoalEntry(rawDetail) {
+  return OWN_GOAL_REGEX.test(String(rawDetail || ''));
+}
+
 function cleanScorerName(rawDetail) {
   return String(rawDetail || '')
     .replace(/\([^)]*\)/g, ' ')
     .replace(/\b(?:pen|og|own goal)\b/gi, ' ')
-    .replace(/\d+\s*(?:\+\s*\d+)?\s*['’`]?/g, ' ')
+    .replace(/\d+\s*(?:\+\s*\d+)?\s*[''`]?/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
-function parseGoalDetails(goalDetails, teamName) {
+/**
+ * @param {string} goalDetails Raw strHomeGoalDetails / strAwayGoalDetails value.
+ * @param {string} teamName Team this goal detail block belongs to (scoring side benefit).
+ * @param {string} opponentName The opposing team, used to re-attribute own goals.
+ */
+function parseGoalDetails(goalDetails, teamName, opponentName) {
   if (!goalDetails) return [];
 
   return String(goalDetails)
     .split(/;|\r?\n/)
-    .map(cleanScorerName)
-    .filter(Boolean)
-    .map(playerName => `${teamName}:${playerName}`);
+    .map(raw => {
+      const ownGoal = isOwnGoalEntry(raw);
+      const playerName = cleanScorerName(raw);
+      if (!playerName) return null;
+
+      // Own goals are listed under the team that benefits from the goal,
+      // but the player belongs to the opposing team. Re-attribute and tag.
+      const team = ownGoal ? opponentName : teamName;
+      const suffix = ownGoal ? ' (p.p.)' : '';
+      return `${team}:${playerName}${suffix}`;
+    })
+    .filter(Boolean);
 }
 
 function extractEventIdsFromHtml(html) {
@@ -199,6 +235,72 @@ function decodeHtmlEntities(text) {
     .replace(/&nbsp;/g, ' ');
 }
 
+function extractLineupsFromHtml(html) {
+  function extractSection(html, title) {
+    const start = html.indexOf(`<b>${title}</b>`);
+
+    if (start === -1) {
+      console.warn(`[lineups] Section not found: ${title}`);
+      return '';
+    }
+
+    const nextMarker = html.indexOf('<br><br><b>', start + 1);
+
+    return nextMarker === -1
+      ? html.slice(start)
+      : html.slice(start, nextMarker);
+  }
+
+  function extractPlayers(sectionHtml) {
+    const players = [];
+
+    // Titulares: el nombre aparece como texto justo antes del </a> que contiene
+    // la imagen de bandera. El HTML puede usar comillas simples o dobles.
+    // Ejemplo comillas dobles: <img src=".../flags/United-States.svg" ...> Tillman</a>
+    // Ejemplo comillas simples: <img src='.../flags/Paraguay.svg' ...> Bobadilla</a></a>
+    const starterRegex = /\/flags\/[^\s"']+[^>]*>\s*([^\n<]{1,40})<\/a>/g;
+    let m;
+    while ((m = starterRegex.exec(sectionHtml))) {
+      const name = decodeHtmlEntities(m[1]).replace(/\s+/g, ' ').trim();
+      if (name && name.length > 1) players.push(name);
+    }
+
+    // Sustitutos: <a href="/player/...">NombreSustituto</a> o con comillas simples,
+    // seguido de un minuto. Ejemplo: <a href='/player/...'>Reyna</a> 82
+    // No llevan imagen de bandera dentro, así que no los captura la regex anterior.
+    const subRegex = /<a href=['"]\/player\/[^'"]+['"]>([^<]{2,40})<\/a>\s*\d/g;
+    while ((m = subRegex.exec(sectionHtml))) {
+      const name = decodeHtmlEntities(m[1]).replace(/\s+/g, ' ').trim();
+      if (name && name.length > 1 && !players.includes(name)) players.push(name);
+    }
+
+    return players;
+  }
+
+  const homeSection = extractSection(html, 'Home Team Lineup');
+  const awaySection = extractSection(html, 'Away Team Lineup');
+
+  const homePlayers = extractPlayers(homeSection);
+  const awayPlayers = extractPlayers(awaySection);
+
+  console.log(
+    `[lineups] Home players detected: ${homePlayers.length}`
+  );
+
+  console.log(
+    `[lineups] Away players detected: ${awayPlayers.length}`
+  );
+
+  return {
+    homePlayers,
+    awayPlayers
+  };
+}
+
+// Matches the "OG" / "O.G." / "p.p." markers used in the event timeline HTML
+// next to a goal entry that was scored against the player's own team.
+const HTML_OWN_GOAL_REGEX = /\bo\.?g\.?\b|own goal|p\.?\s*p\.?/i;
+
 function scrapeGoalScorersFromHtml(html) {
   const timelines = [];
   // Quote-agnostic and order-agnostic: matches class="spoiler-main-timeline"
@@ -210,7 +312,7 @@ function scrapeGoalScorersFromHtml(html) {
   }
 
   function extractNames(timelineHtml) {
-    const names = [];
+    const entries = [];
     // Split into rows that contain a goal icon
     const rows = timelineHtml.split(/goal-soccer\.svg/);
     // Skip first chunk (before first goal icon)
@@ -221,12 +323,13 @@ function scrapeGoalScorersFromHtml(html) {
       while ((lm = linkRegex.exec(rows[i]))) {
         const name = decodeHtmlEntities(lm[1]).trim();
         if (name && name.length > 1) {
-          names.push(name);
+          const ownGoal = HTML_OWN_GOAL_REGEX.test(rows[i]);
+          entries.push({ name, ownGoal });
           break; // Only take the first text-only <a> per goal entry
         }
       }
     }
-    return names;
+    return entries;
   }
 
   return {
@@ -238,7 +341,26 @@ function scrapeGoalScorersFromHtml(html) {
 async function scrapeGoalScorersFromPage(eventId) {
   const url = `https://www.thesportsdb.com/event/${eventId}`;
   const html = await fetchText(url);
-  const result = scrapeGoalScorersFromHtml(html);
+  const goals = scrapeGoalScorersFromHtml(html);
+
+  const {
+    homePlayers,
+    awayPlayers
+  } = extractLineupsFromHtml(html);
+
+  const result = {
+    ...goals,
+    homePlayers,
+    awayPlayers
+  };
+
+  console.log(
+    `[lineups] Home players: ${homePlayers.join(', ')}`
+  );
+
+  console.log(
+    `[lineups] Away players: ${awayPlayers.join(', ')}`
+  );
 
   // Diagnostics: if we found nothing, log clues so we can fix the regex
   // without needing to guess what the real HTML looks like.
@@ -254,6 +376,18 @@ async function scrapeGoalScorersFromPage(eventId) {
       console.warn(`  [debug] raw HTML written to ${debugPath}`);
     }
   }
+
+  console.log(
+    `[html] Home goals found: ${
+      result.home.map(x => x.name).join(', ') || 'none'
+    }`
+  );
+
+  console.log(
+    `[html] Away goals found: ${
+      result.away.map(x => x.name).join(', ') || 'none'
+    }`
+  );
 
   return result;
 }
@@ -348,8 +482,10 @@ function updateMatchFromEvent(match, event, eventId) {
 
   const localHome = localIsReversed ? match.team_away : match.team_home;
   const localAway = localIsReversed ? match.team_home : match.team_away;
-  const homeScorers = parseGoalDetails(event.strHomeGoalDetails, localHome || apiHome);
-  const awayScorers = parseGoalDetails(event.strAwayGoalDetails, localAway || apiAway);
+  const homeTeamName = localHome || apiHome;
+  const awayTeamName = localAway || apiAway;
+  const homeScorers = parseGoalDetails(event.strHomeGoalDetails, homeTeamName, awayTeamName);
+  const awayScorers = parseGoalDetails(event.strAwayGoalDetails, awayTeamName, homeTeamName);
   const scorers = localIsReversed
     ? [...awayScorers, ...homeScorers]
     : [...homeScorers, ...awayScorers];
@@ -385,7 +521,11 @@ function rebuildScorers(matches) {
 
     for (const scorerSpec of match.scorers) {
       const key = String(scorerSpec).trim();
-      if (key) players[key] = (players[key] || 0) + 1;
+      if (!key) continue;
+      // Own goals are shown in the calendar with the "(p.p.)" suffix but
+      // must not count towards the top scorer ("pichichi") table.
+      if (key.endsWith('(p.p.)')) continue;
+      players[key] = (players[key] || 0) + 1;
     }
   }
 
@@ -524,12 +664,72 @@ async function scrapeWorldCupData() {
           try {
             await sleep(REQUEST_DELAY_MS);
             const htmlGoals = await scrapeGoalScorersFromPage(eventId);
-            const homeScorers = htmlGoals.home.map(name => `${match.team_home}:${name}`);
-            const awayScorers = htmlGoals.away.map(name => `${match.team_away}:${name}`);
+            // Own goals in the timeline are listed under the team that
+            // benefited, so re-attribute them to the opposing team and
+            // tag them with "(p.p.)", same as the API-based path.
+            const homeScorers = htmlGoals.home.map(entry => {
+              const belongsToAway =
+                playerBelongsTo(
+                  entry.name,
+                  htmlGoals.awayPlayers
+                );
+
+              console.log(
+                `[check] ${entry.name} -> belongsToAway=${belongsToAway}, ownGoal=${entry.ownGoal}`
+              );
+
+              if (entry.ownGoal || belongsToAway) {
+                console.log(
+                  `[own-goal] ${entry.name} appears in HOME timeline but belongs to AWAY lineup`
+                );
+
+                return `${match.team_away}:${entry.name} (p.p.)`;
+              }
+
+              console.log(
+                `[goal] ${entry.name} assigned to ${match.team_home}`
+              );
+
+              return `${match.team_home}:${entry.name}`;
+            });
+
+            const awayScorers = htmlGoals.away.map(entry => {
+              const belongsToHome =
+                playerBelongsTo(
+                  entry.name,
+                  htmlGoals.homePlayers
+                );
+
+              console.log(
+                `[check] ${entry.name} -> belongsToHome=${belongsToHome}, ownGoal=${entry.ownGoal}`
+              );
+
+              if (entry.ownGoal || belongsToHome) {
+                console.log(
+                  `[own-goal] ${entry.name} appears in AWAY timeline but belongs to HOME lineup`
+                );
+
+                return `${match.team_home}:${entry.name} (p.p.)`;
+              }
+
+              console.log(
+                `[goal] ${entry.name} assigned to ${match.team_away}`
+              );
+
+              return `${match.team_away}:${entry.name}`;
+            });
+
             const allScorers = [...homeScorers, ...awayScorers];
             if (allScorers.length > 0) {
+              console.log(
+                `[scorers] Final scorer list: ${allScorers.join(', ')}`
+              );
+
               match.scorers = allScorers;
-              console.log(`  Scorers from HTML: ${allScorers.join(', ')}`);
+
+              console.log(
+                `  Scorers from HTML: ${allScorers.join(', ')}`
+              );
             }
           } catch (scrapeErr) {
             console.warn(`  Could not scrape goal details: ${scrapeErr.message}`);

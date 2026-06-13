@@ -18,22 +18,44 @@
       background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
       background-size: 24px 24px;
     }
+
+    /* Fix: evitar scroll horizontal global en móvil */
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
+    /* Fix: asegurar que el modal-box no se salga del viewport en móvil real */
+    dialog.modal {
+      padding: 0;
+    }
+    dialog.modal .modal-box {
+      box-sizing: border-box;
+      /* w-[calc(100vw-1.5rem)] ya está en el HTML; esto refuerza el max-width */
+      max-width: min(56rem, calc(100vw - 1.5rem));
+    }
+    /* Evitar que el contenido interno fuerce desbordamiento horizontal */
+    dialog.modal .modal-box * {
+      min-width: 0;
+    }
   </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen bg-paper flex flex-col font-sans">
 
   <!-- Navbar -->
   <header class="navbar bg-slate-800/80 backdrop-blur border-b border-rose-500/20 sticky top-0 z-50 px-4 md:px-8">
-    <div class="flex-1">
-      <a class="flex items-center gap-3 cursor-pointer">
-        <span class="text-3xl">⚽</span>
-        <div>
-          <h1 class="font-black text-xl tracking-tight text-white">PORRA MUNDIAL 2026</h1>
-          <p class="text-xs text-rose-400 font-medium">Actualizado: diario a las 8:00 AM</p>
+    <div class="flex-1 min-w-0">
+      <a class="flex items-center gap-2 cursor-pointer min-w-0">
+        <span class="text-2xl md:text-3xl shrink-0">⚽</span>
+        <div class="min-w-0">
+          <h1 class="font-black text-base md:text-xl tracking-tight text-white truncate">PORRA MUNDIAL 2026</h1>
+          <p class="text-xs text-rose-400 font-medium hidden sm:block">Actualizado: diario a las 8:00 AM</p>
         </div>
       </a>
     </div>
-    <div class="flex-none gap-2">
+
+    <!-- Navegación escritorio (md+) -->
+    <div class="hidden md:flex flex-none gap-2">
       <button onclick="scrollToSection('leaderboard')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Clasificación</button>
       <button onclick="scrollToSection('matches')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Partidos</button>
       <button onclick="scrollToSection('scorers')" class="btn btn-ghost btn-sm text-slate-300 hover:text-white">Goleadores</button>
@@ -42,7 +64,59 @@
         <i class="fa-solid fa-lock text-xs"></i> Admin
       </button>
     </div>
+
+    <!-- Navegación móvil: botón Admin + menú hamburguesa -->
+    <div class="flex md:hidden items-center gap-1.5 shrink-0">
+      <button onclick="openAdmin()" class="btn btn-rose btn-sm gap-1">
+        <i class="fa-solid fa-lock text-xs"></i>
+        <span class="text-xs">Admin</span>
+      </button>
+      <div class="relative">
+        <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="btn btn-ghost btn-sm px-2" aria-label="Menú">
+          <i class="fa-solid fa-bars text-slate-300 text-base"></i>
+        </button>
+        <ul id="mobileMenu" class="hidden absolute right-0 top-full bg-slate-800 border border-slate-700 rounded-xl z-[100] w-48 p-2 shadow-2xl mt-1">
+          <li>
+            <button onclick="scrollToSection('leaderboard'); closeMobileMenu()" class="text-slate-200 hover:bg-slate-700 flex items-center gap-2 rounded-lg px-3 py-2 w-full text-left">
+              <i class="fa-solid fa-ranking-star text-rose-400 w-4"></i> Clasificación
+            </button>
+          </li>
+          <li>
+            <button onclick="scrollToSection('matches'); closeMobileMenu()" class="text-slate-200 hover:bg-slate-700 flex items-center gap-2 rounded-lg px-3 py-2 w-full text-left">
+              <i class="fa-solid fa-calendar-days text-rose-400 w-4"></i> Partidos
+            </button>
+          </li>
+          <li>
+            <button onclick="scrollToSection('scorers'); closeMobileMenu()" class="text-slate-200 hover:bg-slate-700 flex items-center gap-2 rounded-lg px-3 py-2 w-full text-left">
+              <i class="fa-solid fa-shoe-prints text-rose-400 w-4"></i> Goleadores
+            </button>
+          </li>
+          <li>
+            <button onclick="scrollToSection('rules'); closeMobileMenu()" class="text-slate-200 hover:bg-slate-700 flex items-center gap-2 rounded-lg px-3 py-2 w-full text-left">
+              <i class="fa-solid fa-circle-question text-rose-400 w-4"></i> Reglas
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
   </header>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    }
+    function closeMobileMenu() {
+      document.getElementById('mobileMenu').classList.add('hidden');
+    }
+    // Cerrar al tocar fuera del menú
+    document.addEventListener('click', function(e) {
+      const menu = document.getElementById('mobileMenu');
+      const btn  = document.getElementById('mobileMenuBtn');
+      if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+  </script>
 
   <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 space-y-6">
     
@@ -318,14 +392,15 @@
         <table class="table table-zebra w-full text-left">
           <thead class="bg-slate-900/80 text-slate-300 font-bold border-b border-slate-800 text-xs uppercase tracking-wider">
             <tr>
-              <th class="w-16 text-center">Pos</th>
+              <th class="w-12 md:w-16 text-center">Pos</th>
               <th>Participante</th>
-              <th class="text-center">Partidos</th>
-              <th class="text-center">Goles</th>
-              <th class="text-center"><span class="block">Clasif.</span><span class="block">Fase Grupos</span></th>
-              <th class="text-center"><span class="block">Pasar</span><span class="block">Ronda</span></th>
-              <th class="text-center">Top4</th>
-              <th class="bg-rose-950/20 text-rose-300 text-center font-black w-28"><span class="block">Puntos</span><span class="block">Total</span></th>
+              <th class="hidden md:table-cell text-center">Partidos</th>
+              <th class="hidden md:table-cell text-center">Goles</th>
+              <th class="hidden md:table-cell text-center"><span class="block">Clasif.</span><span class="block">Fase Grupos</span></th>
+              <th class="hidden md:table-cell text-center"><span class="block">Pasar</span><span class="block">Ronda</span></th>
+              <th class="hidden md:table-cell text-center">Top4</th>
+              <th class="hidden md:table-cell text-center"><span class="block">Bono</span><span class="block">Pichichi</span></th>
+              <th class="bg-rose-950/20 text-rose-300 text-center font-black w-20 md:w-28"><span class="block">Puntos</span><span class="block">Total</span></th>
             </tr>
           </thead>
           <tbody id="leaderboardBody">
@@ -444,22 +519,22 @@
 
   <!-- Modal Detallado de Participante -->
   <dialog id="participantModal" class="modal bg-slate-950/80 backdrop-blur-sm">
-    <div class="modal-box bg-slate-900 border border-rose-500/30 max-w-4xl p-6 rounded-2xl shadow-2xl relative scrollbar-thin">
+    <div class="modal-box bg-slate-900 border border-rose-500/30 w-[calc(100vw-1.5rem)] max-w-4xl p-3 md:p-6 rounded-2xl shadow-2xl relative overflow-y-auto overflow-x-hidden">
       <form method="dialog">
         <button type="submit" class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-slate-400 hover:text-white">✕</button>
       </form>
       
       <!-- Cabecera del Participante -->
-      <div class="flex items-center gap-4 mb-6 border-b border-slate-800 pb-4">
-        <span class="text-4xl" id="modalPartIcon">🧐</span>
-        <div>
-          <h3 class="text-2xl font-black text-white" id="modalPartName">Participante</h3>
-          <p class="text-sm text-slate-400">Puntuación Total en directo: <span class="badge badge-rose font-bold text-sm" id="modalPartRank">0 Ptos</span></p>
+      <div class="flex flex-wrap items-center gap-3 mb-4 md:mb-6 border-b border-slate-800 pb-4">
+        <span class="text-3xl md:text-4xl shrink-0" id="modalPartIcon">🧐</span>
+        <div class="min-w-0 flex-1">
+          <h3 class="text-xl md:text-2xl font-black text-white truncate" id="modalPartName">Participante</h3>
+          <p class="text-xs md:text-sm text-slate-400 flex flex-wrap items-center gap-1">Puntuación Total: <span class="badge badge-rose font-bold text-sm" id="modalPartRank">0 Ptos</span></p>
         </div>
       </div>
 
       <!-- Resumen de Puntos y la Hoja que replica el papel -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         
         <!-- Resumen de casillas y totales -->
         <div class="space-y-4">
@@ -467,12 +542,12 @@
             <h4 class="font-bold text-white text-sm mb-2 border-b border-slate-850 pb-1">📊 Desglose de Puntos</h4>
             <div class="space-y-2 text-xs">
               <div class="flex justify-between">
-                <span class="text-slate-400">Puntos por Goles (2 pts/gol)</span>
-                <span class="font-semibold text-white" id="modalBreakdownScorers">0 pts</span>
-              </div>
-              <div class="flex justify-between">
                 <span class="text-slate-400">Puntos por Partidos</span>
                 <span class="font-semibold text-white" id="modalBreakdownMatches">0 pts</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-slate-400">Puntos por Goles (2 pts/gol)</span>
+                <span class="font-semibold text-white" id="modalBreakdownScorers">0 pts</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-slate-400">Puntos por Clasif. Fase de Grupo</span>
@@ -513,14 +588,14 @@
             <i class="fa-solid fa-clipboard-list text-rose-500"></i> Selecciones Elegidas por Grupo
           </h4>
           
-          <div class="grid grid-cols-2 gap-3" id="modalGroupsContainer">
+          <div class="grid grid-cols-2 gap-3 w-full" id="modalGroupsContainer">
             <!-- Los 6 grupos de selecciones se pintan en una cuadrícula idéntica a la hoja -->
           </div>
 
           <!-- Predicción Top 4 -->
           <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-4 space-y-2">
             <h4 class="font-bold text-white text-xs uppercase tracking-wider">🔮 Pronóstico de Clasificación Final (Top 4)</h4>
-            <div class="grid grid-cols-4 gap-2 text-center text-xs" id="modalPodiumList">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs" id="modalPodiumList">
               <!-- Carga de P1, P2, P3, P4 -->
             </div>
           </div>

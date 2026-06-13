@@ -660,25 +660,40 @@ function renderLeaderboard() {
     tr.onclick = () => showParticipantDetail(participant.id);
 
     tr.innerHTML = `
-      <td class="text-center font-bold text-sm w-16">
+      <td class="text-center font-bold text-sm w-12 md:w-16 px-1 md:px-4">
         <span class="badge ${badgeClass} badge-sm md:badge-md p-2">${icon}</span>
       </td>
-      <td class="font-bold text-white text-sm md:text-base">
+      <td class="font-bold text-white text-sm md:text-base py-2 md:py-3">
         <div class="flex items-center justify-between gap-2">
-          <div>
-            <div>${participant.name}</div>
+          <div class="min-w-0">
+            <div class="truncate">${participant.name}</div>
             ${isLast ? '<span class="text-[10px] text-rose-500 block font-normal">Sótano (10% premio)</span>' : ''}
             ${isFirst ? '<span class="text-[10px] text-amber-400 block font-normal">Líder Provisional (50% premio)</span>' : ''}
+            <div class="flex md:hidden flex-wrap gap-x-2 gap-y-0.5 mt-1">
+              <span class="text-[12px] text-slate-400">✌🏼 <span class="text-slate-300 font-semibold">${participant.score_details.matches}</span></span>
+              <span class="text-[12px] text-slate-400">⚽ <span class="text-slate-300 font-semibold">${participant.score_details.scorers}</span></span>
+              <span class="text-[12px] text-slate-400">📊 <span class="text-slate-300 font-semibold">${participant.score_details.groups}</span></span>
+              <span class="text-[12px] text-slate-400">⏩ <span class="text-slate-300 font-semibold">${participant.score_details.rounds}</span></span>
+              <span class="text-[12px] text-slate-400">4️⃣ <span class="text-slate-300 font-semibold">${participant.score_details.podium}</span></span>
+              <span class="text-[12px] ${participant.score_details.pichichi > 0 ? 'text-amber-400' : 'text-slate-400'}">
+                🌕 <span class="font-semibold">${participant.score_details.pichichi}</span>
+              </span>            
+            </div>
           </div>
-          <button onclick="toggleParticipantSelections(event, ${participant.id})" class="btn btn-ghost btn-xs text-slate-300">Selecciones</button>
+          <!-- Botón siempre visible: texto en escritorio, icono en móvil -->
+          <button onclick="toggleParticipantSelections(event, ${participant.id})" class="btn btn-ghost btn-xs text-slate-300 shrink-0">
+            <span class="hidden md:inline">Selecciones</span>
+            <i class="fa-solid fa-table-list md:hidden text-xs"></i>
+          </button>
         </div>
       </td>
-      <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.matches} pts</td>
-      <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.scorers} pts</td>
-      <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.groups} pts</td>
-      <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.rounds} pts</td>
-      <td class="text-center text-xs text-slate-300 font-medium">${participant.score_details.podium} pts</td>
-      <td class="bg-rose-950/20 text-rose-300 text-center font-black text-sm md:text-lg rounded-r-xl">${participant.score_details.total}</td>
+      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.matches} pts</td>
+      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.scorers} pts</td>
+      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.groups} pts</td>
+      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.rounds} pts</td>
+      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.podium} pts</td>
+      <td class="hidden md:table-cell text-center text-xs font-medium ${participant.score_details.pichichi > 0 ? 'text-amber-400 font-bold' : 'text-slate-600'}">${participant.score_details.pichichi > 0 ? participant.score_details.pichichi + ' pts 🌟' : '-'}</td>
+      <td class="bg-rose-950/20 text-rose-300 text-center font-black text-base md:text-lg rounded-r-xl px-2 md:px-4">${participant.score_details.total}</td>
     `;
     tbody.appendChild(tr);
 
@@ -686,28 +701,36 @@ function renderLeaderboard() {
     detailRow.id = `participantSelections-${participant.id}`;
     detailRow.className = 'hidden bg-slate-950/70 border-b border-slate-900/60';
     detailRow.innerHTML = `
-      <td colspan="8" class="px-4 py-4 text-[10px] text-slate-300">
-        <div class="space-y-1">
-          <div class="text-slate-400 uppercase tracking-wide text-[9px] font-semibold mb-2">Selecciones + Goleadores</div>
-          <div class="grid gap-1 sm:grid-cols-12">
+      <td colspan="8" class="px-2 md:px-4 py-3 md:py-4 text-[10px] text-slate-300">
+        <div class="space-y-2">
+          <div class="text-slate-400 uppercase tracking-wide text-[9px] font-semibold">Selecciones + Goleadores</div>
+
+          <!-- Grupos: 3 columnas en móvil (2 filas de 3), 6 en escritorio (1 fila) -->
+          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1">
             ${Object.entries(participant.predictions).map(([grpName, teamList]) => `
-              <div class="col-span-1 rounded-2xl border-l-4 p-2 ${getGroupBadgeClasses(grpName)} shadow-inner shadow-slate-950/20 min-w-0">
-                <div class="text-[9px] uppercase tracking-[0.24em] font-bold mb-1 text-slate-200">${grpName}</div>
-                <div class="text-slate-100 text-[12px] leading-4 space-y-0.5">
-                  ${teamList.map(team => `<div class="flex items-center gap-1 min-w-0"><span class="shrink-0 flex items-center">${getTeamFlag(team)}</span><span class="truncate">${team}</span></div>`).join('')}
+              <div class="rounded-xl border-l-2 sm:border-l-4 p-1.5 ${getGroupBadgeClasses(grpName)} min-w-0">
+                <div class="text-[9px] uppercase tracking-wider font-bold mb-0.5 text-slate-200">${grpName}</div>
+                <div class="space-y-0.5">
+                  ${teamList.map(team => `
+                    <div class="flex items-center gap-0.5 min-w-0">
+                      <span class="shrink-0">${getTeamFlag(team)}</span>
+                      <span class="truncate text-[9px] leading-tight">${team}</span>
+                    </div>
+                  `).join('')}
                 </div>
               </div>
             `).join('')}
-            <div class="col-span-6 rounded-2xl border border-slate-800 bg-slate-900/80 p-1.5 shadow-inner shadow-slate-950/20 min-w-0">
-              <div class="grid grid-cols-2 gap-1 text-[10px] text-slate-100">
-                ${Object.entries(participant.scorers).map(([jGrp, player]) => `
-                  <div class="inline-flex items-center gap-1 rounded-xl border border-slate-700 bg-slate-950/80 px-2 py-1 truncate">
-                    <span class="shrink-0">${getPlayerFlag(player)}</span>
-                    <span class="truncate">${player}</span>
-                  </div>
-                `).join('')}
+          </div>
+
+          <!-- Goleadores: 2 columnas en móvil, 3 en sm+ -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-1">
+            ${Object.entries(participant.scorers).map(([jGrp, player]) => `
+              <div class="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-950/80 px-1.5 py-1 min-w-0">
+                <span class="text-[9px] text-slate-500 font-bold shrink-0">${jGrp}</span>
+                <span class="shrink-0">${getPlayerFlag(player)}</span>
+                <span class="truncate text-[9px]">${player}</span>
               </div>
-            </div>
+            `).join('')}
           </div>
         </div>
       </td>

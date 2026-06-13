@@ -220,7 +220,8 @@
     "status": "upcoming",
     "date": "2026-06-16",
     "time": "03:00",
-    "venue": "SoFi Stadium, Los Ángeles"
+    "venue": "SoFi Stadium, Los Ángeles",
+    "idEvent": "2391737"
   },
   {
     "id": 17,
@@ -255,7 +256,8 @@
     "status": "upcoming",
     "date": "2026-06-17",
     "time": "03:00",
-    "venue": "Arrowhead Stadium, Kansas City"
+    "venue": "Arrowhead Stadium, Kansas City",
+    "idEvent": "2391740"
   },
   {
     "id": 20,
@@ -266,7 +268,8 @@
     "status": "upcoming",
     "date": "2026-06-17",
     "time": "06:00",
-    "venue": "Levi's Stadium, San Francisco"
+    "venue": "Levi's Stadium, San Francisco",
+    "idEvent": "2391741"
   },
   {
     "id": 21,
@@ -313,7 +316,8 @@
     "status": "upcoming",
     "date": "2026-06-18",
     "time": "04:00",
-    "venue": "Estadio Azteca, Ciudad de México"
+    "venue": "Estadio Azteca, Ciudad de México",
+    "idEvent": "2391745"
   },
   {
     "id": 25,
@@ -336,7 +340,8 @@
     "status": "upcoming",
     "date": "2026-06-18",
     "time": "21:00",
-    "venue": "SoFi Stadium, Los Ángeles"
+    "venue": "SoFi Stadium, Los Ángeles",
+    "idEvent": "2461110"
   },
   {
     "id": 27,
@@ -347,7 +352,8 @@
     "status": "upcoming",
     "date": "2026-06-19",
     "time": "00:00",
-    "venue": "BC Place, Vancouver"
+    "venue": "BC Place, Vancouver",
+    "idEvent": "2391746"
   },
   {
     "id": 28,
@@ -358,7 +364,8 @@
     "status": "upcoming",
     "date": "2026-06-19",
     "time": "03:00",
-    "venue": "Estadio Akron, Guadalajara"
+    "venue": "Estadio Akron, Guadalajara",
+    "idEvent": "2391747"
   },
   {
     "id": 29,
@@ -393,7 +400,8 @@
     "status": "upcoming",
     "date": "2026-06-20",
     "time": "02:30",
-    "venue": "Lincoln Financial Field, Filadelfia"
+    "venue": "Lincoln Financial Field, Filadelfia",
+    "idEvent": "2391748"
   },
   {
     "id": 32,
@@ -404,7 +412,8 @@
     "status": "upcoming",
     "date": "2026-06-20",
     "time": "05:00",
-    "venue": "Levi's Stadium, San Francisco"
+    "venue": "Levi's Stadium, San Francisco",
+    "idEvent": "2461111"
   },
   {
     "id": 33,
@@ -439,7 +448,8 @@
     "status": "upcoming",
     "date": "2026-06-21",
     "time": "02:00",
-    "venue": "Arrowhead Stadium, Kansas City"
+    "venue": "Arrowhead Stadium, Kansas City",
+    "idEvent": "2391751"
   },
   {
     "id": 36,
@@ -450,7 +460,8 @@
     "status": "upcoming",
     "date": "2026-06-21",
     "time": "06:00",
-    "venue": "Estadio BBVA, Monterrey"
+    "venue": "Estadio BBVA, Monterrey",
+    "idEvent": "2391753"
   },
   {
     "id": 37,
@@ -497,7 +508,8 @@
     "status": "upcoming",
     "date": "2026-06-22",
     "time": "03:00",
-    "venue": "BC Place, Vancouver"
+    "venue": "BC Place, Vancouver",
+    "idEvent": "2391755"
   },
   {
     "id": 41,
@@ -532,7 +544,8 @@
     "status": "upcoming",
     "date": "2026-06-23",
     "time": "02:00",
-    "venue": "MetLife Stadium, Nueva Jersey"
+    "venue": "MetLife Stadium, Nueva Jersey",
+    "idEvent": "2391760"
   },
   {
     "id": 44,
@@ -543,7 +556,8 @@
     "status": "upcoming",
     "date": "2026-06-23",
     "time": "05:00",
-    "venue": "Levi's Stadium, San Francisco"
+    "venue": "Levi's Stadium, San Francisco",
+    "idEvent": "2391759"
   },
   {
     "id": 45,
@@ -578,7 +592,8 @@
     "status": "upcoming",
     "date": "2026-06-24",
     "time": "01:00",
-    "venue": "BMO Field, Toronto"
+    "venue": "BMO Field, Toronto",
+    "idEvent": "2391762"
   },
   {
     "id": 48,
@@ -589,7 +604,8 @@
     "status": "upcoming",
     "date": "2026-06-24",
     "time": "04:00",
-    "venue": "Estadio Akron, Guadalajara"
+    "venue": "Estadio Akron, Guadalajara",
+    "idEvent": "2461114"
   },
   {
     "id": 49,
@@ -612,7 +628,8 @@
     "status": "upcoming",
     "date": "2026-06-24",
     "time": "21:00",
-    "venue": "Lumen Field, Seattle"
+    "venue": "Lumen Field, Seattle",
+    "idEvent": "2461115"
   },
   {
     "id": 51,
@@ -647,7 +664,8 @@
     "status": "upcoming",
     "date": "2026-06-25",
     "time": "03:00",
-    "venue": "Estadio Azteca, Ciudad de México"
+    "venue": "Estadio Azteca, Ciudad de México",
+    "idEvent": "2461116"
   },
   {
     "id": 54,
@@ -658,7 +676,8 @@
     "status": "upcoming",
     "date": "2026-06-25",
     "time": "03:00",
-    "venue": "Estadio BBVA, Monterrey"
+    "venue": "Estadio BBVA, Monterrey",
+    "idEvent": "2391766"
   },
   {
     "id": 55,
@@ -681,7 +700,8 @@
     "status": "upcoming",
     "date": "2026-06-25",
     "time": "22:00",
-    "venue": "MetLife Stadium, Nueva Jersey"
+    "venue": "MetLife Stadium, Nueva Jersey",
+    "idEvent": "2391769"
   },
   {
     "id": 57,
@@ -692,7 +712,8 @@
     "status": "upcoming",
     "date": "2026-06-26",
     "time": "01:00",
-    "venue": "AT&T Stadium, Dallas"
+    "venue": "AT&T Stadium, Dallas",
+    "idEvent": "2461117"
   },
   {
     "id": 58,
@@ -703,7 +724,8 @@
     "status": "upcoming",
     "date": "2026-06-26",
     "time": "01:00",
-    "venue": "Arrowhead Stadium, Kansas City"
+    "venue": "Arrowhead Stadium, Kansas City",
+    "idEvent": "2391771"
   },
   {
     "id": 59,
@@ -714,7 +736,8 @@
     "status": "upcoming",
     "date": "2026-06-26",
     "time": "04:00",
-    "venue": "SoFi Stadium, Los Ángeles"
+    "venue": "SoFi Stadium, Los Ángeles",
+    "idEvent": "2461118"
   },
   {
     "id": 60,
@@ -725,7 +748,8 @@
     "status": "upcoming",
     "date": "2026-06-26",
     "time": "04:00",
-    "venue": "Levi's Stadium, San Francisco"
+    "venue": "Levi's Stadium, San Francisco",
+    "idEvent": "2391770"
   },
   {
     "id": 61,
@@ -736,7 +760,8 @@
     "status": "upcoming",
     "date": "2026-06-26",
     "time": "21:00",
-    "venue": "Gillette Stadium, Boston"
+    "venue": "Gillette Stadium, Boston",
+    "idEvent": "2391775"
   },
   {
     "id": 62,
@@ -747,7 +772,8 @@
     "status": "upcoming",
     "date": "2026-06-26",
     "time": "21:00",
-    "venue": "BMO Field, Toronto"
+    "venue": "BMO Field, Toronto",
+    "idEvent": "2461119"
   },
   {
     "id": 63,
@@ -758,7 +784,8 @@
     "status": "upcoming",
     "date": "2026-06-27",
     "time": "02:00",
-    "venue": "NRG Stadium, Houston"
+    "venue": "NRG Stadium, Houston",
+    "idEvent": "2391772"
   },
   {
     "id": 64,
@@ -769,7 +796,8 @@
     "status": "upcoming",
     "date": "2026-06-27",
     "time": "02:00",
-    "venue": "Estadio Akron, Guadalajara"
+    "venue": "Estadio Akron, Guadalajara",
+    "idEvent": "2391776"
   },
   {
     "id": 65,
@@ -780,7 +808,8 @@
     "status": "upcoming",
     "date": "2026-06-27",
     "time": "05:00",
-    "venue": "Lumen Field, Seattle"
+    "venue": "Lumen Field, Seattle",
+    "idEvent": "2391773"
   },
   {
     "id": 66,
@@ -791,7 +820,8 @@
     "status": "upcoming",
     "date": "2026-06-27",
     "time": "05:00",
-    "venue": "BC Place, Vancouver"
+    "venue": "BC Place, Vancouver",
+    "idEvent": "2391774"
   },
   {
     "id": 67,
@@ -802,7 +832,8 @@
     "status": "upcoming",
     "date": "2026-06-27",
     "time": "23:00",
-    "venue": "MetLife Stadium, Nueva Jersey"
+    "venue": "MetLife Stadium, Nueva Jersey",
+    "idEvent": "2391781"
   },
   {
     "id": 68,
@@ -813,7 +844,8 @@
     "status": "upcoming",
     "date": "2026-06-27",
     "time": "23:00",
-    "venue": "Lincoln Financial Field, Filadelfia"
+    "venue": "Lincoln Financial Field, Filadelfia",
+    "idEvent": "2391779"
   },
   {
     "id": 69,
@@ -824,7 +856,8 @@
     "status": "upcoming",
     "date": "2026-06-28",
     "time": "01:30",
-    "venue": "Hard Rock Stadium, Miami"
+    "venue": "Hard Rock Stadium, Miami",
+    "idEvent": "2391778"
   },
   {
     "id": 70,
@@ -835,7 +868,8 @@
     "status": "upcoming",
     "date": "2026-06-28",
     "time": "01:30",
-    "venue": "Mercedes-Benz Stadium, Atlanta"
+    "venue": "Mercedes-Benz Stadium, Atlanta",
+    "idEvent": "2461120"
   },
   {
     "id": 71,
@@ -846,7 +880,8 @@
     "status": "upcoming",
     "date": "2026-06-28",
     "time": "04:00",
-    "venue": "Arrowhead Stadium, Kansas City"
+    "venue": "Arrowhead Stadium, Kansas City",
+    "idEvent": "2391777"
   },
   {
     "id": 72,
@@ -857,7 +892,8 @@
     "status": "upcoming",
     "date": "2026-06-28",
     "time": "04:00",
-    "venue": "AT&T Stadium, Dallas"
+    "venue": "AT&T Stadium, Dallas",
+    "idEvent": "2391780"
   },
   {
     "id": 73,

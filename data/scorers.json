@@ -1,15 +1,29 @@
 {
   "max_goals": 2,
   "players": {
-    "México:Julián Quiñones": 1,
-    "México:Raúl Jiménez": 1,
-    "Corea del Sur:Hwang": 1,
-    "Corea del Sur:Oh": 1,
-    "República Checa:Krejčí": 1,
-    "Canadá:Larin": 1,
-    "Bosnia y Herzegovina:Lukić": 1,
-    "Estados Unidos:Balogun": 2,
-    "Estados Unidos:Reyna": 1,
-    "Paraguay:Maurício": 1
+    "México:Julian QUINONES": 1,
+    "México:Raul JIMENEZ": 1,
+    "República Checa:Ladislav KREJCI": 1,
+    "Corea del Sur:HWANG Inbeom": 1,
+    "Corea del Sur:OH Hyeongyu": 1,
+    "Bosnia y Herzegovina:Jovo LUKIC": 1,
+    "Canadá:Cyle LARIN": 1,
+    "Estados Unidos:Folarin BALOGUN": 2,
+    "Paraguay:MAURICIO": 1,
+    "Estados Unidos:Giovanni REYNA": 1
+  },
+  "max_assists": 1,
+  "assists": {
+    "México:Erik LIRA": 1,
+    "México:Roberto ALVARADO": 1,
+    "República Checa:Vladimir COUFAL": 1,
+    "Corea del Sur:LEE Kangin": 1,
+    "Corea del Sur:HWANG Inbeom": 1,
+    "Bosnia y Herzegovina:Sead KOLASINAC": 1,
+    "Canadá:Promise DAVID": 1,
+    "Estados Unidos:Christian PULISIC": 1,
+    "Estados Unidos:Malik TILLMAN": 1,
+    "Paraguay:Julio ENCISO": 1,
+    "Estados Unidos:Alex FREEMAN": 1
   }
 }

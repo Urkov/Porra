@@ -57,7 +57,10 @@ const TEAM_CODES = {
   "Cabo Verde": "cv",
   "Panamá": "pa",
   "Curazao": "cw",
-  "Haití": "ht"
+  "Haití": "ht",
+  "República Checa": "cz",
+  "Arabia Saudita": "sa",
+  "Irán": "ir"
 };
 
 // Banderas emojis nativas para selects
@@ -109,15 +112,23 @@ const TEAM_EMOJIS = {
   "Cabo Verde": "🇨🇻",
   "Panamá": "🇵🇦",
   "Curazao": "🇨🇼",
-  "Haití": "🇭🇹"
+  "Haití": "🇭🇹",
+  "República Checa": "🇨🇿",
+  "Arabia Saudita": "🇸🇦",
+  "Irán": "🇮🇷"
 };
 
 const WEEKDAYS = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 function getWeekday(dateStr) {
   if (!dateStr) return "";
   try {
-    const date = new Date(dateStr + "T00:00:00");
-    return WEEKDAYS[date.getDay()] || "";
+    // Formato scraper: MM/DD/YYYY
+    if (dateStr.includes('/')) {
+      const [mo, d, y] = dateStr.split('/');
+      return WEEKDAYS[new Date(`${y}-${mo}-${d}T00:00:00`).getDay()] || "";
+    }
+    // Formato ISO: YYYY-MM-DD
+    return WEEKDAYS[new Date(dateStr + "T00:00:00").getDay()] || "";
   } catch (e) {
     return "";
   }
@@ -125,9 +136,15 @@ function getWeekday(dateStr) {
 
 function formatDate(dateStr) {
   if (!dateStr) return "";
+  // MM/DD/YYYY → DD/MM
+  if (dateStr.includes('/')) {
+    const [mo, d] = dateStr.split('/');
+    return `${d}/${mo}`;
+  }
+  // YYYY-MM-DD → DD/MM
   const parts = dateStr.split("-");
   if (parts.length !== 3) return dateStr;
-  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  return `${parts[2]}/${parts[1]}`;
 }
 
 function getTeamFlag(teamName, isLarge = false) {
@@ -182,16 +199,84 @@ const PLAYER_TEAMS = {
   "Mohamed Salah": "Egipto"
 };
 
+/**
+ * Normalización de nombres de jugadores FIFA → nombre canónico de players.json.
+ *
+ * En lugar de mantener una lista manual de aliases, construimos un mapa
+ * automático a partir de los propios datos de players.json (que se carga en
+ * loadDatabase). El mapa se indexa en minúsculas para ser insensible a
+ * mayúsculas, tildes y variantes ortográficas menores.
+ *
+ * Estrategia de búsqueda (en orden):
+ *  1. Nombre completo en minúsculas           → "jonathan david"    ✓
+ *  2. Todo en Title Case y luego minúsculas   → "Jonathan DAVID" → "jonathan david" ✓
+ *  3. Solo el último token en minúsculas      → "HAALAND" → "haaland" (fallback apellido)
+ *  4. Sin match → devuelve el nombre original para no perder datos.
+ */
+let _playerCanonicalMap = null;
+
+function buildPlayerCanonicalMap() {
+  if (_playerCanonicalMap) return _playerCanonicalMap;
+  _playerCanonicalMap = {};
+  Object.values(players).forEach(list => {
+    list.forEach(canonicalName => {
+      // Índice por nombre completo en minúsculas (máxima precisión)
+      _playerCanonicalMap[canonicalName.toLowerCase()] = canonicalName;
+      // Índice por versión Title Case en minúsculas (cubre "Jonathan DAVID" → "jonathan david")
+      const titleCase = canonicalName.replace(/\b\w/g, c => c.toUpperCase());
+      _playerCanonicalMap[titleCase.toLowerCase()] = canonicalName;
+      // Índice por último apellido en minúsculas (fallback: "HAALAND" → "haaland")
+      const lastName = canonicalName.split(' ').pop().toLowerCase();
+      // Solo lo añadimos si no hay colisión con otro jugador
+      if (!_playerCanonicalMap[lastName]) {
+        _playerCanonicalMap[lastName] = canonicalName;
+      }
+    });
+  });
+  return _playerCanonicalMap;
+}
+
+function normalizePlayerName(name) {
+  if (!name) return name;
+  const map = buildPlayerCanonicalMap();
+
+  // 1. Nombre tal cual en minúsculas
+  const lower = name.toLowerCase();
+  if (map[lower]) return map[lower];
+
+  // 2. Convertir a Title Case (cada palabra con inicial mayúscula) y buscar en minúsculas
+  //    Esto cubre el formato FIFA "Nombre APELLIDO" → "nombre apellido"
+  const titleLower = name.replace(/\b\w+/g, w =>
+    w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()
+  ).toLowerCase();
+  if (map[titleLower]) return map[titleLower];
+
+  // 3. Solo el último token (apellido), útil si la API devuelve solo apellido en mayúsculas
+  const lastToken = name.trim().split(/\s+/).pop().toLowerCase();
+  if (map[lastToken]) return map[lastToken];
+
+  // Sin match: devolver el original para no perder datos en la visualización
+  return name;
+}
+
+// Exponer globalmente para que admin.js u otros scripts también lo usen
+window.normalizePlayerName = normalizePlayerName;
+// Invalidar el mapa si players se recarga (p.ej. en previsualización admin)
+function invalidatePlayerCanonicalMap() { _playerCanonicalMap = null; }
+window.invalidatePlayerCanonicalMap = invalidatePlayerCanonicalMap;
+
 function getPlayerFlag(playerName, isLarge = false) {
   if (!playerName) return "";
-  const team = PLAYER_TEAMS[playerName];
+  const canonical = normalizePlayerName(playerName);
+  const team = PLAYER_TEAMS[canonical];
   if (!team) return "";
   return getTeamFlag(team, isLarge);
 }
 
 function getPlayerFlagEmoji(playerName) {
   if (!playerName) return "";
-  const team = PLAYER_TEAMS[playerName];
+  const canonical = normalizePlayerName(playerName);
+  const team = PLAYER_TEAMS[canonical];
   if (!team) return "";
   return getTeamFlagEmoji(team);
 }
@@ -368,7 +453,8 @@ function computeScores() {
     // 1. CÁLCULO DE GOLES (2 PUNTOS POR GOL INDEPENDIENTEMENTE DE GRUPO)
     // Se recorre cada uno de sus 6 jugadores elegidos
     const participantPlayers = Object.values(participant.scorers);
-    participantPlayers.forEach(pName => {
+    participantPlayers.forEach(rawName => {
+      const pName = normalizePlayerName(rawName);
       const team = PLAYER_TEAMS[pName];
       const key = team ? `${team}:${pName}` : pName;
       const goals = (scorers.players && (scorers.players[key] || scorers.players[pName])) || 0;
@@ -823,7 +909,8 @@ function showParticipantDetail(id) {
   // Goleadores elegidos
   const gList = document.getElementById('modalGoleadoresList');
   gList.innerHTML = '';
-  Object.entries(p.scorers).forEach(([jGrp, playerSelected]) => {
+  Object.entries(p.scorers).forEach(([jGrp, rawPlayerSelected]) => {
+    const playerSelected = normalizePlayerName(rawPlayerSelected);
     const team = PLAYER_TEAMS[playerSelected];
     const key = team ? `${team}:${playerSelected}` : playerSelected;
     const playerGoals = (scorers.players && (scorers.players[key] || scorers.players[playerSelected])) || 0;
@@ -1202,12 +1289,17 @@ function renderMatches() {
 
       <div class="border-t border-slate-900/60 pt-2 text-[10px] text-slate-400 flex flex-col gap-1">
         <div class="flex justify-between items-center text-slate-450 gap-2">
-          <span class="shrink-0"><i class="fa-solid fa-calendar-day mr-1.5 text-rose-500/80"></i>${getWeekday(m.date)}, ${formatDate(m.date)} - ${m.time}</span>
-          <span class="truncate max-w-[130px] sm:max-w-[180px]" title="${m.venue || ''}"><i class="fa-solid fa-location-dot mr-1.5 text-rose-500/80"></i>${m.venue || 'Por definir'}</span>
+           <span class="shrink-0 flex items-center gap-1.5">
+            <i class="fa-solid fa-calendar-day text-rose-500/80"></i>
+            <span>${formatDate(m.date)}</span>
+            <span class="font-semibold text-slate-300">${getWeekday(m.date)}</span>
+            <span class="text-rose-400 font-bold">${m.time}</span>
+          </span>
+          <span class="truncate max-w-[130px] sm:max-w-[180px]" title="${m.venue || ''}"><i class="fa-solid fa-location-dot mr-1 text-rose-500/80"></i>${m.venue || 'Por definir'}</span>
         </div>
         ${isFinished && Array.isArray(m.scorers) && m.scorers.length > 0 ? `
           ${(() => {
-          const selectedScorers = new Set(participants.flatMap(p => Object.values(p.scorers).map(name => name.trim())));
+          const selectedScorers = new Set(participants.flatMap(p => Object.values(p.scorers).map(name => normalizePlayerName(name.trim()))));
           const parsedScorers = m.scorers.map(sc => {
             const parts = sc.split(':');
             return {
@@ -1224,23 +1316,24 @@ function renderMatches() {
             return isOwnGoal ? sc.team === m.team_home : sc.team === m.team_away;
           });
           const renderScorer = sc => {
-            const picked = selectedScorers.has(sc.player);
+            const canonical = normalizePlayerName(sc.player);
+            const picked = selectedScorers.has(canonical);
+            const isOwnGoal = sc.player.endsWith('(p.p.)');
+            const flagHtml = getPlayerFlag(canonical) || getTeamFlag(sc.team);
             return `
                 <span class="inline-flex items-center gap-1 rounded-full px-2 py-1 ${picked ? 'bg-emerald-500/20 border border-emerald-500/30 text-emerald-200' : 'bg-slate-900/80 border border-slate-800 text-slate-300'} text-[10px] truncate">
-                  ${getPlayerFlag(sc.player)}
-                  <span class="truncate">${sc.player}</span>
+                  ${flagHtml}
+                  <span class="truncate">${canonical}</span>
                 </span>
               `;
           };
           return `
-              <div class="grid gap-2 sm:grid-cols-2 border-t border-slate-900/40 pt-2">
+              <div class="grid gap-2 grid-cols-2 border-t border-slate-900/40 pt-2 mt-1">
                 <div class="space-y-1">
-                  <div class="uppercase tracking-[0.18em] text-[9px] text-slate-500 font-semibold">${m.team_home}</div>
-                  <div class="flex flex-wrap gap-1">${homeScorers.length > 0 ? homeScorers.map(renderScorer).join('') : '<span class="text-slate-500">-</span>'}</div>
+                  <div class="flex flex-wrap gap-1 justify-start">${homeScorers.length > 0 ? homeScorers.map(renderScorer).join('') : '<span class="text-slate-600 text-[10px]">-</span>'}</div>
                 </div>
                 <div class="space-y-1">
-                  <div class="uppercase tracking-[0.18em] text-[9px] text-slate-500 font-semibold">${m.team_away}</div>
-                  <div class="flex flex-wrap gap-1">${awayScorers.length > 0 ? awayScorers.map(renderScorer).join('') : '<span class="text-slate-500">-</span>'}</div>
+                  <div class="flex flex-wrap gap-1 justify-end">${awayScorers.length > 0 ? awayScorers.map(renderScorer).join('') : '<span class="text-slate-600 text-[10px]">-</span>'}</div>
                 </div>
               </div>
             `;
@@ -1269,41 +1362,57 @@ function renderScorers() {
     return;
   }
 
-  // Construir conjunto de goleadores elegibles (bombos de la porra)
+  // Construir conjunto de goleadores elegibles (bombos de la porra) — nombres canónicos
   const eligibleSet = new Set();
   Object.values(players).forEach(list => list.forEach(p => eligibleSet.add(p)));
 
   const onlyEligible = document.getElementById('scorersEligibleToggle')?.checked;
 
-  // Ordenar de mayor a menor número de goles y mostrar todos los goleadores registrados
+  // Ordenar de mayor a menor número de goles
   const sortedPlayers = Object.entries(scorers.players)
     .sort((a, b) => b[1] - a[1]);
 
+  const realPichichiKey = sortedPlayers.length > 0 ? sortedPlayers[0][0] : null;
   let rank = 0;
   sortedPlayers.forEach(([key, goals]) => {
     const parts = key.split(':');
     const teamName = parts.length > 1 ? parts[0] : null;
-    const playerName = parts.length > 1 ? parts[1] : key;
+    const rawPlayerName = parts.length > 1 ? parts[1] : key;
+    // Normalizar al nombre canónico para detectar elegibilidad correctamente
+    const playerName = normalizePlayerName(rawPlayerName);
+
+    const isEligible = eligibleSet.has(playerName);
 
     // Si está el filtro activo y el jugador no es elegible, saltar
-    if (onlyEligible && !eligibleSet.has(playerName)) return;
+    if (onlyEligible && !isEligible) return;
 
     rank += 1;
-    const isPichichi = rank === 1;
-    const isEligible = eligibleSet.has(playerName);
-    
+    const isPichichi = key === realPichichiKey;
+
     const flagHtml = teamName ? getTeamFlag(teamName) : getPlayerFlag(playerName);
 
-    const badgeColor = isEligible ? 'badge-success' : 'badge-rose';
+    const assistKey = teamName ? `${teamName}:${rawPlayerName}` : rawPlayerName;
+    const assists = (scorers.assists && (scorers.assists[assistKey] || scorers.assists[rawPlayerName])) || 0;
+
+    // Nombre en verde si es elegible de la porra
+    const nameClass = isEligible
+      ? (isPichichi ? 'text-amber-400 font-black' : 'text-emerald-300 font-bold')
+      : (isPichichi ? 'text-amber-400 font-black' : 'text-slate-300');
+
+    // Badge de goles: ancho fijo para que todos queden alineados
+    const goalsHtml = `<span class="inline-block w-14 text-right font-black text-xs ${isPichichi ? 'text-amber-400' : isEligible ? 'text-emerald-300' : 'text-slate-200'}">${goals} ${isPichichi ? '🌕' : '⚽'}</span>`;
+
+    // Asistencias: a la derecha de los goles, sólo si hay
+    const assistsHtml = assists > 0
+      ? `<span class="inline-block w-12 text-right text-[10px] text-slate-400 font-normal">${assists} ➡ </span>`
+      : `<span class="inline-block w-12"></span>`;
 
     container.innerHTML += `
-      <div class="flex justify-between items-center py-2.5 text-xs gap-2">
-        <div class="flex items-center gap-2 min-w-0">
-          <span class="font-bold text-slate-500 w-4 shrink-0">${rank}.</span>
-          <span class="font-extrabold truncate ${isPichichi ? 'text-amber-400 font-black' : 'text-slate-200'}">${flagHtml} ${playerName}</span>
-          ${isPichichi ? '<span class="badge bg-amber-500 text-slate-950 font-black text-[9px] scale-90 shrink-0">PICHICHI</span>' : ''}
-        </div>
-        <span class="badge badge-sm ${badgeColor} font-bold text-xs shrink-0 whitespace-nowrap">${goals} goles</span>
+      <div class="flex items-center py-2 text-xs gap-1.5">
+        <span class="font-bold text-slate-500 w-5 shrink-0 text-right">${rank}.</span>
+        <span class="shrink-0">${flagHtml}</span>
+        <span class="truncate flex-1 ${nameClass}">${playerName}</span>
+        ${goalsHtml}${assistsHtml}
       </div>
     `;
   });

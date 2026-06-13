@@ -23,9 +23,7 @@ jobs:
           node-version: '24'
 
       - name: Run scraper
-        run: node scripts/scrape.js
-        env:
-          TSDB_API_KEY: ${{ secrets.TSDB_API_KEY || '123' }}
+        run: node scripts/scrapeV2.js
 
       - name: Commit and push updated data
         run: |

@@ -100,26 +100,26 @@
       },
       {
         "team": "Catar",
-        "played": 0,
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 3
       },
       {
         "team": "Suiza",
-        "played": 0,
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 4
       }
     ],
@@ -624,5 +624,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-13T17:30:27.857Z"
+  "lastUpdate": "2026-06-13T21:35:48.207Z"
 }

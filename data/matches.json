@@ -85,7 +85,7 @@
     "group": "B",
     "scorers": [
       "Suiza:Breel EMBOLO",
-      "Catar:BOUALEM KHOUKHI"
+      "Suiza:Miro MUHEIM (p.p.)"
     ]
   },
   {
@@ -96,10 +96,14 @@
     "date": "2026-06-14",
     "time": "00:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "C"
+    "status": "live",
+    "score_home": 1,
+    "score_away": 1,
+    "group": "C",
+    "scorers": [
+      "Marruecos:Ismael SAIBARI",
+      "Brasil:VINICIUS JUNIOR"
+    ]
   },
   {
     "id": "400021453",

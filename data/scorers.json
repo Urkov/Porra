@@ -1,5 +1,5 @@
 {
-  "max_goals": 1,
+  "max_goals": 2,
   "players": {
     "México:Julián Quiñones": 1,
     "México:Raúl Jiménez": 1,
@@ -7,6 +7,10 @@
     "Corea del Sur:Oh": 1,
     "República Checa:Krejčí": 1,
     "Canadá:Larin": 1,
-    "Bosnia y Herzegovina:Lukić": 1
+    "Bosnia y Herzegovina:Lukić": 1,
+    "Estados Unidos:Bobadilla": 1,
+    "Estados Unidos:Balogun": 2,
+    "Estados Unidos:Reyna": 1,
+    "Paraguay:Maurício": 1
   }
 }

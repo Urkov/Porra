@@ -63,11 +63,21 @@
     "group": "D",
     "team_home": "Estados Unidos",
     "team_away": "Paraguay",
-    "status": "upcoming",
+    "status": "finished",
     "date": "2026-06-13",
     "time": "03:00",
     "venue": "SoFi Stadium, Los Ángeles",
-    "idEvent": "2391729"
+    "idEvent": "2391729",
+    "score_home": 4,
+    "score_away": 1,
+    "scorers": [
+      "Estados Unidos:Bobadilla",
+      "Estados Unidos:Balogun",
+      "Estados Unidos:Balogun",
+      "Estados Unidos:Reyna",
+      "Paraguay:Maurício"
+    ],
+    "lastUpdate": "2026-06-13T08:56:54.836Z"
   },
   {
     "id": 5,

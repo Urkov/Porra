@@ -77,34 +77,22 @@
       "Estados Unidos:Reyna",
       "Paraguay:Maurício"
     ],
-    "lastUpdate": "2026-06-13T10:45:26.858Z"
+    "lastUpdate": "2026-06-13T10:45:26.558Z"
   },
   {
     "id": 5,
     "phase": "groups",
-    "group": "C",
-    "team_home": "Haití",
-    "team_away": "Escocia",
+    "group": "B",
+    "team_home": "Catar",
+    "team_away": "Suiza",
     "status": "upcoming",
     "date": "2026-06-13",
     "time": "21:00",
-    "venue": "Gillette Stadium",
-    "idEvent": "2391731"
+    "venue": "Levi's Stadium",
+    "idEvent": "2391732"
   },
   {
     "id": 6,
-    "phase": "groups",
-    "group": "D",
-    "team_home": "Australia",
-    "team_away": "Turquía",
-    "status": "upcoming",
-    "date": "2026-06-14",
-    "time": "06:00",
-    "venue": "BC Place, Vancouver",
-    "idEvent": "2461105"
-  },
-  {
-    "id": 7,
     "phase": "groups",
     "group": "C",
     "team_home": "Brasil",
@@ -116,52 +104,64 @@
     "idEvent": "2391730"
   },
   {
+    "id": 7,
+    "phase": "groups",
+    "group": "C",
+    "team_home": "Haití",
+    "team_away": "Escocia",
+    "status": "upcoming",
+    "date": "2026-06-14",
+    "time": "03:00",
+    "venue": "Gillette Stadium",
+    "idEvent": "2391731"
+  },
+  {
     "id": 8,
     "phase": "groups",
-    "group": "B",
-    "team_home": "Catar",
-    "team_away": "Suiza",
+    "group": "D",
+    "team_home": "Australia",
+    "team_away": "Turquía",
     "status": "upcoming",
-    "date": "2026-06-13",
-    "time": "12:00",
-    "venue": "Levi's Stadium",
-    "idEvent": "2391732"
+    "date": "2026-06-14",
+    "time": "06:00",
+    "venue": "BC Place, Vancouver",
+    "idEvent": "2461105"
   },
   {
     "id": 9,
-    "phase": "groups",
-    "group": "E",
-    "team_home": "Costa de Marfil",
-    "team_away": "Ecuador",
-    "status": "upcoming",
-    "date": "2026-06-14",
-    "time": "19:00",
-    "venue": "Lincoln Financial Field",
-    "idEvent": "2391734"
-  },
-  {
-    "id": 10,
     "phase": "groups",
     "group": "E",
     "team_home": "Alemania",
     "team_away": "Curazao",
     "status": "upcoming",
     "date": "2026-06-14",
-    "time": "12:00",
+    "time": "19:00",
     "venue": "Reliant Stadium",
     "idEvent": "2391733"
   },
   {
-    "id": 11,
+    "id": 10,
     "phase": "groups",
     "group": "F",
     "team_home": "Países Bajos",
     "team_away": "Japón",
     "status": "upcoming",
     "date": "2026-06-14",
-    "time": "15:00",
+    "time": "22:00",
     "venue": "AT&T Stadium",
     "idEvent": "2391735"
+  },
+  {
+    "id": 11,
+    "phase": "groups",
+    "group": "E",
+    "team_home": "Costa de Marfil",
+    "team_away": "Ecuador",
+    "status": "upcoming",
+    "date": "2026-06-15",
+    "time": "01:00",
+    "venue": "Lincoln Financial Field",
+    "idEvent": "2391734"
   },
   {
     "id": 12,
@@ -179,6 +179,30 @@
     "id": 13,
     "phase": "groups",
     "group": "H",
+    "team_home": "España",
+    "team_away": "Cabo Verde",
+    "status": "upcoming",
+    "date": "2026-06-15",
+    "time": "18:00",
+    "venue": "Mercedes-Benz Stadium",
+    "idEvent": "2391739"
+  },
+  {
+    "id": 14,
+    "phase": "groups",
+    "group": "G",
+    "team_home": "Bélgica",
+    "team_away": "Egipto",
+    "status": "upcoming",
+    "date": "2026-06-15",
+    "time": "21:00",
+    "venue": "Lumen Field",
+    "idEvent": "2391736"
+  },
+  {
+    "id": 15,
+    "phase": "groups",
+    "group": "H",
     "team_home": "Arabia Saudita",
     "team_away": "Uruguay",
     "status": "upcoming",
@@ -188,19 +212,7 @@
     "idEvent": "2391738"
   },
   {
-    "id": 14,
-    "phase": "groups",
-    "group": "H",
-    "team_home": "España",
-    "team_away": "Cabo Verde",
-    "status": "upcoming",
-    "date": "2026-06-15",
-    "time": "12:00",
-    "venue": "Mercedes-Benz Stadium",
-    "idEvent": "2391739"
-  },
-  {
-    "id": 15,
+    "id": 16,
     "phase": "groups",
     "group": "G",
     "team_home": "Irán",
@@ -211,18 +223,6 @@
     "venue": "SoFi Stadium, Los Ángeles"
   },
   {
-    "id": 16,
-    "phase": "groups",
-    "group": "G",
-    "team_home": "Bélgica",
-    "team_away": "Egipto",
-    "status": "upcoming",
-    "date": "2026-06-15",
-    "time": "12:00",
-    "venue": "Lumen Field",
-    "idEvent": "2391736"
-  },
-  {
     "id": 17,
     "phase": "groups",
     "group": "I",
@@ -230,7 +230,7 @@
     "team_away": "Senegal",
     "status": "upcoming",
     "date": "2026-06-16",
-    "time": "15:00",
+    "time": "21:00",
     "venue": "MetLife Stadium",
     "idEvent": "2391742"
   },
@@ -241,8 +241,8 @@
     "team_home": "Irak",
     "team_away": "Noruega",
     "status": "upcoming",
-    "date": "2026-06-16",
-    "time": "18:00",
+    "date": "2026-06-17",
+    "time": "00:00",
     "venue": "Gillette Stadium",
     "idEvent": "2461107"
   },
@@ -271,14 +271,14 @@
   {
     "id": 21,
     "phase": "groups",
-    "group": "L",
-    "team_home": "Ghana",
-    "team_away": "Panamá",
+    "group": "K",
+    "team_home": "Portugal",
+    "team_away": "RD Congo",
     "status": "upcoming",
     "date": "2026-06-17",
     "time": "19:00",
-    "venue": "BMO Field",
-    "idEvent": "2391744"
+    "venue": "Reliant Stadium",
+    "idEvent": "2461108"
   },
   {
     "id": 22,
@@ -288,21 +288,21 @@
     "team_away": "Croacia",
     "status": "upcoming",
     "date": "2026-06-17",
-    "time": "15:00",
+    "time": "22:00",
     "venue": "AT&T Stadium",
     "idEvent": "2391743"
   },
   {
     "id": 23,
     "phase": "groups",
-    "group": "K",
-    "team_home": "Portugal",
-    "team_away": "RD Congo",
+    "group": "L",
+    "team_home": "Ghana",
+    "team_away": "Panamá",
     "status": "upcoming",
-    "date": "2026-06-17",
-    "time": "12:00",
-    "venue": "Reliant Stadium",
-    "idEvent": "2461108"
+    "date": "2026-06-18",
+    "time": "01:00",
+    "venue": "BMO Field",
+    "idEvent": "2391744"
   },
   {
     "id": 24,
@@ -323,7 +323,7 @@
     "team_away": "Sudáfrica",
     "status": "upcoming",
     "date": "2026-06-18",
-    "time": "12:00",
+    "time": "18:00",
     "venue": "Mercedes-Benz Stadium",
     "idEvent": "2461109"
   },
@@ -363,6 +363,30 @@
   {
     "id": 29,
     "phase": "groups",
+    "group": "D",
+    "team_home": "Estados Unidos",
+    "team_away": "Australia",
+    "status": "upcoming",
+    "date": "2026-06-19",
+    "time": "21:00",
+    "venue": "Lumen Field",
+    "idEvent": "2391750"
+  },
+  {
+    "id": 30,
+    "phase": "groups",
+    "group": "C",
+    "team_home": "Escocia",
+    "team_away": "Marruecos",
+    "status": "upcoming",
+    "date": "2026-06-20",
+    "time": "00:00",
+    "venue": "Gillette Stadium",
+    "idEvent": "2391749"
+  },
+  {
+    "id": 31,
+    "phase": "groups",
     "group": "C",
     "team_home": "Brasil",
     "team_away": "Haití",
@@ -372,19 +396,7 @@
     "venue": "Lincoln Financial Field, Filadelfia"
   },
   {
-    "id": 30,
-    "phase": "groups",
-    "group": "C",
-    "team_home": "Escocia",
-    "team_away": "Marruecos",
-    "status": "upcoming",
-    "date": "2026-06-19",
-    "time": "18:00",
-    "venue": "Gillette Stadium",
-    "idEvent": "2391749"
-  },
-  {
-    "id": 31,
+    "id": 32,
     "phase": "groups",
     "group": "D",
     "team_home": "Turquía",
@@ -395,31 +407,31 @@
     "venue": "Levi's Stadium, San Francisco"
   },
   {
-    "id": 32,
+    "id": 33,
     "phase": "groups",
-    "group": "D",
-    "team_home": "Estados Unidos",
-    "team_away": "Australia",
+    "group": "F",
+    "team_home": "Países Bajos",
+    "team_away": "Suecia",
     "status": "upcoming",
-    "date": "2026-06-19",
-    "time": "12:00",
-    "venue": "Lumen Field",
-    "idEvent": "2391750"
+    "date": "2026-06-20",
+    "time": "19:00",
+    "venue": "Reliant Stadium",
+    "idEvent": "2461112"
   },
   {
-    "id": 33,
+    "id": 34,
     "phase": "groups",
     "group": "E",
     "team_home": "Alemania",
     "team_away": "Costa de Marfil",
     "status": "upcoming",
     "date": "2026-06-20",
-    "time": "16:00",
+    "time": "22:00",
     "venue": "BMO Field",
     "idEvent": "2391752"
   },
   {
-    "id": 34,
+    "id": 35,
     "phase": "groups",
     "group": "E",
     "team_home": "Ecuador",
@@ -428,18 +440,6 @@
     "date": "2026-06-21",
     "time": "02:00",
     "venue": "Arrowhead Stadium, Kansas City"
-  },
-  {
-    "id": 35,
-    "phase": "groups",
-    "group": "F",
-    "team_home": "Países Bajos",
-    "team_away": "Suecia",
-    "status": "upcoming",
-    "date": "2026-06-20",
-    "time": "12:00",
-    "venue": "Reliant Stadium",
-    "idEvent": "2461112"
   },
   {
     "id": 36,
@@ -456,37 +456,37 @@
     "id": 37,
     "phase": "groups",
     "group": "H",
-    "team_home": "Uruguay",
-    "team_away": "Cabo Verde",
-    "status": "upcoming",
-    "date": "2026-06-21",
-    "time": "18:00",
-    "venue": "Hard Rock Stadium",
-    "idEvent": "2391757"
-  },
-  {
-    "id": 38,
-    "phase": "groups",
-    "group": "H",
     "team_home": "España",
     "team_away": "Arabia Saudita",
     "status": "upcoming",
     "date": "2026-06-21",
-    "time": "12:00",
+    "time": "18:00",
     "venue": "Mercedes-Benz Stadium",
     "idEvent": "2391756"
   },
   {
-    "id": 39,
+    "id": 38,
     "phase": "groups",
     "group": "G",
     "team_home": "Bélgica",
     "team_away": "Irán",
     "status": "upcoming",
     "date": "2026-06-21",
-    "time": "12:00",
+    "time": "21:00",
     "venue": "SoFi Stadium",
     "idEvent": "2391754"
+  },
+  {
+    "id": 39,
+    "phase": "groups",
+    "group": "H",
+    "team_home": "Uruguay",
+    "team_away": "Cabo Verde",
+    "status": "upcoming",
+    "date": "2026-06-22",
+    "time": "00:00",
+    "venue": "Hard Rock Stadium",
+    "idEvent": "2391757"
   },
   {
     "id": 40,
@@ -502,13 +502,14 @@
   {
     "id": 41,
     "phase": "groups",
-    "group": "I",
-    "team_home": "Noruega",
-    "team_away": "Senegal",
+    "group": "J",
+    "team_home": "Argentina",
+    "team_away": "Austria",
     "status": "upcoming",
-    "date": "2026-06-23",
-    "time": "02:00",
-    "venue": "MetLife Stadium, Nueva Jersey"
+    "date": "2026-06-22",
+    "time": "19:00",
+    "venue": "AT&T Stadium",
+    "idEvent": "2391758"
   },
   {
     "id": 42,
@@ -518,21 +519,20 @@
     "team_away": "Irak",
     "status": "upcoming",
     "date": "2026-06-22",
-    "time": "17:00",
+    "time": "23:00",
     "venue": "Lincoln Financial Field",
     "idEvent": "2461113"
   },
   {
     "id": 43,
     "phase": "groups",
-    "group": "J",
-    "team_home": "Argentina",
-    "team_away": "Austria",
+    "group": "I",
+    "team_home": "Noruega",
+    "team_away": "Senegal",
     "status": "upcoming",
-    "date": "2026-06-22",
-    "time": "12:00",
-    "venue": "AT&T Stadium",
-    "idEvent": "2391758"
+    "date": "2026-06-23",
+    "time": "02:00",
+    "venue": "MetLife Stadium, Nueva Jersey"
   },
   {
     "id": 44,
@@ -548,17 +548,29 @@
   {
     "id": 45,
     "phase": "groups",
+    "group": "K",
+    "team_home": "Portugal",
+    "team_away": "Uzbekistán",
+    "status": "upcoming",
+    "date": "2026-06-23",
+    "time": "19:00",
+    "venue": "Reliant Stadium",
+    "idEvent": "2391763"
+  },
+  {
+    "id": 46,
+    "phase": "groups",
     "group": "L",
     "team_home": "Inglaterra",
     "team_away": "Ghana",
     "status": "upcoming",
     "date": "2026-06-23",
-    "time": "16:00",
+    "time": "22:00",
     "venue": "Gillette Stadium",
     "idEvent": "2391761"
   },
   {
-    "id": 46,
+    "id": 47,
     "phase": "groups",
     "group": "L",
     "team_home": "Panamá",
@@ -567,18 +579,6 @@
     "date": "2026-06-24",
     "time": "01:00",
     "venue": "BMO Field, Toronto"
-  },
-  {
-    "id": 47,
-    "phase": "groups",
-    "group": "K",
-    "team_home": "Portugal",
-    "team_away": "Uzbekistán",
-    "status": "upcoming",
-    "date": "2026-06-23",
-    "time": "12:00",
-    "venue": "Reliant Stadium",
-    "idEvent": "2391763"
   },
   {
     "id": 48,
@@ -594,41 +594,17 @@
   {
     "id": 49,
     "phase": "groups",
-    "group": "C",
-    "team_home": "Escocia",
-    "team_away": "Brasil",
-    "status": "upcoming",
-    "date": "2026-06-24",
-    "time": "18:00",
-    "venue": "Hard Rock Stadium",
-    "idEvent": "2391765"
-  },
-  {
-    "id": 50,
-    "phase": "groups",
-    "group": "C",
-    "team_home": "Marruecos",
-    "team_away": "Haití",
-    "status": "upcoming",
-    "date": "2026-06-24",
-    "time": "18:00",
-    "venue": "Mercedes-Benz Stadium",
-    "idEvent": "2391764"
-  },
-  {
-    "id": 51,
-    "phase": "groups",
     "group": "B",
     "team_home": "Suiza",
     "team_away": "Canadá",
     "status": "upcoming",
     "date": "2026-06-24",
-    "time": "12:00",
+    "time": "21:00",
     "venue": "BC Place",
     "idEvent": "2391767"
   },
   {
-    "id": 52,
+    "id": 50,
     "phase": "groups",
     "group": "B",
     "team_home": "Bosnia y Herzegovina",
@@ -637,6 +613,30 @@
     "date": "2026-06-24",
     "time": "21:00",
     "venue": "Lumen Field, Seattle"
+  },
+  {
+    "id": 51,
+    "phase": "groups",
+    "group": "C",
+    "team_home": "Escocia",
+    "team_away": "Brasil",
+    "status": "upcoming",
+    "date": "2026-06-25",
+    "time": "00:00",
+    "venue": "Hard Rock Stadium",
+    "idEvent": "2391765"
+  },
+  {
+    "id": 52,
+    "phase": "groups",
+    "group": "C",
+    "team_home": "Marruecos",
+    "team_away": "Haití",
+    "status": "upcoming",
+    "date": "2026-06-25",
+    "time": "00:00",
+    "venue": "Mercedes-Benz Stadium",
+    "idEvent": "2391764"
   },
   {
     "id": 53,
@@ -668,7 +668,7 @@
     "team_away": "Costa de Marfil",
     "status": "upcoming",
     "date": "2026-06-25",
-    "time": "16:00",
+    "time": "22:00",
     "venue": "Lincoln Financial Field",
     "idEvent": "2391768"
   },
@@ -752,28 +752,6 @@
   {
     "id": 63,
     "phase": "groups",
-    "group": "G",
-    "team_home": "Egipto",
-    "team_away": "Irán",
-    "status": "upcoming",
-    "date": "2026-06-27",
-    "time": "05:00",
-    "venue": "Lumen Field, Seattle"
-  },
-  {
-    "id": 64,
-    "phase": "groups",
-    "group": "G",
-    "team_home": "Nueva Zelanda",
-    "team_away": "Bélgica",
-    "status": "upcoming",
-    "date": "2026-06-27",
-    "time": "05:00",
-    "venue": "BC Place, Vancouver"
-  },
-  {
-    "id": 65,
-    "phase": "groups",
     "group": "H",
     "team_home": "Cabo Verde",
     "team_away": "Arabia Saudita",
@@ -783,7 +761,7 @@
     "venue": "NRG Stadium, Houston"
   },
   {
-    "id": 66,
+    "id": 64,
     "phase": "groups",
     "group": "H",
     "team_home": "Uruguay",
@@ -792,6 +770,28 @@
     "date": "2026-06-27",
     "time": "02:00",
     "venue": "Estadio Akron, Guadalajara"
+  },
+  {
+    "id": 65,
+    "phase": "groups",
+    "group": "G",
+    "team_home": "Egipto",
+    "team_away": "Irán",
+    "status": "upcoming",
+    "date": "2026-06-27",
+    "time": "05:00",
+    "venue": "Lumen Field, Seattle"
+  },
+  {
+    "id": 66,
+    "phase": "groups",
+    "group": "G",
+    "team_home": "Nueva Zelanda",
+    "team_away": "Bélgica",
+    "status": "upcoming",
+    "date": "2026-06-27",
+    "time": "05:00",
+    "venue": "BC Place, Vancouver"
   },
   {
     "id": 67,
@@ -818,28 +818,6 @@
   {
     "id": 69,
     "phase": "groups",
-    "group": "J",
-    "team_home": "Argelia",
-    "team_away": "Austria",
-    "status": "upcoming",
-    "date": "2026-06-28",
-    "time": "04:00",
-    "venue": "Arrowhead Stadium, Kansas City"
-  },
-  {
-    "id": 70,
-    "phase": "groups",
-    "group": "J",
-    "team_home": "Jordania",
-    "team_away": "Argentina",
-    "status": "upcoming",
-    "date": "2026-06-28",
-    "time": "04:00",
-    "venue": "AT&T Stadium, Dallas"
-  },
-  {
-    "id": 71,
-    "phase": "groups",
     "group": "K",
     "team_home": "Colombia",
     "team_away": "Portugal",
@@ -849,7 +827,7 @@
     "venue": "Hard Rock Stadium, Miami"
   },
   {
-    "id": 72,
+    "id": 70,
     "phase": "groups",
     "group": "K",
     "team_home": "RD Congo",
@@ -858,6 +836,28 @@
     "date": "2026-06-28",
     "time": "01:30",
     "venue": "Mercedes-Benz Stadium, Atlanta"
+  },
+  {
+    "id": 71,
+    "phase": "groups",
+    "group": "J",
+    "team_home": "Argelia",
+    "team_away": "Austria",
+    "status": "upcoming",
+    "date": "2026-06-28",
+    "time": "04:00",
+    "venue": "Arrowhead Stadium, Kansas City"
+  },
+  {
+    "id": 72,
+    "phase": "groups",
+    "group": "J",
+    "team_home": "Jordania",
+    "team_away": "Argentina",
+    "status": "upcoming",
+    "date": "2026-06-28",
+    "time": "04:00",
+    "venue": "AT&T Stadium, Dallas"
   },
   {
     "id": 73,
@@ -872,6 +872,16 @@
   {
     "id": 74,
     "phase": "Round of 32",
+    "team_home": "1º Grupo C",
+    "team_away": "2º Grupo F",
+    "status": "upcoming",
+    "date": "2026-06-29",
+    "time": "19:00",
+    "venue": "NRG Stadium, Houston"
+  },
+  {
+    "id": 75,
+    "phase": "Round of 32",
     "team_home": "1º Grupo E",
     "team_away": "3º Grupo A/B/C/D/F",
     "status": "upcoming",
@@ -880,7 +890,7 @@
     "venue": "Gillette Stadium, Boston"
   },
   {
-    "id": 75,
+    "id": 76,
     "phase": "Round of 32",
     "team_home": "1º Grupo F",
     "team_away": "2º Grupo C",
@@ -890,27 +900,7 @@
     "venue": "Estadio BBVA, Monterrey"
   },
   {
-    "id": 76,
-    "phase": "Round of 32",
-    "team_home": "1º Grupo C",
-    "team_away": "2º Grupo F",
-    "status": "upcoming",
-    "date": "2026-06-29",
-    "time": "19:00",
-    "venue": "NRG Stadium, Houston"
-  },
-  {
     "id": 77,
-    "phase": "Round of 32",
-    "team_home": "1º Grupo I",
-    "team_away": "3º Grupo C/D/F/G/H",
-    "status": "upcoming",
-    "date": "2026-06-30",
-    "time": "23:00",
-    "venue": "MetLife Stadium, Nueva Jersey"
-  },
-  {
-    "id": 78,
     "phase": "Round of 32",
     "team_home": "2º Grupo E",
     "team_away": "2º Grupo I",
@@ -918,6 +908,16 @@
     "date": "2026-06-30",
     "time": "19:00",
     "venue": "AT&T Stadium, Dallas"
+  },
+  {
+    "id": 78,
+    "phase": "Round of 32",
+    "team_home": "1º Grupo I",
+    "team_away": "3º Grupo C/D/F/G/H",
+    "status": "upcoming",
+    "date": "2026-06-30",
+    "time": "23:00",
+    "venue": "MetLife Stadium, Nueva Jersey"
   },
   {
     "id": 79,
@@ -942,16 +942,6 @@
   {
     "id": 81,
     "phase": "Round of 32",
-    "team_home": "1º Grupo D",
-    "team_away": "3º Grupo B/E/F/I/J",
-    "status": "upcoming",
-    "date": "2026-07-02",
-    "time": "02:00",
-    "venue": "Levi's Stadium, San Francisco"
-  },
-  {
-    "id": 82,
-    "phase": "Round of 32",
     "team_home": "1º Grupo G",
     "team_away": "3º Grupo A/E/H/I/J",
     "status": "upcoming",
@@ -960,17 +950,17 @@
     "venue": "Lumen Field, Seattle"
   },
   {
-    "id": 83,
+    "id": 82,
     "phase": "Round of 32",
-    "team_home": "2º Grupo K",
-    "team_away": "2º Grupo L",
+    "team_home": "1º Grupo D",
+    "team_away": "3º Grupo B/E/F/I/J",
     "status": "upcoming",
-    "date": "2026-07-03",
+    "date": "2026-07-02",
     "time": "02:00",
-    "venue": "BMO Field, Toronto"
+    "venue": "Levi's Stadium, San Francisco"
   },
   {
-    "id": 84,
+    "id": 83,
     "phase": "Round of 32",
     "team_home": "1º Grupo H",
     "team_away": "2º Grupo J",
@@ -978,6 +968,16 @@
     "date": "2026-07-02",
     "time": "21:00",
     "venue": "SoFi Stadium, Los Ángeles"
+  },
+  {
+    "id": 84,
+    "phase": "Round of 32",
+    "team_home": "2º Grupo K",
+    "team_away": "2º Grupo L",
+    "status": "upcoming",
+    "date": "2026-07-03",
+    "time": "02:00",
+    "venue": "BMO Field, Toronto"
   },
   {
     "id": 85,
@@ -992,6 +992,16 @@
   {
     "id": 86,
     "phase": "Round of 32",
+    "team_home": "2º Grupo D",
+    "team_away": "2º Grupo G",
+    "status": "upcoming",
+    "date": "2026-07-03",
+    "time": "20:00",
+    "venue": "AT&T Stadium, Dallas"
+  },
+  {
+    "id": 87,
+    "phase": "Round of 32",
     "team_home": "1º Grupo J",
     "team_away": "2º Grupo H",
     "status": "upcoming",
@@ -1000,7 +1010,7 @@
     "venue": "Hard Rock Stadium, Miami"
   },
   {
-    "id": 87,
+    "id": 88,
     "phase": "Round of 32",
     "team_home": "1º Grupo K",
     "team_away": "3º Grupo D/E/I/J/L",
@@ -1010,27 +1020,7 @@
     "venue": "Arrowhead Stadium, Kansas City"
   },
   {
-    "id": 88,
-    "phase": "Round of 32",
-    "team_home": "2º Grupo D",
-    "team_away": "2º Grupo G",
-    "status": "upcoming",
-    "date": "2026-07-03",
-    "time": "20:00",
-    "venue": "AT&T Stadium, Dallas"
-  },
-  {
     "id": 89,
-    "phase": "Round of 16",
-    "team_home": "Ganador 74",
-    "team_away": "Ganador 77",
-    "status": "upcoming",
-    "date": "2026-07-04",
-    "time": "23:00",
-    "venue": "Lincoln Financial Field, Filadelfia"
-  },
-  {
-    "id": 90,
     "phase": "Round of 16",
     "team_home": "Ganador 73",
     "team_away": "Ganador 75",
@@ -1038,6 +1028,16 @@
     "date": "2026-07-04",
     "time": "19:00",
     "venue": "NRG Stadium, Houston"
+  },
+  {
+    "id": 90,
+    "phase": "Round of 16",
+    "team_home": "Ganador 74",
+    "team_away": "Ganador 77",
+    "status": "upcoming",
+    "date": "2026-07-04",
+    "time": "23:00",
+    "venue": "Lincoln Financial Field, Filadelfia"
   },
   {
     "id": 91,

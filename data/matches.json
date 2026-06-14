@@ -96,7 +96,7 @@
     "date": "2026-06-14",
     "time": "00:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "live",
+    "status": "finished",
     "score_home": 1,
     "score_away": 1,
     "group": "C",
@@ -113,10 +113,13 @@
     "date": "2026-06-14",
     "time": "03:00",
     "venue": "Estadio Boston",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "C"
+    "score_away": 1,
+    "group": "C",
+    "scorers": [
+      "Escocia:John McGinn"
+    ]
   },
   {
     "id": "400021463",
@@ -126,10 +129,14 @@
     "date": "2026-06-14",
     "time": "06:00",
     "venue": "Estadio BC Place Vancouver",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 2,
     "score_away": 0,
-    "group": "D"
+    "group": "D",
+    "scorers": [
+      "Australia:Nestory IRANKUNDA",
+      "Australia:Connor METCALFE"
+    ]
   },
   {
     "id": "400021464",

@@ -146,10 +146,20 @@
     "date": "2026-06-14",
     "time": "19:00",
     "venue": "Estadio Houston",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "E"
+    "status": "finished",
+    "score_home": 7,
+    "score_away": 1,
+    "group": "E",
+    "scorers": [
+      "Alemania:Felix NMECHA",
+      "Curazao:Livano COMENENCIA",
+      "Alemania:Nico SCHLOTTERBECK",
+      "Alemania:Kai Havertz",
+      "Alemania:Jamal MUSIALA",
+      "Alemania:Nathaniel BROWN",
+      "Alemania:Deniz UNDAV",
+      "Alemania:Kai Havertz"
+    ]
   },
   {
     "id": "400021470",

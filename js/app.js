@@ -211,13 +211,46 @@ const PLAYER_TEAMS = {
  *  1. Nombre completo en minúsculas           → "jonathan david"    ✓
  *  2. Todo en Title Case y luego minúsculas   → "Jonathan DAVID" → "jonathan david" ✓
  *  3. Solo el último token en minúsculas      → "HAALAND" → "haaland" (fallback apellido)
- *  4. Sin match → devuelve el nombre original para no perder datos.
+ *  4. Alias conocidos (PLAYER_KNOWN_ALIASES)  → "vinícius júnior" → "Vinícius Jr." ✓
+ *  5. Sin match → devuelve el nombre original para no perder datos.
+ *
+ * PLAYER_KNOWN_ALIASES: mapa estático para jugadores cuyo nombre en la API
+ * de FIFA difiere estructuralmente del canónico de players.json y no puede
+ * resolverse con las estrategias anteriores.
+ * Clave: forma FIFA en minúsculas. Valor: nombre exacto de players.json.
+ *
+ * RAZÓN de cada entrada:
+ *  - Vinícius Jr.:    FIFA devuelve "Vinícius JÚNIOR" — "JÚNIOR" ≠ "Jr."
+ *  - Rafael Leao:     FIFA puede devolver "Rafael LEÃO" (con acento en la o)
+ *  - Julian Alvarez:  FIFA puede devolver "Julián ÁLVAREZ" (con tildes)
  */
+const PLAYER_KNOWN_ALIASES = {
+  // Vinícius Jr. — variantes posibles de la API FIFA en es-ES
+  "vinícius júnior":  "Vinícius Jr.",
+  "vinicius junior":  "Vinícius Jr.",
+  "vinícius junior":  "Vinícius Jr.",
+  "vinicius júnior":  "Vinícius Jr.",
+  // Rafael Leão — FIFA puede devolver con tilde en la o
+  "rafael leão":      "Rafael Leao",
+  // Julián Álvarez — FIFA puede devolver con tildes (players.json va sin ellas)
+  "julián álvarez":   "Julian Alvarez",
+  "julian álvarez":   "Julian Alvarez",
+  "julián alvarez":   "Julian Alvarez",
+};
+
 let _playerCanonicalMap = null;
 
 function buildPlayerCanonicalMap() {
   if (_playerCanonicalMap) return _playerCanonicalMap;
   _playerCanonicalMap = {};
+
+  // Fase 1: volcar aliases estáticos (menor precedencia; los nombres exactos
+  // de players.json los sobreescriben a continuación si hay colisión).
+  Object.entries(PLAYER_KNOWN_ALIASES).forEach(([alias, canonical]) => {
+    _playerCanonicalMap[alias] = canonical;
+  });
+
+  // Fase 2: nombres canónicos de players.json (siempre tienen mayor prioridad)
   Object.values(players).forEach(list => {
     list.forEach(canonicalName => {
       // Índice por nombre completo en minúsculas (máxima precisión)

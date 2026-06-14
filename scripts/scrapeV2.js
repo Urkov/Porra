@@ -118,11 +118,42 @@ const TEAM_NAME_MAP = {
  * Normalización de nombres FIFA → nombre canónico de players.json.
  * Se construye automáticamente al inicio de main() leyendo players.json,
  * por lo que no requiere mantenimiento manual cuando se añadan jugadores.
+ *
+ * PLAYER_KNOWN_ALIASES: mapa estático para jugadores cuyo nombre en la API
+ * de FIFA difiere estructuralmente del canónico de players.json y no puede
+ * resolverse automáticamente por diferencia de caso.
+ * Clave: forma FIFA en minúsculas. Valor: nombre exacto de players.json.
+ *
+ * RAZÓN de cada entrada:
+ *  - Vinícius Jr.:    FIFA devuelve "Vinícius JÚNIOR" — "JÚNIOR" ≠ "Jr."
+ *  - Rafael Leao:     FIFA puede devolver "Rafael LEÃO" (con acento en la o)
+ *  - Julian Alvarez:  FIFA puede devolver "Julián ÁLVAREZ" (con tildes)
  */
+const PLAYER_KNOWN_ALIASES = {
+  // Vinícius Jr. — variantes posibles de la API FIFA en es-ES
+  "vinícius júnior":  "Vinícius Jr.",
+  "vinicius junior":  "Vinícius Jr.",
+  "vinícius junior":  "Vinícius Jr.",
+  "vinicius júnior":  "Vinícius Jr.",
+  // Rafael Leão — FIFA puede devolver con tilde en la o
+  "rafael leão":      "Rafael Leao",
+  // Julián Álvarez — FIFA puede devolver con tildes (players.json va sin ellas)
+  "julián álvarez":   "Julian Alvarez",
+  "julian álvarez":   "Julian Alvarez",
+  "julián alvarez":   "Julian Alvarez",
+};
+
 let playerCanonicalMap = {};
 
 function buildPlayerCanonicalMap(porraPlayers) {
   const map = {};
+
+  // Fase 1: volcar aliases estáticos (menor precedencia).
+  Object.entries(PLAYER_KNOWN_ALIASES).forEach(([alias, canonical]) => {
+    map[alias] = canonical;
+  });
+
+  // Fase 2: nombres canónicos de players.json (siempre sobreescriben aliases).
   Object.values(porraPlayers).forEach(list => {
     list.forEach(canonicalName => {
       // Índice por nombre completo en minúsculas

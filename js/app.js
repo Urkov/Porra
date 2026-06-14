@@ -1249,6 +1249,19 @@ function toggleCalendar() {
   button.innerText = hidden ? 'Mostrar calendario' : 'Ocultar calendario';
 }
 
+let hideFinishedMatches = false;
+
+function toggleFinishedMatches() {
+  hideFinishedMatches = !hideFinishedMatches;
+  const button = document.getElementById('toggleFinishedBtn');
+  if (button) {
+    button.innerHTML = hideFinishedMatches
+      ? '<i class="fa-solid fa-eye text-emerald-400 mr-1"></i> Mostrar finalizados'
+      : '<i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i> Ocultar finalizados';
+  }
+  renderMatches();
+}
+
 // RENDER DEL CALENDARIO DE PARTIDOS
 function renderMatches() {
   const container = document.getElementById('matchesContainer');
@@ -1272,6 +1285,7 @@ function renderMatches() {
     if (teamFilter !== 'all' && m.team_home !== teamFilter && m.team_away !== teamFilter) return false;
     if (dateFilter !== 'all' && m.date !== dateFilter) return false;
     if (venueFilter !== 'all' && m.venue !== venueFilter) return false;
+    if (hideFinishedMatches && m.status === 'finished') return false;
     return true;
   });
 

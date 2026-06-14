@@ -453,9 +453,14 @@
           <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
             <i class="fa-solid fa-calendar-days text-emerald-500"></i> Calendario
           </h3>
-          <button id="toggleCalendarBtn" type="button" onclick="toggleCalendar()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
-            Ocultar calendario
-          </button>
+          <div class="flex items-center gap-2">
+            <button id="toggleFinishedBtn" type="button" onclick="toggleFinishedMatches()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
+              <i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i> Ocultar finalizados
+            </button>
+            <button id="toggleCalendarBtn" type="button" onclick="toggleCalendar()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
+              Ocultar calendario
+            </button>
+          </div>
         </div>
 
         <div id="matchFiltersSection" class="space-y-3">

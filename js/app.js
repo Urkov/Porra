@@ -1246,7 +1246,9 @@ function toggleCalendar() {
 
   const hidden = container.classList.toggle('hidden');
   if (filters) filters.classList.toggle('hidden', hidden);
-  button.innerText = hidden ? 'Mostrar calendario' : 'Ocultar calendario';
+  button.innerHTML = hidden
+    ? '<i class="fa-solid fa-eye text-emerald-400 mr-1"></i><span class="hidden sm:inline">Mostrar </span>calendario'
+    : '<i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i><span class="hidden sm:inline">Ocultar </span>calendario';
 }
 
 let hideFinishedMatches = false;
@@ -1256,8 +1258,8 @@ function toggleFinishedMatches() {
   const button = document.getElementById('toggleFinishedBtn');
   if (button) {
     button.innerHTML = hideFinishedMatches
-      ? '<i class="fa-solid fa-eye text-emerald-400 mr-1"></i> Mostrar finalizados'
-      : '<i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i> Ocultar finalizados';
+      ? '<i class="fa-solid fa-eye text-emerald-400 mr-1"></i><span class="hidden sm:inline">Mostrar </span>finalizados'
+      : '<i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i><span class="hidden sm:inline">Ocultar </span>finalizados';
   }
   renderMatches();
 }

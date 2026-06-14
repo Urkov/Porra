@@ -449,16 +449,17 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-between mb-2">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
           <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
             <i class="fa-solid fa-calendar-days text-emerald-500"></i> Calendario
           </h3>
           <div class="flex items-center gap-2">
-            <button id="toggleFinishedBtn" type="button" onclick="toggleFinishedMatches()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
-              <i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i> Ocultar finalizados
+            <button id="toggleFinishedBtn" type="button" onclick="toggleFinishedMatches()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900 flex-1 md:flex-none">
+              <i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i>
+              <span class="hidden sm:inline">Ocultar </span>finalizados
             </button>
-            <button id="toggleCalendarBtn" type="button" onclick="toggleCalendar()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
-              Ocultar calendario
+            <button id="toggleCalendarBtn" type="button" onclick="toggleCalendar()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900 flex-1 md:flex-none">
+              <span class="hidden sm:inline">Ocultar </span>calendario
             </button>
           </div>
         </div>

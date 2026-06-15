@@ -169,10 +169,16 @@
     "date": "2026-06-14",
     "time": "22:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "F"
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 2,
+    "group": "F",
+    "scorers": [
+      "Países Bajos:Virgil VAN DIJK",
+      "Japón:Keito Nakamura",
+      "Países Bajos:Crysencio SUMMERVILLE",
+      "Japón:Daichi KAMADA"
+    ]
   },
   {
     "id": "400021467",
@@ -182,10 +188,13 @@
     "date": "2026-06-15",
     "time": "01:00",
     "venue": "Estadio Filadelfia",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 1,
     "score_away": 0,
-    "group": "E"
+    "group": "E",
+    "scorers": [
+      "Costa de Marfil:Amad DIALLO"
+    ]
   },
   {
     "id": "400021474",
@@ -195,10 +204,18 @@
     "date": "2026-06-15",
     "time": "04:00",
     "venue": "Estadio Monterrey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "F"
+    "status": "finished",
+    "score_home": 5,
+    "score_away": 1,
+    "group": "F",
+    "scorers": [
+      "Suecia:Yasin AYARI",
+      "Suecia:Alexander Isak",
+      "Túnez:Omar Rekik",
+      "Suecia:Viktor GYOKERES",
+      "Suecia:Mattias SVANBERG",
+      "Suecia:Yasin AYARI"
+    ]
   },
   {
     "id": "400021482",

@@ -21,7 +21,8 @@
   },
   "actual_pichichi": [
     "Estados Unidos:Folarin BALOGUN",
-    "Alemania:Kai Havertz"
+    "Alemania:Kai Havertz",
+    "Suecia:Yasin AYARI"
   ],
   "official_standings": {
     "A": [
@@ -239,25 +240,25 @@
       },
       {
         "team": "Costa de Marfil",
-        "played": 0,
-        "won": 0,
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "gf": 0,
+        "gf": 1,
         "ga": 0,
-        "gd": 0,
-        "points": 0,
+        "gd": 1,
+        "points": 3,
         "position": 2
       },
       {
         "team": "Ecuador",
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "ga": 1,
+        "gd": -1,
         "points": 0,
         "position": 3
       },
@@ -276,50 +277,50 @@
     ],
     "F": [
       {
-        "team": "Japón",
-        "played": 0,
-        "won": 0,
+        "team": "Suecia",
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
-        "points": 0,
+        "gf": 5,
+        "ga": 1,
+        "gd": 4,
+        "points": 3,
         "position": 1
       },
       {
-        "team": "Países Bajos",
-        "played": 0,
+        "team": "Japón",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 2,
+        "ga": 2,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 2
       },
       {
-        "team": "Suecia",
-        "played": 0,
+        "team": "Países Bajos",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 2,
+        "ga": 2,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 3
       },
       {
         "team": "Túnez",
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "lost": 1,
+        "gf": 1,
+        "ga": 5,
+        "gd": -4,
         "points": 0,
         "position": 4
       }
@@ -625,5 +626,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-14T19:20:20.702Z"
+  "lastUpdate": "2026-06-15T07:42:52.406Z"
 }

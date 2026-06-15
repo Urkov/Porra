@@ -236,6 +236,15 @@ const PLAYER_KNOWN_ALIASES = {
   "julián álvarez":   "Julian Alvarez",
   "julian álvarez":   "Julian Alvarez",
   "julián alvarez":   "Julian Alvarez",
+  // Viktor Gyökeres — FIFA en es-ES puede devolver sin diéresis (ö → o)
+  // o en forma Unicode descompuesta (NFD), lo que impide el match automático
+  "viktor gyokeres":  "Viktor Gyökeres",
+  // Alexander Sørloth — la ø noruega (U+00F8) no existe en lenguas latinas;
+  // FIFA en es-ES casi seguro la elimina → "Sorloth"
+  "alexander sorloth": "Alexander Sørloth",
+  // Arda Güler — la ü turca (U+00FC) no existe en español;
+  // FIFA en es-ES puede eliminarla → "Guler"
+  "arda guler":        "Arda Güler",
 };
 
 let _playerCanonicalMap = null;
@@ -271,6 +280,8 @@ function buildPlayerCanonicalMap() {
 
 function normalizePlayerName(name) {
   if (!name) return name;
+  // Unificar representaciones Unicode (NFD de la API → NFC de players.json)
+  name = name.normalize('NFC');
   const map = buildPlayerCanonicalMap();
 
   // 1. Nombre tal cual en minúsculas

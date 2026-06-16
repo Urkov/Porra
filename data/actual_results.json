@@ -22,7 +22,8 @@
   "actual_pichichi": [
     "Estados Unidos:Folarin BALOGUN",
     "Alemania:Kai Havertz",
-    "Suecia:Yasin AYARI"
+    "Suecia:Yasin AYARI",
+    "Nueva Zelanda:Elijah JUST"
   ],
   "official_standings": {
     "A": [
@@ -327,101 +328,101 @@
     ],
     "G": [
       {
-        "team": "Bélgica",
-        "played": 0,
+        "team": "Irán",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 2,
+        "ga": 2,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 1
       },
       {
-        "team": "Egipto",
-        "played": 0,
+        "team": "Nueva Zelanda",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 2,
+        "ga": 2,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 2
       },
       {
-        "team": "Irán",
-        "played": 0,
+        "team": "Bélgica",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 3
       },
       {
-        "team": "Nueva Zelanda",
-        "played": 0,
+        "team": "Egipto",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 4
       }
     ],
     "H": [
       {
         "team": "Arabia Saudita",
-        "played": 0,
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 1
       },
       {
-        "team": "Cabo Verde",
-        "played": 0,
+        "team": "Uruguay",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 2
       },
       {
-        "team": "España",
-        "played": 0,
+        "team": "Cabo Verde",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
         "gf": 0,
         "ga": 0,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 3
       },
       {
-        "team": "Uruguay",
-        "played": 0,
+        "team": "España",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
         "gf": 0,
         "ga": 0,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 4
       }
     ],
@@ -626,5 +627,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-15T12:11:27.556Z"
+  "lastUpdate": "2026-06-16T06:44:48.697Z"
 }

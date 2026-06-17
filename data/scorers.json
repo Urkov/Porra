@@ -1,5 +1,5 @@
 {
-  "max_goals": 2,
+  "max_goals": 3,
   "players": {
     "México:Julian QUINONES": 1,
     "México:Raul JIMENEZ": 1,
@@ -39,7 +39,17 @@
     "Uruguay:Maxi ARAUJO": 1,
     "Nueva Zelanda:Elijah JUST": 2,
     "Irán:Ramin REZAEIAN": 1,
-    "Irán:Mohammad MOHEBBI": 1
+    "Irán:Mohammad MOHEBBI": 1,
+    "Francia:Kylian MBAPPE": 2,
+    "Francia:Bradley BARCOLA": 1,
+    "Senegal:Ibrahim MBAYE": 1,
+    "Noruega:Erling Haaland": 2,
+    "Irak:AYMEN HUSSEIN": 1,
+    "Noruega:Leo OSTIGARD": 1,
+    "Argentina:Lionel Messi": 3,
+    "Austria:Romano SCHMID": 1,
+    "Jordania:ALI OLWAN": 1,
+    "Austria:Marko ARNAUTOVIC": 1
   },
   "max_assists": 2,
   "assists": {
@@ -71,6 +81,16 @@
     "Suecia:Lucas BERGVALL": 1,
     "Egipto:Mohamed Salah": 1,
     "Nueva Zelanda:Chris WOOD": 2,
-    "Irán:Ramin REZAEIAN": 1
+    "Irán:Ramin REZAEIAN": 1,
+    "Francia:Michael OLISE": 1,
+    "Francia:Adrien RABIOT": 1,
+    "Senegal:Iliman NDIAYE": 1,
+    "Noruega:David MOLLER WOLFE": 1,
+    "Irak:AMIR ALAMMARI": 1,
+    "Noruega:Martin ODEGAARD": 1,
+    "Argentina:Rodrigo DE PAUL": 1,
+    "Argentina:Nico GONZALEZ": 1,
+    "Austria:Xaver Schlager": 1,
+    "Jordania:NOOR ALRAWABDEH": 1
   }
 }

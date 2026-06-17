@@ -20,10 +20,7 @@
     "P4": ""
   },
   "actual_pichichi": [
-    "Estados Unidos:Folarin BALOGUN",
-    "Alemania:Kai Havertz",
-    "Suecia:Yasin AYARI",
-    "Nueva Zelanda:Elijah JUST"
+    "Argentina:Lionel Messi"
   ],
   "official_standings": {
     "A": [
@@ -428,100 +425,100 @@
     ],
     "I": [
       {
-        "team": "Francia",
-        "played": 0,
-        "won": 0,
+        "team": "Noruega",
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
-        "points": 0,
+        "gf": 4,
+        "ga": 1,
+        "gd": 3,
+        "points": 3,
         "position": 1
       },
       {
-        "team": "Irak",
-        "played": 0,
-        "won": 0,
+        "team": "Francia",
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
-        "points": 0,
+        "gf": 3,
+        "ga": 1,
+        "gd": 2,
+        "points": 3,
         "position": 2
       },
       {
-        "team": "Noruega",
-        "played": 0,
+        "team": "Senegal",
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "lost": 1,
+        "gf": 1,
+        "ga": 3,
+        "gd": -2,
         "points": 0,
         "position": 3
       },
       {
-        "team": "Senegal",
-        "played": 0,
+        "team": "Irak",
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "lost": 1,
+        "gf": 1,
+        "ga": 4,
+        "gd": -3,
         "points": 0,
         "position": 4
       }
     ],
     "J": [
       {
-        "team": "Argelia",
-        "played": 0,
-        "won": 0,
+        "team": "Argentina",
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "gf": 0,
+        "gf": 3,
         "ga": 0,
-        "gd": 0,
-        "points": 0,
+        "gd": 3,
+        "points": 3,
         "position": 1
       },
       {
-        "team": "Argentina",
-        "played": 0,
-        "won": 0,
+        "team": "Austria",
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
-        "points": 0,
+        "gf": 3,
+        "ga": 1,
+        "gd": 2,
+        "points": 3,
         "position": 2
       },
       {
-        "team": "Austria",
-        "played": 0,
+        "team": "Jordania",
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "lost": 1,
+        "gf": 1,
+        "ga": 3,
+        "gd": -2,
         "points": 0,
         "position": 3
       },
       {
-        "team": "Jordania",
-        "played": 0,
+        "team": "Argelia",
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "ga": 3,
+        "gd": -3,
         "points": 0,
         "position": 4
       }
@@ -627,5 +624,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-16T11:08:59.047Z"
+  "lastUpdate": "2026-06-17T07:28:34.474Z"
 }

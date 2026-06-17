@@ -291,10 +291,16 @@
     "date": "2026-06-16",
     "time": "21:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "I"
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 1,
+    "group": "I",
+    "scorers": [
+      "Francia:Kylian MBAPPE",
+      "Francia:Bradley BARCOLA",
+      "Senegal:Ibrahim MBAYE",
+      "Francia:Kylian MBAPPE"
+    ]
   },
   {
     "id": "400021488",
@@ -304,10 +310,17 @@
     "date": "2026-06-17",
     "time": "00:00",
     "venue": "Estadio Boston",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "I"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 4,
+    "group": "I",
+    "scorers": [
+      "Noruega:Erling Haaland",
+      "Irak:AYMEN HUSSEIN",
+      "Noruega:Erling Haaland",
+      "Noruega:Leo OSTIGARD",
+      "Irak:AYMEN HUSSEIN (p.p.)"
+    ]
   },
   {
     "id": "400021496",
@@ -317,10 +330,15 @@
     "date": "2026-06-17",
     "time": "03:00",
     "venue": "Estadio Kansas City",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 3,
     "score_away": 0,
-    "group": "J"
+    "group": "J",
+    "scorers": [
+      "Argentina:Lionel Messi",
+      "Argentina:Lionel Messi",
+      "Argentina:Lionel Messi"
+    ]
   },
   {
     "id": "400021498",
@@ -330,10 +348,16 @@
     "date": "2026-06-17",
     "time": "06:00",
     "venue": "Estadio de la Bahía de San Francisco",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "J"
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 1,
+    "group": "J",
+    "scorers": [
+      "Austria:Romano SCHMID",
+      "Jordania:ALI OLWAN",
+      "Jordania:YAZAN ALARAB (p.p.)",
+      "Austria:Marko ARNAUTOVIC"
+    ]
   },
   {
     "id": "400021502",

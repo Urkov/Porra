@@ -137,6 +137,8 @@ const PLAYER_KNOWN_ALIASES = {
   "vinicius júnior":  "Vinícius Jr.",
   // Rafael Leão — FIFA puede devolver con tilde en la o
   "rafael leão":      "Rafael Leao",
+  // Kylian Mbappé — FIFA en es-ES elimina el acento francés (é → e)
+  "kylian mbappe":    "Kylian Mbappé",
   // Julián Álvarez — FIFA puede devolver con tildes (players.json va sin ellas)
   "julián álvarez":   "Julian Alvarez",
   "julian álvarez":   "Julian Alvarez",

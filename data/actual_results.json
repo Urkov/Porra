@@ -525,31 +525,31 @@
     ],
     "K": [
       {
-        "team": "Colombia",
-        "played": 0,
+        "team": "Portugal",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 1
       },
       {
-        "team": "Portugal",
-        "played": 0,
+        "team": "RD Congo",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 2
       },
       {
-        "team": "RD Congo",
+        "team": "Colombia",
         "played": 0,
         "won": 0,
         "drawn": 0,
@@ -624,5 +624,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-17T10:54:03.470Z"
+  "lastUpdate": "2026-06-17T20:23:59.235Z"
 }

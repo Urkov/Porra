@@ -367,10 +367,14 @@
     "date": "2026-06-17",
     "time": "19:00",
     "venue": "Estadio Houston",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "K"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 1,
+    "group": "K",
+    "scorers": [
+      "Portugal:JOAO NEVES",
+      "RD Congo:Yoane WISSA"
+    ]
   },
   {
     "id": "400021507",
@@ -380,10 +384,13 @@
     "date": "2026-06-17",
     "time": "22:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "live",
+    "score_home": 1,
     "score_away": 0,
-    "group": "L"
+    "group": "L",
+    "scorers": [
+      "Inglaterra:Harry Kane"
+    ]
   },
   {
     "id": "400021510",

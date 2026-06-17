@@ -234,6 +234,17 @@ const PLAYER_KNOWN_ALIASES = {
   "rafael leão":      "Rafael Leao",
   // Kylian Mbappé — FIFA en es-ES elimina el acento francés (é → e)
   "kylian mbappe":    "Kylian Mbappé",
+  // Ousmane Dembélé — jugador francés, mismo patrón que Mbappé (é → e)
+  "ousmane dembele":  "Ousmane Dembélé",
+  // Leroy Sané — mismo carácter é, probable strip en es-ES
+  "leroy sane":       "Leroy Sané",
+  // Lautaro Martínez — FIFA puede devolver "MARTINEZ" sin tildes
+  "lautaro martinez": "Lautaro Martínez",
+  // Luis Díaz — probable "Luis DIAZ" en es-ES
+  "luis diaz":        "Luis Díaz",
+  // Darwin Núñez — la ñ es española y FIFA en es-ES suele conservarla,
+  // pero la ú puede caer → "Darwin Nunez"
+  "darwin nunez":     "Darwin Núñez",
   // Julián Álvarez — FIFA puede devolver con tildes (players.json va sin ellas)
   "julián álvarez":   "Julian Alvarez",
   "julian álvarez":   "Julian Alvarez",

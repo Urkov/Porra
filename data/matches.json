@@ -384,12 +384,17 @@
     "date": "2026-06-17",
     "time": "22:00",
     "venue": "Estadio Dallas",
-    "status": "live",
-    "score_home": 1,
-    "score_away": 0,
+    "status": "finished",
+    "score_home": 4,
+    "score_away": 2,
     "group": "L",
     "scorers": [
-      "Inglaterra:Harry Kane"
+      "Inglaterra:Harry Kane",
+      "Croacia:Martin BATURINA",
+      "Inglaterra:Harry Kane",
+      "Croacia:Petar Musa",
+      "Inglaterra:Jude Bellingham",
+      "Inglaterra:Marcus RASHFORD"
     ]
   },
   {

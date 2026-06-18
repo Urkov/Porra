@@ -1288,6 +1288,59 @@ function toggleFinishedMatches() {
   renderMatches();
 }
 
+// Caché de canales TV por partido (evita peticiones duplicadas)
+const _matchChannelsCache = {};
+
+/**
+ * Obtiene los canales de TV disponibles para un partido desde la API de FIFA.
+ * Devuelve un array de objetos { Name, Logo, Url } o [] si falla / no hay datos.
+ */
+async function fetchMatchChannels(matchId) {
+  if (_matchChannelsCache[matchId] !== undefined) return _matchChannelsCache[matchId];
+  try {
+    const res = await fetch(
+      `https://api.fifa.com/api/v3/watch/match/285023/${matchId}/ES?language=es`,
+      { signal: AbortSignal.timeout(6000) }
+    );
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const sources = Array.isArray(data.Sources) ? data.Sources : [];
+    // Deduplicar por IdChannel
+    const seen = new Set();
+    const channels = sources.filter(s => {
+      if (seen.has(s.IdChannel)) return false;
+      seen.add(s.IdChannel);
+      return true;
+    }).map(s => ({ Name: s.Name || '', Logo: s.Logo || '', Url: s.Url || s.TvChannelUrl || '' }));
+    _matchChannelsCache[matchId] = channels;
+    return channels;
+  } catch (e) {
+    _matchChannelsCache[matchId] = [];
+    return [];
+  }
+}
+
+/**
+ * Renderiza el HTML de los canales de TV para un partido.
+ * Solo muestra el logo (sin nombre). Fondo blanco para que logos oscuros sean visibles.
+ * Si no hay canales devuelve cadena vacía (no ocupa espacio).
+ */
+function renderChannelsHtml(channels) {
+  if (!channels || channels.length === 0) return '';
+  const items = channels.map(ch => {
+    if (!ch.Logo) return '';
+    const isDazn = ch.Name.toLowerCase().includes('dazn');
+    const bgClass = isDazn ? 'bg-white/80' : 'bg-white/10';
+    const hoverClass = isDazn ? 'hover:bg-white/90' : 'hover:bg-white/20';
+    const img = `<img src="${ch.Logo}" alt="${ch.Name}" title="${ch.Name}" class="h-3.5 w-auto max-w-[32px] object-contain" onerror="this.parentElement.style.display='none'" />`;
+    return ch.Url
+      ? `<a href="${ch.Url}" target="_blank" rel="noopener noreferrer" title="Ver en ${ch.Name}" class="inline-flex items-center justify-center rounded px-1 py-px ${bgClass} ${hoverClass} transition-colors cursor-pointer">${img}</a>`
+      : `<span class="inline-flex items-center justify-center rounded px-1 py-px ${bgClass}">${img}</span>`;
+  }).filter(Boolean).join('');
+  if (!items) return '';
+  return `<div class="flex flex-wrap items-center gap-1">${items}</div>`;
+}
+
 // RENDER DEL CALENDARIO DE PARTIDOS
 function renderMatches() {
   const container = document.getElementById('matchesContainer');
@@ -1359,11 +1412,12 @@ function renderMatches() {
     }
 
     card.innerHTML = `
-      <div class="flex justify-between text-[10px] text-slate-400 border-b border-slate-900 pb-1.5 uppercase font-bold tracking-wider">
-        <span>${translatePhase(m.phase, m.group)}</span>
-        <span class="${statusClass}">${statusText}</span>
+      <div class="flex items-center text-[10px] text-slate-400 border-b border-slate-900 pb-1.5 uppercase font-bold tracking-wider">
+        <span class="flex-1 truncate">${translatePhase(m.phase, m.group)}</span>
+        <div id="channels-${m.id}" class="flex-1 flex justify-center"></div>
+        <span class="flex-1 text-right ${statusClass}">${statusText}</span>
       </div>
-      
+
       <div class="grid grid-cols-3 items-center text-center py-1">
         <!-- Home -->
         <div class="flex flex-col items-center">
@@ -1439,6 +1493,14 @@ function renderMatches() {
     `;
 
     container.appendChild(card);
+
+    // Cargar canales de TV de forma asíncrona e inyectarlos en el placeholder
+    if (m.id) {
+      fetchMatchChannels(m.id).then(channels => {
+        const placeholder = document.getElementById(`channels-${m.id}`);
+        if (placeholder) placeholder.innerHTML = renderChannelsHtml(channels);
+      });
+    }
   });
 }
 

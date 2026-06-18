@@ -764,14 +764,14 @@ function renderLeaderboard() {
     detailRow.id = `participantSelections-${participant.id}`;
     detailRow.className = 'hidden bg-slate-950/70 border-b border-slate-900/60';
     detailRow.innerHTML = `
-      <td colspan="8" class="px-2 md:px-4 py-3 md:py-4 text-[10px] text-slate-300">
+      <td colspan="9" class="px-2 md:px-4 py-3 text-[10px] text-slate-300">
         <div class="space-y-2">
           <div class="text-slate-400 uppercase tracking-wide text-[9px] font-semibold">Selecciones + Goleadores</div>
 
-          <!-- Grupos: 3 columnas en móvil (2 filas de 3), 6 en escritorio (1 fila) -->
-          <div class="grid grid-cols-3 sm:grid-cols-6 gap-1">
+          <!-- Grupos: 3 columnas en móvil, 6 en escritorio -->
+          <div class="grid grid-cols-3 md:grid-cols-6 gap-1">
             ${Object.entries(participant.predictions).map(([grpName, teamList]) => `
-              <div class="rounded-xl border-l-2 sm:border-l-4 p-1.5 ${getGroupBadgeClasses(grpName)} min-w-0">
+              <div class="rounded-xl border-l-2 md:border-l-4 p-1.5 ${getGroupBadgeClasses(grpName)} min-w-0">
                 <div class="text-[9px] uppercase tracking-wider font-bold mb-0.5 text-slate-200">${grpName}</div>
                 <div class="space-y-0.5">
                   ${teamList.map(team => `
@@ -785,8 +785,8 @@ function renderLeaderboard() {
             `).join('')}
           </div>
 
-          <!-- Goleadores: 2 columnas en móvil, 3 en sm+ -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-1">
+          <!-- Goleadores: 2 columnas en móvil, 3 en escritorio -->
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-1">
             ${Object.entries(participant.scorers).map(([jGrp, player]) => `
               <div class="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-950/80 px-1.5 py-1 min-w-0">
                 <span class="text-[9px] text-slate-500 font-bold shrink-0">${jGrp}</span>

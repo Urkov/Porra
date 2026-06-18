@@ -50,26 +50,26 @@
       },
       {
         "team": "República Checa",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "gf": 1,
-        "ga": 2,
+        "gf": 2,
+        "ga": 3,
         "gd": -1,
-        "points": 0,
+        "points": 1,
         "position": 3
       },
       {
         "team": "Sudáfrica",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "gf": 0,
-        "ga": 2,
+        "gf": 1,
+        "ga": 3,
         "gd": -2,
-        "points": 0,
+        "points": 1,
         "position": 4
       }
     ],
@@ -624,5 +624,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-18T16:52:30.463Z"
+  "lastUpdate": "2026-06-18T18:19:47.615Z"
 }

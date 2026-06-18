@@ -717,8 +717,12 @@ function renderLeaderboard() {
     tr.onclick = () => showParticipantDetail(participant.id);
 
     tr.innerHTML = `
-      <td class="text-center font-bold text-xs w-14 md:w-16 px-1">
-        <span class="badge ${badgeClass} badge-xs md:badge-md px-2 py-2 md:px-2 md:py-2">${icon}</span>
+      <td class="w-[28px] text-center align-middle px-0 pl-1 pr-0">
+        <span class="inline-flex items-center justify-center w-full">
+          <span class="badge ${badgeClass} w-5 h-5 flex items-center justify-center p-0 text-[9px] leading-none">
+            ${icon}
+          </span>
+        </span>
       </td>
       <td class="font-bold text-white text-sm md:text-base py-2 md:py-3">
         <div class="flex items-center justify-between gap-2">

@@ -1317,7 +1317,7 @@ function toggleFreeToAirMatches() {
   const button = document.getElementById('toggleFreeToAirBtn');
   if (button) {
     button.innerHTML = showOnlyFreeToAir
-      ? '<i class="fa-solid fa-tv text-emerald-400 mr-1"></i><span class="hidden sm:inline">Partidos</span>en Abierto ✓'
+      ? '<i class="fa-solid fa-tv text-emerald-400 mr-1"></i><span class="hidden sm:inline">Partidos</span>en Abierto'
       : '<i class="fa-solid fa-tv text-slate-400 mr-1"></i><span class="hidden sm:inline">Partidos</span>en Abierto';
     button.classList.toggle('border-emerald-500/50', showOnlyFreeToAir);
     button.classList.toggle('text-emerald-300', showOnlyFreeToAir);

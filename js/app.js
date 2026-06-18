@@ -717,8 +717,8 @@ function renderLeaderboard() {
     tr.onclick = () => showParticipantDetail(participant.id);
 
     tr.innerHTML = `
-      <td class="text-center font-bold text-sm w-12 md:w-16 px-1 md:px-4">
-        <span class="badge ${badgeClass} badge-sm md:badge-md p-2">${icon}</span>
+      <td class="text-center font-bold text-xs w-6 md:w-16 px-0">
+        <span class="badge ${badgeClass} badge-xs md:badge-md p-1 md:p-2">${icon}</span>
       </td>
       <td class="font-bold text-white text-sm md:text-base py-2 md:py-3">
         <div class="flex items-center justify-between gap-2">
@@ -750,7 +750,9 @@ function renderLeaderboard() {
       <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.rounds} pts</td>
       <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.podium} pts</td>
       <td class="hidden md:table-cell text-center text-xs font-medium ${participant.score_details.pichichi > 0 ? 'text-amber-400 font-bold' : 'text-slate-600'}">${participant.score_details.pichichi > 0 ? participant.score_details.pichichi + ' pts 🌟' : '-'}</td>
-      <td class="bg-rose-950/20 text-rose-300 text-center font-black text-base md:text-lg rounded-r-xl px-2 md:px-4">${participant.score_details.total}</td>
+      <td class="bg-rose-950/20 text-rose-300 text-center font-black text-sm md:text-lg rounded-r-xl px-0 w-12 md:px-4">
+        ${participant.score_details.total}
+      </td>
     `;
     tbody.appendChild(tr);
 

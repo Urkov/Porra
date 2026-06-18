@@ -1371,7 +1371,7 @@ function renderChannelsHtml(channels) {
     const isRtve = nameLower.includes('rtve') || nameLower.includes('la 1') || nameLower.includes('play');
     const bgClass = isDazn ? 'bg-white/80' : 'bg-white/10';
     const hoverClass = isDazn ? 'hover:bg-white/90' : 'hover:bg-white/20';
-    const sizeClass = (isDazn || isRtve) ? 'h-5 max-w-[40px]' : 'h-3.5 max-w-[32px]';
+    const sizeClass = (isDazn || isRtve) ? 'h-4 max-w-[36px]' : 'h-3.5 max-w-[30px]';
     const img = `<img src="${ch.Logo}" alt="${ch.Name}" title="${ch.Name}" class="${sizeClass} w-auto object-contain" onerror="this.parentElement.style.display='none'" />`;
     return ch.Url
       ? `<a href="${ch.Url}" target="_blank" rel="noopener noreferrer" title="Ver en ${ch.Name}" class="inline-flex items-center justify-center rounded px-1 py-px ${bgClass} ${hoverClass} transition-colors cursor-pointer">${img}</a>`

@@ -1329,16 +1329,19 @@ function renderChannelsHtml(channels) {
   if (!channels || channels.length === 0) return '';
   const items = channels.map(ch => {
     if (!ch.Logo) return '';
-    const isDazn = ch.Name.toLowerCase().includes('dazn');
+    const nameLower = ch.Name.toLowerCase();
+    const isDazn = nameLower.includes('dazn');
+    const isRtve = nameLower.includes('rtve') || nameLower.includes('la 1') || nameLower.includes('play');
     const bgClass = isDazn ? 'bg-white/80' : 'bg-white/10';
     const hoverClass = isDazn ? 'hover:bg-white/90' : 'hover:bg-white/20';
-    const img = `<img src="${ch.Logo}" alt="${ch.Name}" title="${ch.Name}" class="h-3.5 w-auto max-w-[32px] object-contain" onerror="this.parentElement.style.display='none'" />`;
+    const sizeClass = (isDazn || isRtve) ? 'h-5 max-w-[40px]' : 'h-3.5 max-w-[32px]';
+    const img = `<img src="${ch.Logo}" alt="${ch.Name}" title="${ch.Name}" class="${sizeClass} w-auto object-contain" onerror="this.parentElement.style.display='none'" />`;
     return ch.Url
       ? `<a href="${ch.Url}" target="_blank" rel="noopener noreferrer" title="Ver en ${ch.Name}" class="inline-flex items-center justify-center rounded px-1 py-px ${bgClass} ${hoverClass} transition-colors cursor-pointer">${img}</a>`
       : `<span class="inline-flex items-center justify-center rounded px-1 py-px ${bgClass}">${img}</span>`;
   }).filter(Boolean).join('');
   if (!items) return '';
-  return `<div class="flex flex-wrap items-center gap-1">${items}</div>`;
+  return `<div class="flex items-center gap-0.5 overflow-hidden">${items}</div>`;
 }
 
 // RENDER DEL CALENDARIO DE PARTIDOS

@@ -1288,6 +1288,43 @@ function toggleFinishedMatches() {
   renderMatches();
 }
 
+let showOnlyFreeToAir = false;
+
+/**
+ * Devuelve true si el canal se emite en abierto (La 1, PLAY, RTVE u otros
+ * canales de libre acceso). DAZN y similares se excluyen.
+ */
+function isFreeToAirChannel(channelName) {
+  const n = channelName.toLowerCase();
+  return (
+    n.includes('la 1') ||
+    n.includes('la1') ||
+    n.includes('play') ||
+    n.includes('rtve') ||
+    n.includes('tve') ||
+    n.includes('rai') ||
+    n.includes('zdf') ||
+    n.includes('arv') ||
+    n.includes('tlc') ||
+    n.includes('m6') ||
+    n.includes('tf1') ||
+    n.includes('das erste')
+  );
+}
+
+function toggleFreeToAirMatches() {
+  showOnlyFreeToAir = !showOnlyFreeToAir;
+  const button = document.getElementById('toggleFreeToAirBtn');
+  if (button) {
+    button.innerHTML = showOnlyFreeToAir
+      ? '<i class="fa-solid fa-tv text-emerald-400 mr-1"></i><span>Partidos en Abierto ✓</span>'
+      : '<i class="fa-solid fa-tv text-slate-400 mr-1"></i><span>Partidos en Abierto</span>';
+    button.classList.toggle('border-emerald-500/50', showOnlyFreeToAir);
+    button.classList.toggle('text-emerald-300', showOnlyFreeToAir);
+  }
+  renderMatches();
+}
+
 // Caché de canales TV por partido (evita peticiones duplicadas)
 const _matchChannelsCache = {};
 
@@ -1345,7 +1382,7 @@ function renderChannelsHtml(channels) {
 }
 
 // RENDER DEL CALENDARIO DE PARTIDOS
-function renderMatches() {
+async function renderMatches() {
   const container = document.getElementById('matchesContainer');
   if (!container) return;
 
@@ -1355,7 +1392,7 @@ function renderMatches() {
   const dateFilter = document.getElementById('matchDateFilter').value;
   const venueFilter = document.getElementById('matchVenueFilter').value;
 
-  const filtered = currentMatches.filter(m => {
+  let filtered = currentMatches.filter(m => {
     if (phaseFilter === 'groups' && m.phase !== 'groups') return false;
     if (phaseFilter === 'eliminatorias' && m.phase === 'groups') return false;
     if (phaseFilter === 'dieciseisavos' && m.phase !== 'Round of 32') return false;
@@ -1370,6 +1407,21 @@ function renderMatches() {
     if (hideFinishedMatches && m.status === 'finished') return false;
     return true;
   });
+
+  // Filtro Partidos en Abierto: pre-fetch de canales y filtrado asíncrono
+  if (showOnlyFreeToAir && filtered.length > 0) {
+    container.innerHTML = `
+      <div class="col-span-2 text-center py-8 text-slate-400 text-sm">
+        <i class="fa-solid fa-tv animate-pulse mr-2 text-emerald-400"></i>Buscando partidos en abierto...
+      </div>
+    `;
+    const channelResults = await Promise.all(
+      filtered.map(m => m.id ? fetchMatchChannels(m.id) : Promise.resolve([]))
+    );
+    filtered = filtered.filter((m, i) =>
+      channelResults[i].some(ch => isFreeToAirChannel(ch.Name))
+    );
+  }
 
   container.innerHTML = '';
 

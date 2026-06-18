@@ -405,10 +405,13 @@
     "date": "2026-06-18",
     "time": "01:00",
     "venue": "Estadio de Toronto",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 1,
     "score_away": 0,
-    "group": "L"
+    "group": "L",
+    "scorers": [
+      "Ghana:Caleb YIRENKYI"
+    ]
   },
   {
     "id": "400021504",
@@ -418,10 +421,16 @@
     "date": "2026-06-18",
     "time": "04:00",
     "venue": "Estadio Ciudad de México",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "K"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 3,
+    "group": "K",
+    "scorers": [
+      "Colombia:Daniel MUNOZ",
+      "Uzbekistán:Abbosbek FAYZULLAEV",
+      "Colombia:Luis Díaz",
+      "Colombia:Jaminton CAMPAZ"
+    ]
   },
   {
     "id": "400021440",

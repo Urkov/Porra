@@ -525,19 +525,19 @@
     ],
     "K": [
       {
-        "team": "Portugal",
+        "team": "Colombia",
         "played": 1,
-        "won": 0,
-        "drawn": 1,
+        "won": 1,
+        "drawn": 0,
         "lost": 0,
-        "gf": 1,
+        "gf": 3,
         "ga": 1,
-        "gd": 0,
-        "points": 1,
+        "gd": 2,
+        "points": 3,
         "position": 1
       },
       {
-        "team": "RD Congo",
+        "team": "Portugal",
         "played": 1,
         "won": 0,
         "drawn": 1,
@@ -549,26 +549,26 @@
         "position": 2
       },
       {
-        "team": "Colombia",
-        "played": 0,
+        "team": "RD Congo",
+        "played": 1,
         "won": 0,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 1,
+        "ga": 1,
         "gd": 0,
-        "points": 0,
+        "points": 1,
         "position": 3
       },
       {
         "team": "Uzbekistán",
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "lost": 1,
+        "gf": 1,
+        "ga": 3,
+        "gd": -2,
         "points": 0,
         "position": 4
       }
@@ -588,25 +588,25 @@
       },
       {
         "team": "Ghana",
-        "played": 0,
-        "won": 0,
+        "played": 1,
+        "won": 1,
         "drawn": 0,
         "lost": 0,
-        "gf": 0,
+        "gf": 1,
         "ga": 0,
-        "gd": 0,
-        "points": 0,
+        "gd": 1,
+        "points": 3,
         "position": 2
       },
       {
         "team": "Panamá",
-        "played": 0,
+        "played": 1,
         "won": 0,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "ga": 1,
+        "gd": -1,
         "points": 0,
         "position": 3
       },
@@ -624,5 +624,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-17T22:18:55.536Z"
+  "lastUpdate": "2026-06-18T07:08:52.536Z"
 }

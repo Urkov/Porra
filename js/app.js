@@ -1271,8 +1271,8 @@ function toggleCalendar() {
   const hidden = container.classList.toggle('hidden');
   if (filters) filters.classList.toggle('hidden', hidden);
   button.innerHTML = hidden
-    ? '<i class="fa-solid fa-eye text-emerald-400 mr-1"></i><span class="hidden sm:inline">Mostrar </span>calendario'
-    : '<i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i><span class="hidden sm:inline">Ocultar </span>calendario';
+    ? '<i class="fa-solid fa-eye text-emerald-400 mr-1"></i><span class="hidden sm:inline">Mostrar</span>calendario'
+    : '<i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i><span class="hidden sm:inline">Ocultar</span>calendario';
 }
 
 let hideFinishedMatches = false;
@@ -1282,8 +1282,8 @@ function toggleFinishedMatches() {
   const button = document.getElementById('toggleFinishedBtn');
   if (button) {
     button.innerHTML = hideFinishedMatches
-      ? '<i class="fa-solid fa-eye text-emerald-400 mr-1"></i><span class="hidden sm:inline">Mostrar </span>finalizados'
-      : '<i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i><span class="hidden sm:inline">Ocultar </span>finalizados';
+      ? '<i class="fa-solid fa-eye text-emerald-400 mr-1"></i><span class="hidden sm:inline">Mostrar</span>finalizados'
+      : '<i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i><span class="hidden sm:inline">Ocultar</span>finalizados';
   }
   renderMatches();
 }
@@ -1317,8 +1317,8 @@ function toggleFreeToAirMatches() {
   const button = document.getElementById('toggleFreeToAirBtn');
   if (button) {
     button.innerHTML = showOnlyFreeToAir
-      ? '<i class="fa-solid fa-tv text-emerald-400 mr-1"></i><span>Partidos en Abierto ✓</span>'
-      : '<i class="fa-solid fa-tv text-slate-400 mr-1"></i><span>Partidos en Abierto</span>';
+      ? '<i class="fa-solid fa-tv text-emerald-400 mr-1"></i><span class="hidden sm:inline">Partidos</span>en Abierto ✓'
+      : '<i class="fa-solid fa-tv text-slate-400 mr-1"></i><span class="hidden sm:inline">Partidos</span>en Abierto';
     button.classList.toggle('border-emerald-500/50', showOnlyFreeToAir);
     button.classList.toggle('text-emerald-300', showOnlyFreeToAir);
   }

@@ -1130,12 +1130,13 @@ function translatePhase(phase, group) {
 
 function buildOfficialGroupsFromMatches(matchList) {
   const groups = {};
+  const isValidTeam = name => name && name.trim() !== '' && name !== 'Por definir';
   matchList
     .filter(m => m.phase === 'groups' && m.group)
     .forEach(m => {
       if (!groups[m.group]) groups[m.group] = new Set();
-      groups[m.group].add(m.team_home);
-      groups[m.group].add(m.team_away);
+      if (isValidTeam(m.team_home)) groups[m.group].add(m.team_home);
+      if (isValidTeam(m.team_away)) groups[m.group].add(m.team_away);
     });
   return Object.keys(groups)
     .sort()
@@ -1163,7 +1164,9 @@ function computeOfficialGroupStandings(matchList) {
     });
 
     matchList
-      .filter(m => m.phase === 'groups' && m.group === group && m.status === 'finished')
+      .filter(m => m.phase === 'groups' && m.group === group && m.status === 'finished'
+        && m.team_home && m.team_home !== 'Por definir'
+        && m.team_away && m.team_away !== 'Por definir')
       .forEach(m => {
         const home = stats[m.team_home];
         const away = stats[m.team_away];

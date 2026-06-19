@@ -457,10 +457,17 @@
     "date": "2026-06-18",
     "time": "21:00",
     "venue": "Estadio Los Angeles",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "B"
+    "status": "finished",
+    "score_home": 4,
+    "score_away": 1,
+    "group": "B",
+    "scorers": [
+      "Suiza:Johan MANZAMBI",
+      "Suiza:Ruben VARGAS",
+      "Suiza:Johan MANZAMBI",
+      "Bosnia y Herzegovina:Ermin MAHMIC",
+      "Suiza:Granit XHAKA"
+    ]
   },
   {
     "id": "400021450",
@@ -470,10 +477,18 @@
     "date": "2026-06-19",
     "time": "00:00",
     "venue": "Estadio BC Place Vancouver",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 6,
     "score_away": 0,
-    "group": "B"
+    "group": "B",
+    "scorers": [
+      "Canadá:Cyle LARIN",
+      "Canadá:Jonathan David",
+      "Canadá:Jonathan David",
+      "Canadá:Nathan SALIBA",
+      "Catar:MOHAMED MANAI (p.p.)",
+      "Canadá:Jonathan David"
+    ]
   },
   {
     "id": "400021442",
@@ -483,10 +498,13 @@
     "date": "2026-06-19",
     "time": "03:00",
     "venue": "Estadio Guadalajara",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 1,
     "score_away": 0,
-    "group": "A"
+    "group": "A",
+    "scorers": [
+      "México:Luis ROMO"
+    ]
   },
   {
     "id": "400021462",
@@ -1134,15 +1152,16 @@
   },
   {
     "id": "400021520",
-    "phase": "Round of 32",
-    "team_home": "Por definir",
+    "phase": "groups",
+    "team_home": "México",
     "team_away": "Por definir",
     "date": "2026-07-01",
     "time": "03:00",
     "venue": "Estadio Ciudad de México",
     "status": "scheduled",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 0,
+    "group": "A"
   },
   {
     "id": "400021512",

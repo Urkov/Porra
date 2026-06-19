@@ -20,31 +20,32 @@
     "P4": ""
   },
   "actual_pichichi": [
-    "Argentina:Lionel Messi"
+    "Argentina:Lionel Messi",
+    "Canadá:Jonathan David"
   ],
   "official_standings": {
     "A": [
       {
         "team": "México",
-        "played": 1,
-        "won": 1,
+        "played": 2,
+        "won": 2,
         "drawn": 0,
         "lost": 0,
-        "gf": 2,
+        "gf": 3,
         "ga": 0,
-        "gd": 2,
-        "points": 3,
+        "gd": 3,
+        "points": 6,
         "position": 1
       },
       {
         "team": "Corea del Sur",
-        "played": 1,
+        "played": 2,
         "won": 1,
         "drawn": 0,
-        "lost": 0,
+        "lost": 1,
         "gf": 2,
-        "ga": 1,
-        "gd": 1,
+        "ga": 2,
+        "gd": 0,
         "points": 3,
         "position": 2
       },
@@ -75,50 +76,50 @@
     ],
     "B": [
       {
-        "team": "Bosnia y Herzegovina",
-        "played": 1,
-        "won": 0,
+        "team": "Canadá",
+        "played": 2,
+        "won": 1,
         "drawn": 1,
         "lost": 0,
-        "gf": 1,
+        "gf": 7,
         "ga": 1,
-        "gd": 0,
-        "points": 1,
+        "gd": 6,
+        "points": 4,
         "position": 1
       },
       {
-        "team": "Canadá",
-        "played": 1,
-        "won": 0,
+        "team": "Suiza",
+        "played": 2,
+        "won": 1,
         "drawn": 1,
         "lost": 0,
-        "gf": 1,
-        "ga": 1,
-        "gd": 0,
-        "points": 1,
+        "gf": 5,
+        "ga": 2,
+        "gd": 3,
+        "points": 4,
         "position": 2
       },
       {
-        "team": "Catar",
-        "played": 1,
+        "team": "Bosnia y Herzegovina",
+        "played": 2,
         "won": 0,
         "drawn": 1,
-        "lost": 0,
-        "gf": 1,
-        "ga": 1,
-        "gd": 0,
+        "lost": 1,
+        "gf": 2,
+        "ga": 5,
+        "gd": -3,
         "points": 1,
         "position": 3
       },
       {
-        "team": "Suiza",
-        "played": 1,
+        "team": "Catar",
+        "played": 2,
         "won": 0,
         "drawn": 1,
-        "lost": 0,
+        "lost": 1,
         "gf": 1,
-        "ga": 1,
-        "gd": 0,
+        "ga": 7,
+        "gd": -6,
         "points": 1,
         "position": 4
       }
@@ -624,5 +625,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-18T18:19:47.615Z"
+  "lastUpdate": "2026-06-19T06:59:46.804Z"
 }

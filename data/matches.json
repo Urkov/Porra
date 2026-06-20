@@ -514,10 +514,14 @@
     "date": "2026-06-19",
     "time": "21:00",
     "venue": "Estadio de Seattle",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 2,
     "score_away": 0,
-    "group": "D"
+    "group": "D",
+    "scorers": [
+      "Australia:Cameron BURGESS (p.p.)",
+      "Estados Unidos:Alex FREEMAN"
+    ]
   },
   {
     "id": "400021454",
@@ -527,10 +531,13 @@
     "date": "2026-06-20",
     "time": "00:00",
     "venue": "Estadio Boston",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "C"
+    "score_away": 1,
+    "group": "C",
+    "scorers": [
+      "Marruecos:Ismael SAIBARI"
+    ]
   },
   {
     "id": "400021457",
@@ -540,10 +547,15 @@
     "date": "2026-06-20",
     "time": "02:30",
     "venue": "Estadio Filadelfia",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 3,
     "score_away": 0,
-    "group": "C"
+    "group": "C",
+    "scorers": [
+      "Brasil:MATHEUS CUNHA",
+      "Brasil:MATHEUS CUNHA",
+      "Brasil:Vinícius Jr."
+    ]
   },
   {
     "id": "400021460",
@@ -553,10 +565,13 @@
     "date": "2026-06-20",
     "time": "05:00",
     "venue": "Estadio de la Bahía de San Francisco",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "D"
+    "score_away": 1,
+    "group": "D",
+    "scorers": [
+      "Paraguay:Matias GALARZA"
+    ]
   },
   {
     "id": "400021472",
@@ -1189,15 +1204,16 @@
   },
   {
     "id": "400021524",
-    "phase": "Round of 32",
-    "team_home": "Por definir",
+    "phase": "groups",
+    "team_home": "Estados Unidos",
     "team_away": "Por definir",
     "date": "2026-07-02",
     "time": "02:00",
     "venue": "Estadio de la Bahía de San Francisco",
     "status": "scheduled",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 0,
+    "group": "D"
   },
   {
     "id": "400021519",

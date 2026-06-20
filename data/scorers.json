@@ -12,8 +12,8 @@
     "Paraguay:MAURICIO": 1,
     "Estados Unidos:Giovanni REYNA": 1,
     "Suiza:Breel EMBOLO": 1,
-    "Marruecos:Ismael SAIBARI": 1,
-    "Brasil:Vinícius Jr.": 1,
+    "Marruecos:Ismael SAIBARI": 2,
+    "Brasil:Vinícius Jr.": 2,
     "Escocia:John McGinn": 1,
     "Australia:Nestory IRANKUNDA": 1,
     "Australia:Connor METCALFE": 1,
@@ -70,7 +70,10 @@
     "Suiza:Granit XHAKA": 1,
     "Canadá:Jonathan David": 3,
     "Canadá:Nathan SALIBA": 1,
-    "México:Luis ROMO": 1
+    "México:Luis ROMO": 1,
+    "Estados Unidos:Alex FREEMAN": 1,
+    "Brasil:MATHEUS CUNHA": 2,
+    "Paraguay:Matias GALARZA": 1
   },
   "max_assists": 2,
   "assists": {
@@ -83,9 +86,9 @@
     "Canadá:Promise DAVID": 1,
     "Estados Unidos:Christian PULISIC": 1,
     "Estados Unidos:Malik TILLMAN": 1,
-    "Paraguay:Julio ENCISO": 1,
+    "Paraguay:Julio ENCISO": 2,
     "Estados Unidos:Alex FREEMAN": 1,
-    "Marruecos:Brahim DIAZ": 1,
+    "Marruecos:Brahim DIAZ": 2,
     "Brasil:BRUNO GUIMARAES": 1,
     "Australia:Paul OKON-ENGSTLER": 1,
     "Alemania:Florian WIRTZ": 1,
@@ -126,6 +129,8 @@
     "República Checa:Alexandr SOJKA": 1,
     "Suiza:Breel EMBOLO": 1,
     "Suiza:Ruben VARGAS": 1,
-    "Canadá:Nathan SALIBA": 1
+    "Canadá:Nathan SALIBA": 1,
+    "Brasil:Vinícius Jr.": 1,
+    "Brasil:LUCAS PAQUETA": 1
   }
 }

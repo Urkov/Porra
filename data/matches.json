@@ -581,10 +581,18 @@
     "date": "2026-06-20",
     "time": "19:00",
     "venue": "Estadio Houston",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "F"
+    "status": "finished",
+    "score_home": 5,
+    "score_away": 1,
+    "group": "F",
+    "scorers": [
+      "Países Bajos:Brian BROBBEY",
+      "Países Bajos:Brian BROBBEY",
+      "Países Bajos:Cody GAKPO",
+      "Países Bajos:Cody GAKPO",
+      "Suecia:Anthony ELANGA",
+      "Países Bajos:Crysencio SUMMERVILLE"
+    ]
   },
   {
     "id": "400021469",
@@ -594,10 +602,15 @@
     "date": "2026-06-20",
     "time": "22:00",
     "venue": "Estadio de Toronto",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "E"
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 1,
+    "group": "E",
+    "scorers": [
+      "Costa de Marfil:Franck KESSIE",
+      "Alemania:Deniz UNDAV",
+      "Alemania:Deniz UNDAV"
+    ]
   },
   {
     "id": "400021465",
@@ -607,7 +620,7 @@
     "date": "2026-06-21",
     "time": "02:00",
     "venue": "Estadio Kansas City",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
     "score_away": 0,
     "group": "E"
@@ -620,10 +633,16 @@
     "date": "2026-06-21",
     "time": "06:00",
     "venue": "Estadio Monterrey",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "F"
+    "score_away": 4,
+    "group": "F",
+    "scorers": [
+      "Japón:Daichi KAMADA",
+      "Japón:Ayase UEDA",
+      "Japón:Junya ITO",
+      "Japón:Ayase UEDA"
+    ]
   },
   {
     "id": "400021483",
@@ -1119,15 +1138,16 @@
   },
   {
     "id": "400021513",
-    "phase": "Round of 32",
-    "team_home": "Por definir",
+    "phase": "groups",
+    "team_home": "Alemania",
     "team_away": "Por definir",
     "date": "2026-06-29",
     "time": "22:30",
     "venue": "Estadio Boston",
     "status": "scheduled",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 0,
+    "group": "E"
   },
   {
     "id": "400021522",

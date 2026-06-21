@@ -328,15 +328,27 @@
     "G": [
       {
         "team": "Irán",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 0,
         "gf": 2,
         "ga": 2,
         "gd": 0,
-        "points": 1,
+        "points": 2,
         "position": 1
+      },
+      {
+        "team": "Bélgica",
+        "played": 2,
+        "won": 0,
+        "drawn": 2,
+        "lost": 0,
+        "gf": 1,
+        "ga": 1,
+        "gd": 0,
+        "points": 2,
+        "position": 2
       },
       {
         "team": "Nueva Zelanda",
@@ -346,18 +358,6 @@
         "lost": 0,
         "gf": 2,
         "ga": 2,
-        "gd": 0,
-        "points": 1,
-        "position": 2
-      },
-      {
-        "team": "Bélgica",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "gf": 1,
-        "ga": 1,
         "gd": 0,
         "points": 1,
         "position": 3
@@ -377,15 +377,15 @@
     ],
     "H": [
       {
-        "team": "Arabia Saudita",
-        "played": 1,
-        "won": 0,
+        "team": "España",
+        "played": 2,
+        "won": 1,
         "drawn": 1,
         "lost": 0,
-        "gf": 1,
-        "ga": 1,
-        "gd": 0,
-        "points": 1,
+        "gf": 4,
+        "ga": 0,
+        "gd": 4,
+        "points": 4,
         "position": 1
       },
       {
@@ -413,14 +413,14 @@
         "position": 3
       },
       {
-        "team": "España",
-        "played": 1,
+        "team": "Arabia Saudita",
+        "played": 2,
         "won": 0,
         "drawn": 1,
-        "lost": 0,
-        "gf": 0,
-        "ga": 0,
-        "gd": 0,
+        "lost": 1,
+        "gf": 1,
+        "ga": 5,
+        "gd": -4,
         "points": 1,
         "position": 4
       }
@@ -626,5 +626,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-21T09:48:33.729Z"
+  "lastUpdate": "2026-06-21T21:03:46.983Z"
 }

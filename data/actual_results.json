@@ -327,6 +327,18 @@
     ],
     "G": [
       {
+        "team": "Egipto",
+        "played": 2,
+        "won": 1,
+        "drawn": 1,
+        "lost": 0,
+        "gf": 4,
+        "ga": 2,
+        "gd": 2,
+        "points": 4,
+        "position": 1
+      },
+      {
         "team": "Irán",
         "played": 2,
         "won": 0,
@@ -336,7 +348,7 @@
         "ga": 2,
         "gd": 0,
         "points": 2,
-        "position": 1
+        "position": 2
       },
       {
         "team": "Bélgica",
@@ -348,29 +360,17 @@
         "ga": 1,
         "gd": 0,
         "points": 2,
-        "position": 2
-      },
-      {
-        "team": "Nueva Zelanda",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "gf": 2,
-        "ga": 2,
-        "gd": 0,
-        "points": 1,
         "position": 3
       },
       {
-        "team": "Egipto",
-        "played": 1,
+        "team": "Nueva Zelanda",
+        "played": 2,
         "won": 0,
         "drawn": 1,
-        "lost": 0,
-        "gf": 1,
-        "ga": 1,
-        "gd": 0,
+        "lost": 1,
+        "gf": 3,
+        "ga": 5,
+        "gd": -2,
         "points": 1,
         "position": 4
       }
@@ -390,26 +390,26 @@
       },
       {
         "team": "Uruguay",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 0,
-        "gf": 1,
-        "ga": 1,
+        "gf": 3,
+        "ga": 3,
         "gd": 0,
-        "points": 1,
+        "points": 2,
         "position": 2
       },
       {
         "team": "Cabo Verde",
-        "played": 1,
+        "played": 2,
         "won": 0,
-        "drawn": 1,
+        "drawn": 2,
         "lost": 0,
-        "gf": 0,
-        "ga": 0,
+        "gf": 2,
+        "ga": 2,
         "gd": 0,
-        "points": 1,
+        "points": 2,
         "position": 3
       },
       {
@@ -626,5 +626,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-21T21:03:46.983Z"
+  "lastUpdate": "2026-06-22T11:52:13.889Z"
 }

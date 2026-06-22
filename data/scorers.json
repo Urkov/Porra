@@ -36,7 +36,7 @@
     "Suecia:Mattias SVANBERG": 1,
     "Egipto:EMAM ASHOUR": 1,
     "Arabia Saudita:Abdulelah ALAMRI": 1,
-    "Uruguay:Maxi ARAUJO": 1,
+    "Uruguay:Maxi ARAUJO": 2,
     "Nueva Zelanda:Elijah JUST": 2,
     "Irán:Ramin REZAEIAN": 1,
     "Irán:Mohammad MOHEBBI": 1,
@@ -81,7 +81,14 @@
     "Japón:Ayase UEDA": 2,
     "Japón:Junya ITO": 1,
     "España:Lamine Yamal": 1,
-    "España:Mikel Oyarzabal": 2
+    "España:Mikel Oyarzabal": 2,
+    "Cabo Verde:KEVIN PINA": 1,
+    "Uruguay:Agustin CANOBBIO": 1,
+    "Cabo Verde:HELIO VARELA": 1,
+    "Nueva Zelanda:Finn SURMAN": 1,
+    "Egipto:MOSTAFA ZICO": 1,
+    "Egipto:Mohamed Salah": 1,
+    "Egipto:TREZEGUET": 1
   },
   "max_assists": 3,
   "assists": {
@@ -111,7 +118,7 @@
     "Túnez:Hannibal MEJBRI": 1,
     "Suecia:Alexander Isak": 3,
     "Suecia:Lucas BERGVALL": 1,
-    "Egipto:Mohamed Salah": 1,
+    "Egipto:Mohamed Salah": 2,
     "Nueva Zelanda:Chris WOOD": 2,
     "Irán:Ramin REZAEIAN": 1,
     "Francia:Michael OLISE": 1,
@@ -152,6 +159,10 @@
     "Japón:Kaishu SANO": 1,
     "España:Mikel Oyarzabal": 1,
     "España:Aymeric LAPORTE": 1,
-    "España:Dani OLMO": 1
+    "España:Dani OLMO": 1,
+    "Uruguay:Maxi ARAUJO": 1,
+    "Nueva Zelanda:Tim PAYNE": 1,
+    "Egipto:MOHAMED HANY": 1,
+    "Egipto:MOSTAFA ZICO": 1
   }
 }

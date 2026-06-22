@@ -684,10 +684,16 @@
     "date": "2026-06-22",
     "time": "00:00",
     "venue": "Estadio Miami",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "H"
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 2,
+    "group": "H",
+    "scorers": [
+      "Cabo Verde:KEVIN PINA",
+      "Uruguay:Maxi ARAUJO",
+      "Uruguay:Agustin CANOBBIO",
+      "Cabo Verde:HELIO VARELA"
+    ]
   },
   {
     "id": "400021480",
@@ -697,10 +703,16 @@
     "date": "2026-06-22",
     "time": "03:00",
     "venue": "Estadio BC Place Vancouver",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "G"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 3,
+    "group": "G",
+    "scorers": [
+      "Nueva Zelanda:Finn SURMAN",
+      "Egipto:MOSTAFA ZICO",
+      "Egipto:Mohamed Salah",
+      "Egipto:TREZEGUET"
+    ]
   },
   {
     "id": "400021494",

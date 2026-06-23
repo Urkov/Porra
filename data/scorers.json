@@ -1,5 +1,5 @@
 {
-  "max_goals": 3,
+  "max_goals": 5,
   "players": {
     "México:Julian QUINONES": 1,
     "México:Raul JIMENEZ": 1,
@@ -40,13 +40,13 @@
     "Nueva Zelanda:Elijah JUST": 2,
     "Irán:Ramin REZAEIAN": 1,
     "Irán:Mohammad MOHEBBI": 1,
-    "Francia:Kylian Mbappé": 2,
+    "Francia:Kylian Mbappé": 4,
     "Francia:Bradley BARCOLA": 1,
     "Senegal:Ibrahim MBAYE": 1,
-    "Noruega:Erling Haaland": 2,
+    "Noruega:Erling Haaland": 4,
     "Irak:AYMEN HUSSEIN": 1,
     "Noruega:Leo OSTIGARD": 1,
-    "Argentina:Lionel Messi": 3,
+    "Argentina:Lionel Messi": 5,
     "Austria:Romano SCHMID": 1,
     "Jordania:ALI OLWAN": 1,
     "Austria:Marko ARNAUTOVIC": 1,
@@ -88,7 +88,13 @@
     "Nueva Zelanda:Finn SURMAN": 1,
     "Egipto:MOSTAFA ZICO": 1,
     "Egipto:Mohamed Salah": 1,
-    "Egipto:TREZEGUET": 1
+    "Egipto:TREZEGUET": 1,
+    "Francia:Ousmane Dembélé": 1,
+    "Noruega:Marcus HOLMGREN PEDERSEN": 1,
+    "Senegal:Ismaila SARR": 2,
+    "Jordania:NIZAR ALRASHDAN": 1,
+    "Argelia:Nadhir BENBOUALI": 1,
+    "Argelia:Amine GOUIRI": 1
   },
   "max_assists": 3,
   "assists": {
@@ -121,12 +127,12 @@
     "Egipto:Mohamed Salah": 2,
     "Nueva Zelanda:Chris WOOD": 2,
     "Irán:Ramin REZAEIAN": 1,
-    "Francia:Michael OLISE": 1,
+    "Francia:Michael OLISE": 3,
     "Francia:Adrien RABIOT": 1,
     "Senegal:Iliman NDIAYE": 1,
     "Noruega:David MOLLER WOLFE": 1,
     "Irak:AMIR ALAMMARI": 1,
-    "Noruega:Martin ODEGAARD": 1,
+    "Noruega:Martin ODEGAARD": 2,
     "Argentina:Rodrigo DE PAUL": 1,
     "Argentina:Nico GONZALEZ": 1,
     "Austria:Xaver Schlager": 1,
@@ -163,6 +169,13 @@
     "Uruguay:Maxi ARAUJO": 1,
     "Nueva Zelanda:Tim PAYNE": 1,
     "Egipto:MOHAMED HANY": 1,
-    "Egipto:MOSTAFA ZICO": 1
+    "Egipto:MOSTAFA ZICO": 1,
+    "Argentina:Facundo MEDINA": 1,
+    "Francia:Ousmane Dembélé": 1,
+    "Senegal:Sadio MANE": 1,
+    "Noruega:Patrick BERG": 1,
+    "Senegal:Nicolas JACKSON": 1,
+    "Jordania:MOUSA ALTAMARI": 1,
+    "Argelia:Riyad Mahrez": 1
   }
 }

@@ -722,10 +722,14 @@
     "date": "2026-06-22",
     "time": "19:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 2,
     "score_away": 0,
-    "group": "J"
+    "group": "J",
+    "scorers": [
+      "Argentina:Lionel Messi",
+      "Argentina:Lionel Messi"
+    ]
   },
   {
     "id": "400021492",
@@ -735,10 +739,15 @@
     "date": "2026-06-22",
     "time": "23:00",
     "venue": "Estadio Filadelfia",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 3,
     "score_away": 0,
-    "group": "I"
+    "group": "I",
+    "scorers": [
+      "Francia:Kylian Mbappé",
+      "Francia:Kylian Mbappé",
+      "Francia:Ousmane Dembélé"
+    ]
   },
   {
     "id": "400021491",
@@ -748,10 +757,17 @@
     "date": "2026-06-23",
     "time": "02:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "I"
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 2,
+    "group": "I",
+    "scorers": [
+      "Noruega:Marcus HOLMGREN PEDERSEN",
+      "Noruega:Erling Haaland",
+      "Senegal:Ismaila SARR",
+      "Noruega:Erling Haaland",
+      "Senegal:Ismaila SARR"
+    ]
   },
   {
     "id": "400021499",
@@ -761,10 +777,15 @@
     "date": "2026-06-23",
     "time": "05:00",
     "venue": "Estadio de la Bahía de San Francisco",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "J"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 2,
+    "group": "J",
+    "scorers": [
+      "Jordania:NIZAR ALRASHDAN",
+      "Argelia:Nadhir BENBOUALI",
+      "Argelia:Amine GOUIRI"
+    ]
   },
   {
     "id": "400021503",
@@ -1303,15 +1324,16 @@
   },
   {
     "id": "400021521",
-    "phase": "Round of 32",
-    "team_home": "Por definir",
+    "phase": "groups",
+    "team_home": "Argentina",
     "team_away": "Por definir",
     "date": "2026-07-04",
     "time": "00:00",
     "venue": "Estadio Miami",
     "status": "scheduled",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 0,
+    "group": "J"
   },
   {
     "id": "400021517",

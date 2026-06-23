@@ -412,6 +412,7 @@ let currentActualResults = [];
 document.addEventListener('DOMContentLoaded', async () => {
   await loadDatabase();
   populateMatchFilters();
+  populateOfficialGroupsFilter();
   computeScores();
   renderLeaderboard();
   renderOfficialGroups();
@@ -419,6 +420,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderScorers();
   renderRulesCatalog();
 });
+
+/**
+ * Rellena el desplegable de filtro de participante en la sección de grupos oficiales.
+ * Se llama tras loadDatabase() para tener la lista de participantes disponible.
+ */
+function populateOfficialGroupsFilter() {
+  const select = document.getElementById('officialGroupsParticipantFilter');
+  if (!select) return;
+  // Preservar la selección actual si ya tenía opciones
+  const current = select.value;
+  select.innerHTML = '<option value="all">Vista general</option>';
+  participants.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name;
+    select.appendChild(opt);
+  });
+  if (current && current !== 'all') select.value = current;
+}
 
 // Desplazamiento dinámico suave
 function scrollToSection(id) {
@@ -498,16 +518,15 @@ function populateMatchFilters() {
 
 // ALGORITMO INTEGRAL DEL MOTOR DE CÁLCULO DE LA PORRA
 function computeScores() {
-  // Calcular standings del Mundial y posiciones provisionales UNA vez para todos
-  // los participantes (evita recalcular por cada participante en el loop).
+  // Precalcular standings y posición real (1º-4º) de cada equipo en su
+  // propio grupo oficial del Mundial, una sola vez para todos.
   const wcStandings = computeOfficialGroupStandings(currentMatches);
-  const provisionalPositions = buildProvisionalPositions(wcStandings);
+  const teamRealPosition = buildTeamRealPositionMap(wcStandings);
 
   participants.forEach(participant => {
     let scoreGoles = 0;
     let scoreMatches = 0;
     let scoreGroups = 0;
-    let scoreExact = 0;
     let scoreRounds = 0;
     let scorePodium = 0;
     let scorePichichi = 0;
@@ -630,41 +649,34 @@ function computeScores() {
       }
     });
 
-    // 4. CLASIFICACIÓN FASE DE GRUPOS (10, 6, 2 PTS SEGÚN POSICIÓN REAL O PROVISIONAL)
-    //
-    // Si actual_positions[grpName] tiene datos (el admin los ha fijado al final
-    // de la fase de grupos) se usan directamente.
-    // Si está vacío (fase de grupos en curso), se calculan posiciones provisionales
-    // en tiempo real a partir de los standings actuales del Mundial:
-    //   · Equipos en posición 1 o 2 de su grupo del Mundial → clasifican
-    //   · Equipos en posición 3 que son mejores terceros → clasifican
-    //   · Dentro de cada grupo-porra se ordenan por posición mundial, luego por
-    //     puntos, DG, GF.
-    // La puntuación provisional se actualiza cada vez que se recarga la porra.
+    // 4. CLASIFICACIÓN FASE DE GRUPOS (10, 6, 2 PTS SEGÚN POSICIÓN REAL 1º-4º
+    //    DE CADA EQUIPO EN SU PROPIO GRUPO OFICIAL DEL MUNDIAL, A-L)
+    // Si actual_positions[grpName] tiene datos (fijados manualmente por el
+    // admin al final de la fase de grupos, como lista ordenada de los 4
+    // equipos de ESE grupo de porra) se usan directamente. Si está vacío,
+    // se usa la posición real de cada equipo en su propio grupo oficial,
+    // calculada en tiempo real desde los standings del Mundial
+    // (teamRealPosition). Importante: la posición real es una propiedad de
+    // cada equipo individual, NO un ranking dentro del grupo de porra —
+    // varios equipos de un mismo grupo de porra pueden compartir la misma
+    // posición real (p.ej. si el grupo de porra junta a varios cabezas de
+    // grupo, todos están en posición 1 a la vez).
     Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
       const manualOrder = currentActualResults.actual_positions[grpName] || [];
-      const realOrder = manualOrder.length > 0
-        ? manualOrder
-        : (provisionalPositions[grpName] || []);
 
-      // Evaluación del puesto de grupo de los 3 elegidos
       predictedList.forEach((team_pred, index) => {
-        const realIdx = realOrder.indexOf(team_pred);
-        if (realIdx !== -1) {
-          const realPosNumber = realIdx + 1;
+        let realPosNumber = null;
+        if (manualOrder.length > 0) {
+          const realIdx = manualOrder.indexOf(team_pred);
+          if (realIdx !== -1) realPosNumber = realIdx + 1;
+        } else {
+          realPosNumber = teamRealPosition[team_pred] || null;
+        }
 
-          // Clasificación fase de grupos
+        if (realPosNumber !== null) {
           if (realPosNumber === 1) scoreGroups += rules.points.group_position["1"];
           else if (realPosNumber === 2) scoreGroups += rules.points.group_position["2"];
           else if (realPosNumber === 3) scoreGroups += rules.points.group_position["3"];
-
-          // Coincidencia exacta de posición de predicción
-          const predIndexNumber = index + 1;
-          if (predIndexNumber === realPosNumber) {
-            if (realPosNumber === 1) scoreExact += rules.points.prediction_match["1"];
-            else if (realPosNumber === 2) scoreExact += rules.points.prediction_match["2"];
-            else if (realPosNumber === 3) scoreExact += rules.points.prediction_match["3"];
-          }
         }
       });
     });
@@ -682,11 +694,10 @@ function computeScores() {
       scorers: scoreGoles,
       matches: scoreMatches,
       groups: scoreGroups,
-      exact: scoreExact,
       rounds: scoreRounds,
       podium: scorePodium,
       pichichi: scorePichichi,
-      total: scoreGoles + scoreMatches + scoreGroups + scoreExact + scoreRounds + scorePodium + scorePichichi
+      total: scoreGoles + scoreMatches + scoreGroups + scoreRounds + scorePodium + scorePichichi
     };
   });
 }
@@ -771,8 +782,11 @@ function renderLeaderboard() {
       <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.rounds} pts</td>
       <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.podium} pts</td>
       <td class="hidden md:table-cell text-center text-xs font-medium ${participant.score_details.pichichi > 0 ? 'text-amber-400 font-bold' : 'text-slate-600'}">${participant.score_details.pichichi > 0 ? participant.score_details.pichichi + ' pts 🌟' : '-'}</td>
-      <td class="bg-rose-950/20 text-rose-300 text-center font-black text-sm md:text-lg rounded-r-xl px-0 w-12 md:px-4">
-        ${participant.score_details.total}
+      <td class="bg-rose-950/20 text-rose-300 text-center font-black text-sm md:text-lg rounded-r-xl px-0 w-12 md:px-4 cursor-pointer hover:bg-rose-950/40 transition" onclick="event.stopPropagation(); showParticipantDetail(${participant.id})" title="Ver desglose completo">
+        <div class="flex flex-col items-center gap-0.5">
+          <span>${participant.score_details.total}</span>
+          <span class="text-[8px] text-rose-500/60 font-normal hidden md:block">ver desglose</span>
+        </div>
       </td>
     `;
     tbody.appendChild(tr);
@@ -780,23 +794,42 @@ function renderLeaderboard() {
     const detailRow = document.createElement('tr');
     detailRow.id = `participantSelections-${participant.id}`;
     detailRow.className = 'hidden bg-slate-950/70 border-b border-slate-900/60';
+
+    // Calcular puntos por equipo para el desglose inline
+    const inlineTeamPoints = computeParticipantTeamPoints(participant);
+
     detailRow.innerHTML = `
       <td colspan="9" class="px-2 md:px-4 py-3 text-[10px] text-slate-300">
         <div class="space-y-2">
-          <div class="text-slate-400 uppercase tracking-wide text-[9px] font-semibold">Selecciones + Goleadores</div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-400 uppercase tracking-wide text-[9px] font-semibold">Selecciones + Goleadores</span>
+            <button onclick="event.stopPropagation(); showParticipantDetail(${participant.id})" class="btn btn-ghost btn-xs text-rose-400 text-[9px] gap-1">
+              <i class="fa-solid fa-chart-pie text-[9px]"></i> Desglose completo
+            </button>
+          </div>
 
-          <!-- Grupos: 3 columnas en móvil, 6 en escritorio -->
-          <div class="grid grid-cols-3 md:grid-cols-6 gap-1">
+          <!-- Grupos: 2 columnas en móvil, 3 en escritorio -->
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-1.5">
             ${Object.entries(participant.predictions).map(([grpName, teamList]) => `
               <div class="rounded-xl border-l-2 md:border-l-4 p-1.5 ${getGroupBadgeClasses(grpName)} min-w-0">
-                <div class="text-[9px] uppercase tracking-wider font-bold mb-0.5 text-slate-200">${grpName}</div>
-                <div class="space-y-0.5">
-                  ${teamList.map(team => `
-                    <div class="flex items-center gap-0.5 min-w-0">
-                      <span class="shrink-0">${getTeamFlag(team)}</span>
-                      <span class="truncate text-[9px] leading-tight">${team}</span>
-                    </div>
-                  `).join('')}
+                <div class="text-[9px] uppercase tracking-wider font-bold mb-1 text-slate-200">${grpName}</div>
+                <div class="space-y-1">
+                  ${teamList.map(team => {
+                    const tp = inlineTeamPoints[team];
+                    const pts = tp ? tp.total : 0;
+                    const ptsBadge = pts > 0
+                      ? `<span class="shrink-0 text-[8px] font-black text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded px-1">+${formatPointsLabel(pts)}</span>`
+                      : `<span class="shrink-0 text-[8px] text-slate-600 bg-slate-900 border border-slate-800 rounded px-1">0</span>`;
+                    return `
+                      <div class="flex items-center justify-between gap-0.5 min-w-0">
+                        <div class="flex items-center gap-0.5 min-w-0">
+                          <span class="shrink-0">${getTeamFlag(team)}</span>
+                          <span class="truncate text-[9px] leading-tight">${team}</span>
+                        </div>
+                        ${ptsBadge}
+                      </div>
+                    `;
+                  }).join('')}
                 </div>
               </div>
             `).join('')}
@@ -804,13 +837,34 @@ function renderLeaderboard() {
 
           <!-- Goleadores: 2 columnas en móvil, 3 en escritorio -->
           <div class="grid grid-cols-2 md:grid-cols-3 gap-1">
-            ${Object.entries(participant.scorers).map(([jGrp, player]) => `
-              <div class="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-950/80 px-1.5 py-1 min-w-0">
-                <span class="text-[9px] text-slate-500 font-bold shrink-0">${jGrp}</span>
-                <span class="shrink-0">${getPlayerFlag(player)}</span>
-                <span class="truncate text-[9px]">${player}</span>
-              </div>
-            `).join('')}
+            ${Object.entries(participant.scorers).map(([jGrp, player]) => {
+              const pName = normalizePlayerName(player);
+              const team = PLAYER_TEAMS[pName];
+              const key = team ? `${team}:${pName}` : pName;
+              const goals = (scorers.players && (scorers.players[key] || scorers.players[pName])) || 0;
+              const pts = goals * (rules.points.goal_pts || 2);
+              const ptsBadge = goals > 0
+                ? `<span class="shrink-0 text-[8px] font-black text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded px-1 whitespace-nowrap">+${pts} pts</span>`
+                : '';
+              return `
+                <div class="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-950/80 px-1.5 py-1 min-w-0">
+                  <span class="text-[9px] text-slate-500 font-bold shrink-0">${jGrp}</span>
+                  <span class="shrink-0">${getPlayerFlag(player)}</span>
+                  <span class="truncate text-[9px] flex-1">${player}</span>
+                  ${ptsBadge}
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- Resumen de puntos -->
+          <div class="border-t border-slate-800 pt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[9px] text-slate-400">
+            <span>✌🏼 Partidos: <strong class="text-slate-200">${participant.score_details.matches}</strong></span>
+            <span>⚽ Goles: <strong class="text-slate-200">${participant.score_details.scorers}</strong></span>
+            <span>📊 Grupo: <strong class="text-slate-200">${participant.score_details.groups}</strong></span>
+            <span>⏩ Rondas: <strong class="text-slate-200">${participant.score_details.rounds}</strong></span>
+            <span>🏆 Top4: <strong class="text-slate-200">${participant.score_details.podium}</strong></span>
+            ${participant.score_details.pichichi > 0 ? `<span class="text-amber-400">🌕 Pichichi: <strong>${participant.score_details.pichichi}</strong></span>` : ''}
           </div>
         </div>
       </td>
@@ -880,8 +934,8 @@ function computeParticipantTeamPoints(participant) {
         teamPoints[teamName] = {
           matches: 0,
           groups: 0,
-          exact: 0,
           rounds: 0,
+          top4: 0,
           total: 0
         };
       }
@@ -950,26 +1004,50 @@ function computeParticipantTeamPoints(participant) {
     }
   });
 
+  // Mismo criterio que en computeScores: si el admin ha fijado manualmente
+  // actual_positions[grpName] se usa eso; si no, se calcula la posición
+  // real (1º-4º) de cada equipo en su propio grupo oficial del Mundial.
+  const wcStandings = computeOfficialGroupStandings(currentMatches);
+  const teamRealPosition = buildTeamRealPositionMap(wcStandings);
+
   Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
-    const realOrder = currentActualResults.actual_positions[grpName] || [];
+    const manualOrder = currentActualResults.actual_positions[grpName] || [];
 
-    predictedList.forEach((teamName, index) => {
-      const realIdx = realOrder.indexOf(teamName);
-      if (realIdx === -1) return;
+    predictedList.forEach((teamName) => {
+      let realPosNumber = null;
+      if (manualOrder.length > 0) {
+        const realIdx = manualOrder.indexOf(teamName);
+        if (realIdx !== -1) realPosNumber = realIdx + 1;
+      } else {
+        realPosNumber = teamRealPosition[teamName] || null;
+      }
+      if (realPosNumber === null) return;
 
-      const realPosNumber = realIdx + 1;
       if (realPosNumber === 1) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["1"]);
       else if (realPosNumber === 2) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["2"]);
       else if (realPosNumber === 3) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["3"]);
-
-      const predIndexNumber = index + 1;
-      if (predIndexNumber === realPosNumber) {
-        if (realPosNumber === 1) addTeamPoint(teamPoints, teamName, 'exact', rules.points.prediction_match["1"]);
-        else if (realPosNumber === 2) addTeamPoint(teamPoints, teamName, 'exact', rules.points.prediction_match["2"]);
-        else if (realPosNumber === 3) addTeamPoint(teamPoints, teamName, 'exact', rules.points.prediction_match["3"]);
-      }
     });
   });
+
+  // Puntos de "Top4" (podio final: Campeón, Subcampeón, 3º y 4º puesto).
+  // El Mundial no ha terminado, así que esto da 0 para todos los equipos
+  // hasta que currentActualResults.actual_podium tenga cada puesto fijado;
+  // se muestra siempre en el tooltip (aunque sea 0) para que se entienda
+  // que el equipo está apostado en el podio del participante.
+  if (participant.podium && currentActualResults.actual_podium) {
+    ['P1', 'P2', 'P3', 'P4'].forEach(pos => {
+      const predictedTeam = participant.podium[pos];
+      if (!predictedTeam) return;
+      // Si el equipo del podio no estaba ya en las selecciones de grupo,
+      // lo añadimos a teamPoints para poder mostrar su badge Top4 también.
+      if (!teamPoints[predictedTeam]) {
+        teamPoints[predictedTeam] = { matches: 0, groups: 0, rounds: 0, top4: 0, total: 0 };
+      }
+      if (predictedTeam === currentActualResults.actual_podium[pos]) {
+        addTeamPoint(teamPoints, predictedTeam, 'top4', rules.points.final_classification[pos]);
+      }
+    });
+  }
 
   return teamPoints;
 }
@@ -978,16 +1056,55 @@ function formatPointsLabel(points) {
   return Number.isInteger(points) ? String(points) : String(points).replace('.', ',');
 }
 
-function renderTeamPointsBadge(points) {
+/**
+ * Genera un badge de puntos por equipo que, al tocarlo/clicarlo,
+ * despliega un mini desglose inline por categoría.
+ * Funciona igual en móvil y escritorio (no depende de hover).
+ * Los puntos se acumulan dinámicamente: partidos, clasificación de grupos,
+ * pases de ronda y acierto de posición final (Top4) se suman según ocurren.
+ * @param {object} points  - { matches, groups, rounds, top4, total }
+ * @param {string} teamId  - identificador único para el toggle DOM
+ */
+function renderTeamPointsBadge(points, teamId) {
   const value = points && points.total ? points.total : 0;
-  const title = points
-    ? `Partidos: ${formatPointsLabel(points.matches)} | Grupos: ${formatPointsLabel(points.groups)} | Exacta: ${formatPointsLabel(points.exact)} | Rondas: ${formatPointsLabel(points.rounds)}`
-    : '';
   const classes = value > 0
-    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200'
+    ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200 cursor-pointer hover:bg-emerald-500/25'
     : 'bg-slate-900 border-slate-800 text-slate-500';
 
-  return `<span class="order-2 ml-auto shrink-0 rounded-md border px-1.5 py-0.5 text-[10px] font-black ${classes}" title="${title}">${formatPointsLabel(value)} pts</span>`;
+  if (!points || value === 0) {
+    return `<span class="order-2 ml-auto shrink-0 rounded-md border px-1.5 py-0.5 text-[10px] font-black ${classes}">0 pts</span>`;
+  }
+
+  const safeId = teamId ? teamId.replace(/[^a-zA-Z0-9]/g, '_') : Math.random().toString(36).slice(2);
+  const panelId = `tpanel_${safeId}`;
+
+  // Solo mostrar categorías que ya tienen puntos (irán apareciendo conforme avance el torneo)
+  const rows = [
+    { label: '✌🏼 Partidos', val: points.matches },
+    { label: '📊 Grupo',   val: points.groups },
+    { label: '⏩ Rondas',   val: points.rounds },
+    { label: '🏆 Top4',     val: points.top4 },
+  ].filter(r => r.val > 0);
+
+  const rowsHtml = rows.map(r =>
+    `<div class="flex justify-between gap-3 text-[9px]">
+      <span class="text-slate-400">${r.label}</span>
+      <span class="font-bold text-emerald-300">+${formatPointsLabel(r.val)}</span>
+    </div>`
+  ).join('');
+
+  return `
+    <span class="order-2 ml-auto shrink-0 flex flex-col items-end gap-0.5">
+      <span
+        class="rounded-md border px-1.5 py-0.5 text-[10px] font-black ${classes} select-none"
+        onclick="event.stopPropagation(); document.getElementById('${panelId}').classList.toggle('hidden')"
+        title="Toca para ver desglose"
+      >${formatPointsLabel(value)} pts ▾</span>
+      <div id="${panelId}" class="hidden bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 space-y-0.5 shadow-xl z-10 min-w-[120px]">
+        ${rowsHtml}
+      </div>
+    </span>
+  `;
 }
 
 // DETALLES FLOTANTES (MODAL) TIPO PLANILLA ORIGINAL
@@ -1002,8 +1119,6 @@ function showParticipantDetail(id) {
   document.getElementById('modalBreakdownScorers').innerText = `${p.score_details.scorers} pts`;
   document.getElementById('modalBreakdownMatches').innerText = `${p.score_details.matches} pts`;
   document.getElementById('modalBreakdownGroups').innerText = `${p.score_details.groups} pts`;
-  const exactEl = document.getElementById('modalBreakdownExact');
-  if (exactEl) exactEl.innerText = `${p.score_details.exact} pts`;
   document.getElementById('modalBreakdownRounds').innerText = `${p.score_details.rounds} pts`;
   document.getElementById('modalBreakdownPodium').innerText = `${p.score_details.podium} pts`;
   document.getElementById('modalBreakdownPichichi').innerText = `${p.score_details.pichichi} pts`;
@@ -1049,8 +1164,14 @@ function showParticipantDetail(id) {
   groupsContainer.innerHTML = '';
   const teamPoints = computeParticipantTeamPoints(p);
 
+  // Mismo criterio que en computeScores/computeParticipantTeamPoints:
+  // posición manual del admin si existe, si no la posición real 1º-4º de
+  // cada equipo dentro de su propio grupo oficial del Mundial.
+  const modalWcStandings = computeOfficialGroupStandings(currentMatches);
+  const modalTeamRealPosition = buildTeamRealPositionMap(modalWcStandings);
+
   Object.entries(p.predictions).forEach(([grpName, teamList]) => {
-    const realOrder = currentActualResults.actual_positions[grpName] || [];
+    const manualOrder = currentActualResults.actual_positions[grpName] || [];
 
     // Validación del número de selecciones por grupo (deberían ser 3)
     const expectedCount = 3;
@@ -1065,7 +1186,13 @@ function showParticipantDetail(id) {
 
     teamList.forEach((teamName, index) => {
       // Determinar si el equipo ya tiene posición real en fase de grupos
-      const posRealIndex = realOrder.indexOf(teamName);
+      let realPosNumber = null;
+      if (manualOrder.length > 0) {
+        const realIdx = manualOrder.indexOf(teamName);
+        if (realIdx !== -1) realPosNumber = realIdx + 1;
+      } else {
+        realPosNumber = modalTeamRealPosition[teamName] || null;
+      }
       let statusIndicator = '';
       let textClass = 'text-slate-300';
 
@@ -1074,28 +1201,19 @@ function showParticipantDetail(id) {
       if (!isTeamOfficial) {
         textClass = 'text-rose-400 font-bold';
         statusIndicator = `<span class="badge badge-error text-slate-950 font-bold text-[9px]">Inválido</span>`;
-      }
-
-      if (posRealIndex !== -1) {
-        const realPosNumber = posRealIndex + 1;
-        const predPosNumber = index + 1;
-
-        if (realPosNumber === predPosNumber) {
-          statusIndicator = `<span class="badge badge-success text-slate-950 font-bold text-[9px]">Acierto Posición</span>`;
-          textClass = 'text-emerald-400 font-black';
-        } else if (realPosNumber <= 3) {
-          statusIndicator = `<span class="badge badge-warning text-slate-950 font-bold text-[9px]">Pasa (puesto ${realPosNumber})</span>`;
-          textClass = 'text-amber-400 font-semibold';
-        } else {
-          statusIndicator = `<span class="badge badge-error text-slate-950 font-bold text-[9px]">Eliminado</span>`;
-          textClass = 'text-slate-500 line-through';
-        }
+      } else if (realPosNumber !== null && realPosNumber >= 4) {
+        // Fase de grupos terminada para este equipo y quedó 4º (eliminado):
+        // se tacha, sin badge adicional. No hay bonus por acertar el orden
+        // exacto dentro de la fase de grupos (eso solo existe en el podio
+        // final del Mundial), así que no se muestra ningún indicador a los
+        // que siguen vivos en 1º, 2º o 3º puesto.
+        textClass = 'text-slate-500 line-through';
       }
 
       htmlGroup += `
         <div class="flex flex-col gap-0.5 justify-between py-1 bg-slate-900/40 px-2 rounded border border-slate-900">
           <div class="flex justify-between items-center gap-2">
-            ${renderTeamPointsBadge(teamPoints[teamName])}
+            ${renderTeamPointsBadge(teamPoints[teamName], `modal_${p.id}_${teamName}`)}
             <span class="${textClass}">${index + 1}.º ${getTeamFlag(teamName)} ${teamName}</span>
           </div>
           ${statusIndicator ? `<div class="text-right mt-0.5">${statusIndicator}</div>` : ''}
@@ -1235,9 +1353,6 @@ function computeOfficialGroupStandings(matchList) {
 /**
  * Calcula los 8 mejores terceros de entre los 12 grupos del Mundial (A-L).
  * Criterios FIFA: puntos → DG → GF → GA → nombre.
- * Devuelve un Set con los nombres de los 8 equipos que clasificarían.
- * Si aún no todos los grupos tienen un tercero con partidos jugados,
- * el resultado es provisional pero orientativo.
  */
 function getBestThirds(standings) {
   const thirds = Object.values(standings)
@@ -1258,22 +1373,21 @@ function getBestThirds(standings) {
 /**
  * Construye posiciones provisionales por grupo-porra (A-F) a partir de
  * los standings actuales del Mundial (A-L).
+ * Devuelve { porraGroup: [team1, team2, team3, ...] } con los equipos
+ * que estarían clasificando ordenados por posición mundial, pts, DG, GF.
  *
- * Para cada porra-grupo (A-F, de teams.json con 8 selecciones) determina
- * qué equipos estarían clasificando según los resultados actuales y en
- * qué orden provisional quedarían dentro del grupo-porra.
- *
- * Se usa en computeScores() cuando actual_positions[grpName] está vacío,
- * es decir, durante la fase de grupos antes de que el admin fije el resultado.
- *
- * Orden dentro de cada grupo-porra:
- *  1º posición mundial (1 > 2 > 3er mejor tercero)
- *  2º puntos DESC, DG DESC, GF DESC, nombre ASC
+ * NOTA: esta función se mantiene únicamente para pintar el bloque de
+ * "grupos oficiales del Mundial" (renderOfficialGroups), donde sí interesa
+ * saber quién clasificaría a octavos. NO debe usarse para calcular los
+ * puntos de la porra 10/6/2, porque mezcla equipos de hasta 8 grupos
+ * oficiales distintos dentro de un mismo grupo de porra y los reordena
+ * según si clasifican o no, perdiendo la posición real 1º-4º de cada
+ * equipo en su propio grupo oficial. Para eso usar
+ * buildTeamRealPositionMap().
  */
 function buildProvisionalPositions(wcStandings) {
   const bestThirds = getBestThirds(wcStandings);
 
-  // Mapa equipo → info actual del Mundial
   const teamWCInfo = {};
   Object.values(wcStandings).forEach(rows => {
     rows.forEach(row => {
@@ -1290,14 +1404,12 @@ function buildProvisionalPositions(wcStandings) {
 
   const provisional = {};
 
-  // `teams` es el global de teams.json (grupos-porra A-F con 8 selecciones c/u)
   Object.entries(teams).forEach(([porraGroup, teamList]) => {
     const withInfo = teamList.map(team => ({
       team,
       ...(teamWCInfo[team] || { position: null, points: 0, gd: 0, gf: 0, ga: 0, played: 0 })
     }));
 
-    // Sólo equipos que estarían clasificando ahora mismo
     const qualifying = withInfo.filter(t => {
       if (t.position === null || t.played === 0) return false;
       if (t.position <= 2) return true;
@@ -1305,7 +1417,6 @@ function buildProvisionalPositions(wcStandings) {
       return false;
     });
 
-    // Orden provisional dentro del grupo-porra
     qualifying.sort((a, b) => {
       if (a.position !== b.position) return a.position - b.position;
       if (b.points   !== a.points)   return b.points   - a.points;
@@ -1320,13 +1431,36 @@ function buildProvisionalPositions(wcStandings) {
   return provisional;
 }
 
+/**
+ * Devuelve un mapa { team: position } (1-4) con la posición REAL de cada
+ * equipo dentro de SU PROPIO grupo oficial del Mundial (A-L), tal y como
+ * está calculada en los standings (puntos → DG → GF → alfabético).
+ *
+ * OJO: esta es la única función que debe usarse para obtener la posición
+ * real de un equipo de cara a los puntos de la porra (10/6/2/0). No intentes
+ * "agrupar por grupo de porra" la posición real en una lista tipo
+ * [equipo_1º, equipo_2º, equipo_3º]: un grupo de porra (A-F) puede contener
+ * varios equipos que comparten la MISMA posición real porque pertenecen a
+ * grupos oficiales distintos (por ejemplo, un grupo de porra formado por
+ * varios cabezas de grupo tendría 8 equipos en posición 1 a la vez). La
+ * posición real es una propiedad de cada equipo de forma independiente,
+ * no un ranking dentro del grupo de porra.
+ */
+function buildTeamRealPositionMap(wcStandings) {
+  const map = {};
+  Object.values(wcStandings).forEach(rows => {
+    rows.forEach(row => {
+      map[row.team] = row.position;
+    });
+  });
+  return map;
+}
+
 function getStandingsRowClass(position, hasPlayed, isBestThird = false) {
   if (!hasPlayed) return 'border-l-2 border-transparent';
   if (position <= 2) return 'border-l-2 border-emerald-500/80 bg-emerald-950/20';
   if (position === 3) {
-    // Los 8 mejores terceros clasifican: mismo verde que 1º y 2º
     if (isBestThird) return 'border-l-2 border-emerald-500/80 bg-emerald-950/20';
-    // Los 4 peores terceros: ámbar (potencialmente fuera)
     return 'border-l-2 border-amber-500/60 bg-amber-950/10';
   }
   return 'border-l-2 border-transparent';
@@ -1337,38 +1471,136 @@ function renderOfficialGroups() {
   if (!container) return;
 
   const standings = computeOfficialGroupStandings(currentMatches);
-  const bestThirds = getBestThirds(standings);  // 8 mejores terceros para colorear verde/ámbar
+  const bestThirds = getBestThirds(standings);
+  const provisionalPositions = buildProvisionalPositions(standings);
   const groupKeys = Object.keys(standings).sort();
+
   if (groupKeys.length === 0) {
     container.innerHTML = '';
     return;
   }
 
+  // ── Puntos por equipo según su puesto REAL 1º-4º en su grupo oficial ──────
+  // Importante: estos +10/+6/+2 son los puntos que ese equipo le da a quien
+  // lo predijo en su grupo de la porra, y dependen ÚNICAMENTE de la posición
+  // real del equipo dentro de su propio grupo oficial del Mundial (A-L), NO
+  // de si ese equipo clasificaría o no a octavos dentro de su grupo de porra
+  // (A-F). Por eso se usa buildTeamRealPositionMap aquí, y NO
+  // provisionalPositions (esa última solo sirve para los indicadores de
+  // "clasificado a octavos" que se pintan más abajo).
+  const PTS_BY_POS = { 1: 10, 2: 6, 3: 2 };
+  const teamRealPosition = buildTeamRealPositionMap(standings);
+  const teamProvPts  = {};   // team → pts que da a la porra (0 si 4º puesto)
+  const teamProvPos  = {};   // team → posición real en su grupo oficial (1-4)
+  const teamPorraGrp = {};   // team → letra del grupo-porra (A-F)
+
+  Object.entries(teams).forEach(([pg, teamList]) => {
+    teamList.forEach(t => { teamPorraGrp[t] = pg; });
+  });
+  Object.values(teams).flat().forEach(t => {
+    const pos = teamRealPosition[t] || null;
+    teamProvPos[t] = pos;
+    teamProvPts[t] = (pos && PTS_BY_POS[pos]) || 0;
+  });
+
+  // ── Participante seleccionado ─────────────────────────────────────────────
+  const filterEl = document.getElementById('officialGroupsParticipantFilter');
+  const selId    = filterEl ? filterEl.value : 'all';
+  const selPart  = selId !== 'all'
+    ? participants.find(p => String(p.id) === selId)
+    : null;
+
+  // Equipos elegidos por el participante seleccionado y su posición de predicción
+  const chosenTeams    = new Set();
+  const chosenPredPos  = {};   // team → posición en la predicción (1, 2 o 3)
+  if (selPart) {
+    Object.entries(selPart.predictions).forEach(([pg, list]) => {
+      list.forEach((t, idx) => {
+        chosenTeams.add(t);
+        chosenPredPos[t] = idx + 1;
+      });
+    });
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
   container.innerHTML = groupKeys.map(group => {
-    const rows = standings[group];
+    const rows      = standings[group];
     const hasPlayed = rows.some(r => r.played > 0);
+
+    const rowsHtml = rows.map(row => {
+      const isChosen  = selPart ? chosenTeams.has(row.team) : false;
+      const isBest3   = bestThirds.has(row.team);
+      const baseClass = getStandingsRowClass(row.position, hasPlayed, isBest3);
+
+      // Resaltar si el participante eligió este equipo
+      const chosenClass = isChosen
+        ? 'ring-1 ring-rose-400/60 bg-rose-500/10'
+        : (selPart ? 'opacity-40' : '');
+
+      // Puntos provisionales de la porra para este equipo
+      const provPts = teamProvPts[row.team] ?? 0;
+      const provPos = teamProvPos[row.team] ?? null;
+
+      let ptsBadgeHtml = '';
+      if (provPts > 0) {
+        // Colores según posición en grupo-porra
+        const badgeColor = provPos === 1
+          ? 'border-amber-400/60 text-amber-300 bg-amber-950/40'
+          : provPos === 2
+            ? 'border-sky-500/50 text-sky-300 bg-sky-950/30'
+            : 'border-amber-600/50 text-amber-600 bg-amber-950/20';
+        // Atenuar si hay participante y el equipo no es suyo
+        const dimClass = selPart && !isChosen ? 'opacity-40' : '';
+        ptsBadgeHtml = `<span class="inline-flex border rounded px-1 text-[9px] font-black shrink-0 ${badgeColor} ${dimClass}">+${provPts}</span>`;
+      } else if (selPart && isChosen) {
+        // El equipo es elegido pero no está clasificando → mostrar 0
+        ptsBadgeHtml = `<span class="inline-flex border border-slate-700/60 rounded px-1 text-[9px] font-black text-slate-600 shrink-0">0</span>`;
+      } else {
+        ptsBadgeHtml = `<span class="w-6 shrink-0 inline-block"></span>`;
+      }
+
+      // Stats de partido en texto pequeño
+      const statsHtml = hasPlayed ? `
+        <div class="text-[9px] text-slate-500 pl-7 -mt-0.5 pb-0.5 ${selPart && !isChosen ? 'opacity-40' : ''}">
+          ${row.played}PJ · ${row.won}V ${row.drawn}E ${row.lost}D · ${row.gf}-${row.ga} (${row.gd >= 0 ? '+' : ''}${row.gd})
+        </div>` : '';
+
+      return `
+        <div class="flex items-center gap-1.5 rounded-md pl-1.5 pr-1 py-1 ${baseClass} ${chosenClass}">
+          <span class="text-[10px] font-black text-slate-500 w-3 shrink-0">${hasPlayed ? row.position : '·'}</span>
+          <span class="shrink-0">${getTeamFlag(row.team, true)}</span>
+          <span class="truncate font-semibold text-slate-200 text-[11px] flex-1" title="${row.team}">${row.team}</span>
+          <div class="flex items-center gap-1 shrink-0">
+            ${ptsBadgeHtml}
+            <span class="font-black text-emerald-400 text-xs w-4 text-right">${row.points}</span>
+          </div>
+        </div>
+        ${statsHtml}
+      `;
+    }).join('');
+
+    // Puntos totales provisionales del participante en este grupo del Mundial
+    let groupSummaryHtml = '';
+    if (selPart && hasPlayed) {
+      const chosenInGroup = rows.filter(r => chosenTeams.has(r.team));
+      if (chosenInGroup.length > 0) {
+        const totalPts = chosenInGroup.reduce((sum, r) => sum + (teamProvPts[r.team] || 0), 0);
+        const qualifying = chosenInGroup.filter(r => (teamProvPts[r.team] || 0) > 0).length;
+        groupSummaryHtml = `
+          <div class="mt-1 pt-1 border-t border-slate-800/60 flex justify-between items-center text-[9px]">
+            <span class="text-slate-500">${qualifying} clasif. de ${chosenInGroup.length} elegido${chosenInGroup.length > 1 ? 's' : ''}</span>
+            <span class="font-black text-rose-400">+${totalPts} pts</span>
+          </div>`;
+      }
+    }
 
     return `
       <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 space-y-1.5 shadow-sm">
         <h5 class="font-black text-emerald-400 border-b border-slate-900/60 pb-1 uppercase tracking-widest text-[10px]">Grupo ${group}</h5>
         <div class="space-y-1">
-          ${rows.map(row => `
-            <div class="flex items-center gap-1.5 rounded-md pl-1.5 pr-1 py-1 ${getStandingsRowClass(row.position, hasPlayed, bestThirds.has(row.team))}">
-              <span class="text-[10px] font-black text-slate-500 w-3 shrink-0">${hasPlayed ? row.position : '·'}</span>
-              <span class="shrink-0">${getTeamFlag(row.team, true)}</span>
-              <span class="truncate font-semibold text-slate-200 text-[11px] flex-1" title="${row.team}">${row.team}</span>
-              <div class="text-right shrink-0">
-                <span class="font-black text-emerald-400 text-xs">${row.points}</span>
-                <span class="text-[9px] text-slate-500 ml-0.5">pts</span>
-              </div>
-            </div>
-            ${hasPlayed ? `
-              <div class="text-[9px] text-slate-500 pl-7 -mt-0.5 pb-0.5">
-                ${row.played} PJ · ${row.won}V ${row.drawn}E ${row.lost}D · ${row.gf}-${row.ga} (${row.gd >= 0 ? '+' : ''}${row.gd})
-              </div>
-            ` : ''}
-          `).join('')}
+          ${rowsHtml}
         </div>
+        ${groupSummaryHtml}
       </div>
     `;
   }).join('');

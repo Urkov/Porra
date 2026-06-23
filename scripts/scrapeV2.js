@@ -262,8 +262,18 @@ function mapStatus(matchStatus) {
 }
 
 function mapPhase(stageDesc, hasGroup) {
-  if (hasGroup) return 'groups';
   const s = (stageDesc || '').toLowerCase();
+
+  // La descripción real del stage que da la API de FIFA es la fuente de
+  // verdad: hay que mirarla SIEMPRE primero. Esto es importante porque, en
+  // los partidos de Dieciseisavos de Final (Round of 32) en los que el
+  // cabeza de grupo ya está fijado en el bracket (p.ej. "México vs Por
+  // definir"), el rival todavía no se conoce, pero el equipo conocido SÍ
+  // pertenece a un grupo real (A-L) ya resuelto. Si solo miráramos
+  // "¿conozco el grupo de alguno de los dos equipos?" para decidir la fase,
+  // ese partido de octavos se etiquetaría erróneamente como fase de grupos
+  // (y aparecería en el calendario como "Grupo X" en vez de "Dieciseisavos
+  // de Final").
   if (s.includes('grupo') || s.includes('group')) return 'groups';
   if (s.includes('32') || s.includes('dieciseisavo')) return 'Round of 32';
   if (s.includes('16') || s.includes('octavo')) return 'Round of 16';
@@ -272,6 +282,12 @@ function mapPhase(stageDesc, hasGroup) {
   if (s.includes('cuarto')) return 'Quarter-finals';
   if (s.includes('semifinal')) return 'Semi-finals';
   if (s.includes('final')) return 'Final';
+
+  // Si el texto del stage no es reconocible (caso raro, p.ej. la API
+  // devuelve un nombre de fase inesperado), recurrimos como ÚLTIMO recurso
+  // a si alguno de los dos equipos pertenece a un grupo real conocido.
+  if (hasGroup) return 'groups';
+
   return stageDesc || '';
 }
 
@@ -391,7 +407,14 @@ async function main() {
       score_home: (m.Home && m.Home.Score) || 0,
       score_away: (m.Away && m.Away.Score) || 0,
     };
-    if (group) match.group = group;
+    // OJO: el campo "group" SOLO tiene sentido para partidos de fase de
+    // grupos. Un partido de Dieciseisavos de Final (Round of 32) donde el
+    // cabeza de grupo ya está fijado (p.ej. "México vs Por definir") tiene
+    // `group` resuelto a "A" por venir de realGroupTeams, pero su `phase`
+    // ya es 'Round of 32' gracias al fix de mapPhase. Si igualmente le
+    // asignáramos match.group aquí, el frontend lo mostraría en el
+    // calendario como "Grupo A" en vez de "Dieciseisavos de Final".
+    if (group && phase === 'groups') match.group = group;
 
     // Tanda de penaltis
     const penHome = m.Home && m.Home.PenaltyScore;

@@ -498,6 +498,11 @@ function populateMatchFilters() {
 
 // ALGORITMO INTEGRAL DEL MOTOR DE CÁLCULO DE LA PORRA
 function computeScores() {
+  // Calcular standings del Mundial y posiciones provisionales UNA vez para todos
+  // los participantes (evita recalcular por cada participante en el loop).
+  const wcStandings = computeOfficialGroupStandings(currentMatches);
+  const provisionalPositions = buildProvisionalPositions(wcStandings);
+
   participants.forEach(participant => {
     let scoreGoles = 0;
     let scoreMatches = 0;
@@ -625,10 +630,22 @@ function computeScores() {
       }
     });
 
-    // 4. CLASIFICACIÓN FASE DE GRUPOS (10, 6, 2 PTS SEGÚN POSICIÓN REAL)
-    // El orden de cada grupo real en la tabla está en currentActualResults.actual_positions
+    // 4. CLASIFICACIÓN FASE DE GRUPOS (10, 6, 2 PTS SEGÚN POSICIÓN REAL O PROVISIONAL)
+    //
+    // Si actual_positions[grpName] tiene datos (el admin los ha fijado al final
+    // de la fase de grupos) se usan directamente.
+    // Si está vacío (fase de grupos en curso), se calculan posiciones provisionales
+    // en tiempo real a partir de los standings actuales del Mundial:
+    //   · Equipos en posición 1 o 2 de su grupo del Mundial → clasifican
+    //   · Equipos en posición 3 que son mejores terceros → clasifican
+    //   · Dentro de cada grupo-porra se ordenan por posición mundial, luego por
+    //     puntos, DG, GF.
+    // La puntuación provisional se actualiza cada vez que se recarga la porra.
     Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
-      const realOrder = currentActualResults.actual_positions[grpName] || [];
+      const manualOrder = currentActualResults.actual_positions[grpName] || [];
+      const realOrder = manualOrder.length > 0
+        ? manualOrder
+        : (provisionalPositions[grpName] || []);
 
       // Evaluación del puesto de grupo de los 3 elegidos
       predictedList.forEach((team_pred, index) => {
@@ -641,7 +658,7 @@ function computeScores() {
           else if (realPosNumber === 2) scoreGroups += rules.points.group_position["2"];
           else if (realPosNumber === 3) scoreGroups += rules.points.group_position["3"];
 
-          // Coincidencia exacta de posición de predicción (primer equipo de tu porra queda 1ro, segundo queda 2do, etc.)
+          // Coincidencia exacta de posición de predicción
           const predIndexNumber = index + 1;
           if (predIndexNumber === realPosNumber) {
             if (realPosNumber === 1) scoreExact += rules.points.prediction_match["1"];
@@ -1214,10 +1231,104 @@ function computeOfficialGroupStandings(matchList) {
   return standings;
 }
 
-function getStandingsRowClass(position, hasPlayed) {
+
+/**
+ * Calcula los 8 mejores terceros de entre los 12 grupos del Mundial (A-L).
+ * Criterios FIFA: puntos → DG → GF → GA → nombre.
+ * Devuelve un Set con los nombres de los 8 equipos que clasificarían.
+ * Si aún no todos los grupos tienen un tercero con partidos jugados,
+ * el resultado es provisional pero orientativo.
+ */
+function getBestThirds(standings) {
+  const thirds = Object.values(standings)
+    .map(rows => rows.find(r => r.position === 3))
+    .filter(t => t && t.played > 0);
+
+  const sorted = [...thirds].sort((a, b) => {
+    if (b.points !== a.points) return b.points - a.points;
+    if (b.gd    !== a.gd)    return b.gd    - a.gd;
+    if (b.gf    !== a.gf)    return b.gf    - a.gf;
+    if (a.ga    !== b.ga)    return a.ga    - b.ga;
+    return a.team.localeCompare(b.team, 'es');
+  });
+
+  return new Set(sorted.slice(0, 8).map(t => t.team));
+}
+
+/**
+ * Construye posiciones provisionales por grupo-porra (A-F) a partir de
+ * los standings actuales del Mundial (A-L).
+ *
+ * Para cada porra-grupo (A-F, de teams.json con 8 selecciones) determina
+ * qué equipos estarían clasificando según los resultados actuales y en
+ * qué orden provisional quedarían dentro del grupo-porra.
+ *
+ * Se usa en computeScores() cuando actual_positions[grpName] está vacío,
+ * es decir, durante la fase de grupos antes de que el admin fije el resultado.
+ *
+ * Orden dentro de cada grupo-porra:
+ *  1º posición mundial (1 > 2 > 3er mejor tercero)
+ *  2º puntos DESC, DG DESC, GF DESC, nombre ASC
+ */
+function buildProvisionalPositions(wcStandings) {
+  const bestThirds = getBestThirds(wcStandings);
+
+  // Mapa equipo → info actual del Mundial
+  const teamWCInfo = {};
+  Object.values(wcStandings).forEach(rows => {
+    rows.forEach(row => {
+      teamWCInfo[row.team] = {
+        position: row.position,
+        points:   row.points,
+        gd:       row.gd,
+        gf:       row.gf,
+        ga:       row.ga,
+        played:   row.played
+      };
+    });
+  });
+
+  const provisional = {};
+
+  // `teams` es el global de teams.json (grupos-porra A-F con 8 selecciones c/u)
+  Object.entries(teams).forEach(([porraGroup, teamList]) => {
+    const withInfo = teamList.map(team => ({
+      team,
+      ...(teamWCInfo[team] || { position: null, points: 0, gd: 0, gf: 0, ga: 0, played: 0 })
+    }));
+
+    // Sólo equipos que estarían clasificando ahora mismo
+    const qualifying = withInfo.filter(t => {
+      if (t.position === null || t.played === 0) return false;
+      if (t.position <= 2) return true;
+      if (t.position === 3 && bestThirds.has(t.team)) return true;
+      return false;
+    });
+
+    // Orden provisional dentro del grupo-porra
+    qualifying.sort((a, b) => {
+      if (a.position !== b.position) return a.position - b.position;
+      if (b.points   !== a.points)   return b.points   - a.points;
+      if (b.gd       !== a.gd)       return b.gd       - a.gd;
+      if (b.gf       !== a.gf)       return b.gf       - a.gf;
+      return a.team.localeCompare(b.team, 'es');
+    });
+
+    provisional[porraGroup] = qualifying.map(t => t.team);
+  });
+
+  return provisional;
+}
+
+function getStandingsRowClass(position, hasPlayed, isBestThird = false) {
   if (!hasPlayed) return 'border-l-2 border-transparent';
   if (position <= 2) return 'border-l-2 border-emerald-500/80 bg-emerald-950/20';
-  if (position === 3) return 'border-l-2 border-amber-500/60 bg-amber-950/10';
+  if (position === 3) {
+    // Los 8 mejores terceros clasifican: mismo verde que 1º y 2º
+    if (isBestThird) return 'border-l-2 border-emerald-500/80 bg-emerald-950/20';
+    // Los 4 peores terceros: ámbar (potencialmente fuera)
+    return 'border-l-2 border-amber-500/60 bg-amber-950/10';
+  }
   return 'border-l-2 border-transparent';
 }
 
@@ -1226,6 +1337,7 @@ function renderOfficialGroups() {
   if (!container) return;
 
   const standings = computeOfficialGroupStandings(currentMatches);
+  const bestThirds = getBestThirds(standings);  // 8 mejores terceros para colorear verde/ámbar
   const groupKeys = Object.keys(standings).sort();
   if (groupKeys.length === 0) {
     container.innerHTML = '';
@@ -1241,7 +1353,7 @@ function renderOfficialGroups() {
         <h5 class="font-black text-emerald-400 border-b border-slate-900/60 pb-1 uppercase tracking-widest text-[10px]">Grupo ${group}</h5>
         <div class="space-y-1">
           ${rows.map(row => `
-            <div class="flex items-center gap-1.5 rounded-md pl-1.5 pr-1 py-1 ${getStandingsRowClass(row.position, hasPlayed)}">
+            <div class="flex items-center gap-1.5 rounded-md pl-1.5 pr-1 py-1 ${getStandingsRowClass(row.position, hasPlayed, bestThirds.has(row.team))}">
               <span class="text-[10px] font-black text-slate-500 w-3 shrink-0">${hasPlayed ? row.position : '·'}</span>
               <span class="shrink-0">${getTeamFlag(row.team, true)}</span>
               <span class="truncate font-semibold text-slate-200 text-[11px] flex-1" title="${row.team}">${row.team}</span>

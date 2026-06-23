@@ -525,6 +525,18 @@
     ],
     "K": [
       {
+        "team": "Portugal",
+        "played": 2,
+        "won": 1,
+        "drawn": 1,
+        "lost": 0,
+        "gf": 6,
+        "ga": 1,
+        "gd": 5,
+        "points": 4,
+        "position": 1
+      },
+      {
         "team": "Colombia",
         "played": 1,
         "won": 1,
@@ -534,18 +546,6 @@
         "ga": 1,
         "gd": 2,
         "points": 3,
-        "position": 1
-      },
-      {
-        "team": "Portugal",
-        "played": 1,
-        "won": 0,
-        "drawn": 1,
-        "lost": 0,
-        "gf": 1,
-        "ga": 1,
-        "gd": 0,
-        "points": 1,
         "position": 2
       },
       {
@@ -562,13 +562,13 @@
       },
       {
         "team": "Uzbekistán",
-        "played": 1,
+        "played": 2,
         "won": 0,
         "drawn": 0,
-        "lost": 1,
+        "lost": 2,
         "gf": 1,
-        "ga": 3,
-        "gd": -2,
+        "ga": 8,
+        "gd": -7,
         "points": 0,
         "position": 4
       }
@@ -576,26 +576,26 @@
     "L": [
       {
         "team": "Inglaterra",
-        "played": 1,
+        "played": 2,
         "won": 1,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
         "gf": 4,
         "ga": 2,
         "gd": 2,
-        "points": 3,
+        "points": 4,
         "position": 1
       },
       {
         "team": "Ghana",
-        "played": 1,
+        "played": 2,
         "won": 1,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 0,
         "gf": 1,
         "ga": 0,
         "gd": 1,
-        "points": 3,
+        "points": 4,
         "position": 2
       },
       {
@@ -624,5 +624,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-23T07:31:04.705Z"
+  "lastUpdate": "2026-06-23T22:03:07.486Z"
 }

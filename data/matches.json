@@ -795,10 +795,17 @@
     "date": "2026-06-23",
     "time": "19:00",
     "venue": "Estadio Houston",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 5,
     "score_away": 0,
-    "group": "K"
+    "group": "K",
+    "scorers": [
+      "Portugal:Cristiano Ronaldo",
+      "Portugal:NUNO MENDES",
+      "Portugal:Cristiano Ronaldo",
+      "Uzbekistán:Abduvohid NEMATOV (p.p.)",
+      "Portugal:Rafael Leao"
+    ]
   },
   {
     "id": "400021506",
@@ -808,7 +815,7 @@
     "date": "2026-06-23",
     "time": "22:00",
     "venue": "Estadio Boston",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
     "score_away": 0,
     "group": "L"

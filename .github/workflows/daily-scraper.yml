@@ -3,7 +3,7 @@ name: Daily World Cup Scraper & Update
 on:
   schedule:
     # 08:00 in Spain during summer time (UTC+2).
-    - cron: '0 6 * * *'
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 permissions:

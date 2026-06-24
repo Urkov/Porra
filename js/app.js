@@ -861,7 +861,7 @@ function renderLeaderboard() {
           <div class="border-t border-slate-800 pt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[9px] text-slate-400">
             <span>✌🏼 Partidos: <strong class="text-slate-200">${participant.score_details.matches}</strong></span>
             <span>⚽ Goles: <strong class="text-slate-200">${participant.score_details.scorers}</strong></span>
-            <span>📊 Grupo: <strong class="text-slate-200">${participant.score_details.groups}</strong></span>
+            <span>📊 Grupos: <strong class="text-slate-200">${participant.score_details.groups}</strong></span>
             <span>⏩ Rondas: <strong class="text-slate-200">${participant.score_details.rounds}</strong></span>
             <span>🏆 Top4: <strong class="text-slate-200">${participant.score_details.podium}</strong></span>
             ${participant.score_details.pichichi > 0 ? `<span class="text-amber-400">🌕 Pichichi: <strong>${participant.score_details.pichichi}</strong></span>` : ''}
@@ -1081,7 +1081,7 @@ function renderTeamPointsBadge(points, teamId) {
   // Solo mostrar categorías que ya tienen puntos (irán apareciendo conforme avance el torneo)
   const rows = [
     { label: '✌🏼 Partidos', val: points.matches },
-    { label: '📊 Grupo',   val: points.groups },
+    { label: '📊 Grupos',   val: points.groups },
     { label: '⏩ Rondas',   val: points.rounds },
     { label: '🏆 Top4',     val: points.top4 },
   ].filter(r => r.val > 0);
@@ -1522,6 +1522,14 @@ function renderOfficialGroups() {
     });
   }
 
+  // ── Mapa de puntos por participante por equipo (sin Top4) ───────────────
+  // Precalculamos para todos los participantes de una vez para no repetir
+  // el cálculo por cada equipo dentro del render.
+  const allParticipantTeamPoints = {};
+  participants.forEach(p => {
+    allParticipantTeamPoints[p.id] = computeParticipantTeamPoints(p);
+  });
+
   // ── Render ────────────────────────────────────────────────────────────────
   container.innerHTML = groupKeys.map(group => {
     const rows      = standings[group];
@@ -1543,39 +1551,89 @@ function renderOfficialGroups() {
 
       let ptsBadgeHtml = '';
       if (provPts > 0) {
-        // Colores según posición en grupo-porra
         const badgeColor = provPos === 1
           ? 'border-amber-400/60 text-amber-300 bg-amber-950/40'
           : provPos === 2
             ? 'border-sky-500/50 text-sky-300 bg-sky-950/30'
             : 'border-amber-600/50 text-amber-600 bg-amber-950/20';
-        // Atenuar si hay participante y el equipo no es suyo
         const dimClass = selPart && !isChosen ? 'opacity-40' : '';
         ptsBadgeHtml = `<span class="inline-flex border rounded px-1 text-[9px] font-black shrink-0 ${badgeColor} ${dimClass}">+${provPts}</span>`;
       } else if (selPart && isChosen) {
-        // El equipo es elegido pero no está clasificando → mostrar 0
         ptsBadgeHtml = `<span class="inline-flex border border-slate-700/60 rounded px-1 text-[9px] font-black text-slate-600 shrink-0">0</span>`;
       } else {
         ptsBadgeHtml = `<span class="w-6 shrink-0 inline-block"></span>`;
       }
 
-      // Stats de partido en texto pequeño
+      // ── Panel de participantes que han elegido este equipo ───────────────
+      const teamPanelId = `og_team_${group}_${row.team.replace(/[^a-zA-Z0-9]/g, '_')}`;
+
+      const choosers = participants
+        .filter(p => Object.values(p.predictions).flat().includes(row.team))
+        .map(p => {
+          const tp = allParticipantTeamPoints[p.id][row.team];
+          return { name: p.name, tp };
+        });
+
+      // Stats de partido en texto pequeño, con contador de quién lo eligió al final
+      const chooserBadge = choosers.length > 0
+        ? `<span class="ml-1.5 text-slate-500">· 👤${choosers.length}</span>`
+        : '';
       const statsHtml = hasPlayed ? `
         <div class="text-[9px] text-slate-500 pl-7 -mt-0.5 pb-0.5 ${selPart && !isChosen ? 'opacity-40' : ''}">
-          ${row.played}PJ · ${row.won}V ${row.drawn}E ${row.lost}D · ${row.gf}-${row.ga} (${row.gd >= 0 ? '+' : ''}${row.gd})
+          ${row.played}PJ · ${row.won}V ${row.drawn}E ${row.lost}D · ${row.gf}-${row.ga} (${row.gd >= 0 ? '+' : ''}${row.gd})${chooserBadge}
         </div>` : '';
 
+      // Puntos compartidos: todos los que eligen el mismo equipo acumulan
+      // los mismos pts de partidos/grupos/rondas (Top4 excluido — es del podio)
+      const refTp = choosers.length > 0 ? choosers[0].tp : null;
+      const sharedMatches = refTp ? refTp.matches : 0;
+      const sharedGroups  = refTp ? refTp.groups  : 0;
+      const sharedRounds  = refTp ? refTp.rounds  : 0;
+
+      let teamPanelHtml = '';
+      if (choosers.length > 0) {
+        const namesHtml = choosers.map(c => c.name).join(', ');
+
+        const breakdownParts = [];
+        if (sharedMatches > 0) breakdownParts.push({ label: 'Partidos', val: sharedMatches, color: 'bg-sky-950/60 border-sky-700/50 text-sky-300' });
+        if (sharedGroups  > 0) breakdownParts.push({ label: 'Grupos',   val: sharedGroups,  color: 'bg-violet-950/60 border-violet-700/50 text-violet-300' });
+        if (sharedRounds  > 0) breakdownParts.push({ label: 'Rondas',   val: sharedRounds,  color: 'bg-emerald-950/60 border-emerald-700/50 text-emerald-300' });
+        const breakdownHtml = breakdownParts.length > 0
+          ? `<div class="flex flex-wrap gap-1 mt-0.5">${breakdownParts.map(b => `
+              <span class="inline-flex items-center gap-1 border rounded-md px-1.5 py-0.5 text-[9px] font-bold ${b.color}">
+                ${b.label} <span class="font-black">+${formatPointsLabel(b.val)}</span>
+              </span>`).join('')}</div>`
+          : `<span class="text-slate-600 text-[9px]">Sin puntos por ahora</span>`;
+
+        teamPanelHtml = `
+          <div id="${teamPanelId}" class="hidden mt-0.5 mb-0.5 bg-slate-900/60 border border-slate-800 rounded-lg px-2.5 py-1.5 space-y-1 text-[9px]">
+            <span class="text-slate-200">${namesHtml}</span>
+            <div>${breakdownHtml}</div>
+          </div>`;
+      }
+
+      // Color tenue en la fila si alguien la eligió (sin filtro activo) o ya resaltada con filtro
+      const anyChosen = choosers.length > 0;
+      const noFilterChosenClass = (!selPart && anyChosen) ? 'bg-slate-800/20' : '';
+      const clickable = anyChosen
+        ? `onclick="event.stopPropagation(); document.getElementById('${teamPanelId}').classList.toggle('hidden')" style="cursor:pointer"`
+        : '';
+      const hoverClass = anyChosen ? 'hover:bg-slate-800/40' : '';
+
       return `
-        <div class="flex items-center gap-1.5 rounded-md pl-1.5 pr-1 py-1 ${baseClass} ${chosenClass}">
-          <span class="text-[10px] font-black text-slate-500 w-3 shrink-0">${hasPlayed ? row.position : '·'}</span>
-          <span class="shrink-0">${getTeamFlag(row.team, true)}</span>
-          <span class="truncate font-semibold text-slate-200 text-[11px] flex-1" title="${row.team}">${row.team}</span>
-          <div class="flex items-center gap-1 shrink-0">
-            ${ptsBadgeHtml}
-            <span class="font-black text-emerald-400 text-xs w-4 text-right">${row.points}</span>
+        <div>
+          <div class="flex items-center gap-1.5 rounded-md pl-1.5 pr-1 py-1 ${baseClass} ${chosenClass} ${noFilterChosenClass} ${hoverClass} transition-colors" ${clickable}>
+            <span class="text-[10px] font-black text-slate-500 w-3 shrink-0">${hasPlayed ? row.position : '·'}</span>
+            <span class="shrink-0">${getTeamFlag(row.team, true)}</span>
+            <span class="truncate font-semibold text-slate-200 text-[11px] flex-1" title="${row.team}">${row.team}</span>
+            <div class="flex items-center gap-1 shrink-0">
+              ${ptsBadgeHtml}
+              <span class="font-black text-emerald-400 text-xs w-4 text-right">${row.points}</span>
+            </div>
           </div>
+          ${statsHtml}
+          ${teamPanelHtml}
         </div>
-        ${statsHtml}
       `;
     }).join('');
 

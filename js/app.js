@@ -419,6 +419,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderMatches();
   renderScorers();
   renderRulesCatalog();
+  updateScoresToggleUI();
 });
 
 /**
@@ -522,6 +523,20 @@ function computeScores() {
   // propio grupo oficial del Mundial, una sola vez para todos.
   const wcStandings = computeOfficialGroupStandings(currentMatches);
   const teamRealPosition = buildTeamRealPositionMap(wcStandings);
+
+  // Determinar qué puntos son ya definitivos (no provisionales):
+  // - Puntos de posición de grupo: definitivos cuando el equipo ha jugado 3 partidos
+  // - Pase 1º/2º: definitivo cuando su propio grupo ha cerrado los 3 partidos
+  // - Pase 3º (mejor tercero): definitivo cuando los 12 grupos han cerrado todos sus partidos
+  //   (solo entonces se conocen los 8 mejores terceros de forma definitiva)
+  const allGroupsFinished = Object.keys(wcStandings).length >= 12 &&
+    Object.values(wcStandings).every(rows => rows.every(r => r.played >= 3));
+
+  // Función auxiliar: ¿ha terminado el grupo oficial de este equipo?
+  function groupIsFinished(teamName) {
+    const standing = Object.values(wcStandings).flatMap(r => r).find(r => r.team === teamName);
+    return standing && standing.played >= 3;
+  }
 
   participants.forEach(participant => {
     let scoreGoles = 0;
@@ -674,9 +689,74 @@ function computeScores() {
         }
 
         if (realPosNumber !== null) {
-          if (realPosNumber === 1) scoreGroups += rules.points.group_position["1"];
-          else if (realPosNumber === 2) scoreGroups += rules.points.group_position["2"];
-          else if (realPosNumber === 3) scoreGroups += rules.points.group_position["3"];
+          // Solo contar si showProvisional o si el grupo ya está cerrado (definitivo)
+          const isDefinitive = manualOrder.length > 0 || groupIsFinished(team_pred);
+          if (showProvisional || isDefinitive) {
+            if (realPosNumber === 1) scoreGroups += rules.points.group_position["1"];
+            else if (realPosNumber === 2) scoreGroups += rules.points.group_position["2"];
+            else if (realPosNumber === 3) scoreGroups += rules.points.group_position["3"];
+          }
+        }
+      });
+    });
+
+    // 4b. PASE DE RONDA: CLASIFICARSE A DIECISEISAVOS (1º o 2º en grupo terminado)
+    // Un equipo pasa de ronda al terminar la fase de grupos si queda 1º o 2º.
+    // Se detecta cuando su grupo oficial ha completado los 3 partidos por equipo.
+    // Solo se suma si el participante lo tenía elegido y no se ha sumado ya
+    // por un partido eliminatorio posterior.
+    Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
+      const manualOrder = currentActualResults.actual_positions[grpName] || [];
+
+      predictedList.forEach((team_pred) => {
+        // Evitar doble conteo con fases eliminatorias ya procesadas
+        const alreadyCounted = Object.values(roundsPassedByTeamsByPhase).some(s => s.has(team_pred));
+        if (alreadyCounted) return;
+
+        let realPosNumber = null;
+        let groupFinished = false;
+
+        if (manualOrder.length > 0) {
+          const realIdx = manualOrder.indexOf(team_pred);
+          if (realIdx !== -1) { realPosNumber = realIdx + 1; groupFinished = true; }
+        } else {
+          const teamStanding = Object.values(wcStandings)
+            .flatMap(rows => rows)
+            .find(r => r.team === team_pred);
+          if (teamStanding && teamStanding.played >= 3) {
+            realPosNumber = teamRealPosition[team_pred] || null;
+            groupFinished = true;
+          }
+        }
+
+        // Pase 1º/2º: definitivo en cuanto su propio grupo cierra los 3 partidos.
+        // No es necesario esperar al inicio de eliminatorias.
+        if (groupFinished && (realPosNumber === 1 || realPosNumber === 2)) {
+          if (!roundsPassedByTeamsByPhase['groups_to_r16']) roundsPassedByTeamsByPhase['groups_to_r16'] = new Set();
+          roundsPassedByTeamsByPhase['groups_to_r16'].add(team_pred);
+          const gp = getTeamGroup(team_pred);
+          let pts = rules.points.round_passed_base;
+          if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.round_passed;
+          if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.round_passed;
+          scoreRounds += pts;
+        }
+
+        // Pase 3º (mejores 8 terceros): provisional si ahora está en el top-8 de los grupos
+        // ya terminados (puede cambiar); definitivo solo cuando los 12 grupos hayan cerrado.
+        if (groupFinished && realPosNumber === 3) {
+          const bestThirdsNow = getBestThirds(wcStandings);
+          const isInBestThirds = bestThirdsNow.has(team_pred);
+          // Definitivo cuando todos los 12 grupos han terminado sus 3 partidos
+          const thirdR16Definitive = allGroupsFinished;
+          if (isInBestThirds && (showProvisional || thirdR16Definitive)) {
+            if (!roundsPassedByTeamsByPhase['groups_to_r16']) roundsPassedByTeamsByPhase['groups_to_r16'] = new Set();
+            roundsPassedByTeamsByPhase['groups_to_r16'].add(team_pred);
+            const gp = getTeamGroup(team_pred);
+            let pts = rules.points.round_passed_base;
+            if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.round_passed;
+            if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.round_passed;
+            scoreRounds += pts;
+          }
         }
       });
     });
@@ -702,12 +782,39 @@ function computeScores() {
   });
 }
 
+// ── TOGGLE PUNTOS PROVISIONALES ──────────────────────────────────────────────
+// showProvisional: true  → total incluye puntos provisionales (grupo + r16 prov.)
+//                  false → total solo cuenta partidos + goles (puntos ya cerrados)
+// Los puntos de grupo/ronda dejan de ser "provisionales" cuando el grupo oficial
+// ha terminado (played>=3) o ya existen partidos eliminatorios respectivamente;
+// en ese caso ambos modos muestran lo mismo automáticamente.
+let showProvisional = localStorage.getItem('showProvisional') !== 'false'; // default: true
+
+function toggleScoresVisibility() {
+  showProvisional = !showProvisional;
+  localStorage.setItem('showProvisional', showProvisional);
+  updateScoresToggleUI();
+  computeScores();
+  renderLeaderboard();
+}
+
+function updateScoresToggleUI() {
+  const label = document.getElementById('toggleScoresLabel');
+  if (!label) return;
+  if (showProvisional) {
+    label.textContent = 'Con pts provisionales';
+    label.className = 'text-emerald-400 text-xs';
+  } else {
+    label.textContent = 'Sin pts provisionales';
+    label.className = 'text-slate-400 text-xs';
+  }
+}
+
 // RENDER DE LA TABLA GENERAL DE PARTICIPANTES (LEADERBOARD)
 function renderLeaderboard() {
   const tbody = document.getElementById('leaderboardBody');
   if (!tbody) return;
 
-  // Ordenar participantes por puntos de mayor a menor
   const sorted = [...participants].sort((a, b) => b.score_details.total - a.score_details.total);
 
   tbody.innerHTML = '';
@@ -766,12 +873,12 @@ function renderLeaderboard() {
               <span class="text-[12px] text-slate-400">4️⃣ <span class="text-slate-300 font-semibold">${participant.score_details.podium}</span></span>
               <span class="text-[12px] ${participant.score_details.pichichi > 0 ? 'text-amber-400' : 'text-slate-400'}">
                 🌕 <span class="font-semibold">${participant.score_details.pichichi}</span>
-              </span>            
+              </span>
             </div>
           </div>
           <!-- Botón siempre visible: texto en escritorio, icono en móvil -->
           <button onclick="toggleParticipantSelections(event, ${participant.id})" class="btn btn-ghost btn-xs text-slate-300 shrink-0">
-            <span class="hidden md:inline">Selecciones</span>
+            <span class="hidden md:inline">Elecciones</span>
             <i class="fa-solid fa-table-list md:hidden text-xs"></i>
           </button>
         </div>
@@ -883,7 +990,7 @@ function isAllSelectionRowsVisible() {
 function updateAllSelectionsButton() {
   const btn = document.getElementById('toggleAllSelectionsBtn');
   if (!btn) return;
-  btn.innerText = isAllSelectionRowsVisible() ? 'Ocultar selecciones de todos' : 'Ver selecciones de todos';
+  btn.innerText = isAllSelectionRowsVisible() ? 'Ocultar elecciones' : 'Ver elecciones';
 }
 
 function toggleAllSelections() {
@@ -1026,6 +1133,42 @@ function computeParticipantTeamPoints(participant) {
       if (realPosNumber === 1) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["1"]);
       else if (realPosNumber === 2) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["2"]);
       else if (realPosNumber === 3) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["3"]);
+    });
+  });
+
+  // 4b (modal). PASE DE RONDA: CLASIFICARSE A DIECISEISAVOS
+  Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
+    const manualOrder = currentActualResults.actual_positions[grpName] || [];
+
+    predictedList.forEach((teamName) => {
+      const alreadyCounted = Object.values(roundsPassedByTeamsByPhase).some(s => s.has(teamName));
+      if (alreadyCounted) return;
+
+      let realPosNumber = null;
+      let groupFinished = false;
+
+      if (manualOrder.length > 0) {
+        const realIdx = manualOrder.indexOf(teamName);
+        if (realIdx !== -1) { realPosNumber = realIdx + 1; groupFinished = true; }
+      } else {
+        const teamStanding = Object.values(wcStandings)
+          .flatMap(rows => rows)
+          .find(r => r.team === teamName);
+        if (teamStanding && teamStanding.played >= 3) {
+          realPosNumber = teamRealPosition[teamName] || null;
+          groupFinished = true;
+        }
+      }
+
+      if (groupFinished && (realPosNumber === 1 || realPosNumber === 2)) {
+        if (!roundsPassedByTeamsByPhase['groups_to_r16']) roundsPassedByTeamsByPhase['groups_to_r16'] = new Set();
+        roundsPassedByTeamsByPhase['groups_to_r16'].add(teamName);
+        const gp = getTeamGroup(teamName);
+        let pts = rules.points.round_passed_base;
+        if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.round_passed;
+        if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.round_passed;
+        addTeamPoint(teamPoints, teamName, 'rounds', pts);
+      }
     });
   });
 
@@ -1496,8 +1639,11 @@ function renderOfficialGroups() {
   });
   Object.values(teams).flat().forEach(t => {
     const pos = teamRealPosition[t] || null;
+    const pg  = teamPorraGrp[t];
+    const handicap = (pg === 'C' || pg === 'D') ? 2
+                   : (pg === 'E' || pg === 'F') ? 4 : 0;
     teamProvPos[t] = pos;
-    teamProvPts[t] = (pos && PTS_BY_POS[pos]) || 0;
+    teamProvPts[t] = pos && PTS_BY_POS[pos] ? PTS_BY_POS[pos] + handicap : 0;
   });
 
   // ── Participante seleccionado ─────────────────────────────────────────────

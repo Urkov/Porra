@@ -420,6 +420,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderScorers();
   renderRulesCatalog();
   updateScoresToggleUI();
+  if (typeof renderKnockoutBracket === 'function') renderKnockoutBracket();
 });
 
 /**
@@ -962,7 +963,7 @@ function renderLeaderboard() {
           <div class="border-t border-slate-800 pt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 text-[9px] text-slate-400">
             <span>✌🏼 Partidos: <strong class="text-slate-200">${participant.score_details.matches}</strong></span>
             <span>⚽ Goles: <strong class="text-slate-200">${participant.score_details.scorers}</strong></span>
-            <span>📊 Grupos: <strong class="text-slate-200">${participant.score_details.groups}</strong></span>
+            <span>📊 F.Grupo: <strong class="text-slate-200">${participant.score_details.groups}</strong></span>
             <span>⏩ Rondas: <strong class="text-slate-200">${participant.score_details.rounds}</strong></span>
             <span>🏆 Top4: <strong class="text-slate-200">${participant.score_details.podium}</strong></span>
             ${participant.score_details.pichichi > 0 ? `<span class="text-amber-400">🌕 Pichichi: <strong>${participant.score_details.pichichi}</strong></span>` : ''}
@@ -1766,7 +1767,7 @@ function renderOfficialGroups() {
 
         const breakdownParts = [];
         if (sharedMatches > 0) breakdownParts.push({ label: 'Partidos', val: sharedMatches, color: 'bg-sky-950/60 border-sky-700/50 text-sky-300' });
-        if (sharedGroups  > 0) breakdownParts.push({ label: 'Grupos',   val: sharedGroups,  color: 'bg-violet-950/60 border-violet-700/50 text-violet-300' });
+        if (sharedGroups  > 0) breakdownParts.push({ label: 'F.Grupo',   val: sharedGroups,  color: 'bg-violet-950/60 border-violet-700/50 text-violet-300' });
         if (sharedRounds  > 0) breakdownParts.push({ label: 'Rondas',   val: sharedRounds,  color: 'bg-emerald-950/60 border-emerald-700/50 text-emerald-300' });
         const breakdownHtml = breakdownParts.length > 0
           ? `<div class="flex flex-wrap gap-1 mt-0.5">${breakdownParts.map(b => `

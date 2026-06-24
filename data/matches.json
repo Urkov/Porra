@@ -860,10 +860,16 @@
     "date": "2026-06-24",
     "time": "21:00",
     "venue": "Estadio de Seattle",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "B"
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 1,
+    "group": "B",
+    "scorers": [
+      "Bosnia y Herzegovina:Kerim ALAJBEGOVIC",
+      "Catar:MAHMOUD ABUNADA (p.p.)",
+      "Catar:HASSAN ALHAYDOS",
+      "Bosnia y Herzegovina:Ermin MAHMIC"
+    ]
   },
   {
     "id": "400021451",
@@ -873,10 +879,15 @@
     "date": "2026-06-24",
     "time": "21:00",
     "venue": "Estadio BC Place Vancouver",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "B"
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 1,
+    "group": "B",
+    "scorers": [
+      "Suiza:Ruben VARGAS",
+      "Suiza:Johan MANZAMBI",
+      "Canadá:Promise DAVID"
+    ]
   },
   {
     "id": "400021452",
@@ -1168,7 +1179,7 @@
     "id": "400021518",
     "phase": "Round of 32",
     "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_away": "Canadá",
     "date": "2026-06-28",
     "time": "21:00",
     "venue": "Estadio Los Angeles",
@@ -1311,7 +1322,7 @@
   {
     "id": "400021527",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Suiza",
     "team_away": "Por definir",
     "date": "2026-07-03",
     "time": "05:00",

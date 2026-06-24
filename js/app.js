@@ -796,6 +796,7 @@ function toggleScoresVisibility() {
   updateScoresToggleUI();
   computeScores();
   renderLeaderboard();
+  renderOfficialGroups();
 }
 
 function updateScoresToggleUI() {
@@ -865,7 +866,7 @@ function renderLeaderboard() {
             <div class="truncate">${participant.name}</div>
             ${isLast ? '<span class="text-[10px] text-rose-500 block font-normal">Sótano (10% premio)</span>' : ''}
             ${isFirst ? '<span class="text-[10px] text-amber-400 block font-normal">Líder Provisional (50% premio)</span>' : ''}
-            <div class="flex md:hidden flex-wrap gap-x-2 gap-y-0.5 mt-1">
+            <div class="flex lg:hidden flex-wrap gap-x-2 gap-y-0.5 mt-1">
               <span class="text-[12px] text-slate-400">✌🏼 <span class="text-slate-300 font-semibold">${participant.score_details.matches}</span></span>
               <span class="text-[12px] text-slate-400">⚽ <span class="text-slate-300 font-semibold">${participant.score_details.scorers}</span></span>
               <span class="text-[12px] text-slate-400">📊 <span class="text-slate-300 font-semibold">${participant.score_details.groups}</span></span>
@@ -878,21 +879,21 @@ function renderLeaderboard() {
           </div>
           <!-- Botón siempre visible: texto en escritorio, icono en móvil -->
           <button onclick="toggleParticipantSelections(event, ${participant.id})" class="btn btn-ghost btn-xs text-slate-300 shrink-0">
-            <span class="hidden md:inline">Elecciones</span>
-            <i class="fa-solid fa-table-list md:hidden text-xs"></i>
+            <span class="hidden lg:inline">Elecciones</span>
+            <i class="fa-solid fa-table-list lg:hidden text-xs"></i>
           </button>
         </div>
       </td>
-      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.matches} pts</td>
-      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.scorers} pts</td>
-      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.groups} pts</td>
-      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.rounds} pts</td>
-      <td class="hidden md:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.podium} pts</td>
-      <td class="hidden md:table-cell text-center text-xs font-medium ${participant.score_details.pichichi > 0 ? 'text-amber-400 font-bold' : 'text-slate-600'}">${participant.score_details.pichichi > 0 ? participant.score_details.pichichi + ' pts 🌟' : '-'}</td>
-      <td class="bg-rose-950/20 text-rose-300 text-center font-black text-sm md:text-lg rounded-r-xl px-0 w-12 md:px-4 cursor-pointer hover:bg-rose-950/40 transition" onclick="event.stopPropagation(); showParticipantDetail(${participant.id})" title="Ver desglose completo">
+      <td class="hidden lg:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.matches} pts</td>
+      <td class="hidden lg:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.scorers} pts</td>
+      <td class="hidden lg:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.groups} pts</td>
+      <td class="hidden lg:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.rounds} pts</td>
+      <td class="hidden lg:table-cell text-center text-xs text-slate-300 font-medium">${participant.score_details.podium} pts</td>
+      <td class="hidden lg:table-cell text-center text-xs font-medium ${participant.score_details.pichichi > 0 ? 'text-amber-400 font-bold' : 'text-slate-600'}">${participant.score_details.pichichi > 0 ? participant.score_details.pichichi + ' pts 🌟' : '-'}</td>
+      <td class="bg-rose-950/20 text-rose-300 text-center font-black text-sm lg:text-lg rounded-r-xl px-0 w-12 lg:px-4 cursor-pointer hover:bg-rose-950/40 transition" onclick="event.stopPropagation(); showParticipantDetail(${participant.id})" title="Ver desglose completo">
         <div class="flex flex-col items-center gap-0.5">
           <span>${participant.score_details.total}</span>
-          <span class="text-[8px] text-rose-500/60 font-normal hidden md:block">ver desglose</span>
+          <span class="text-[8px] text-rose-500/60 font-normal hidden lg:block">ver desglose</span>
         </div>
       </td>
     `;
@@ -908,25 +909,18 @@ function renderLeaderboard() {
     detailRow.innerHTML = `
       <td colspan="9" class="px-2 md:px-4 py-3 text-[10px] text-slate-300">
         <div class="space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-slate-400 uppercase tracking-wide text-[9px] font-semibold">Selecciones + Goleadores</span>
-            <button onclick="event.stopPropagation(); showParticipantDetail(${participant.id})" class="btn btn-ghost btn-xs text-rose-400 text-[9px] gap-1">
-              <i class="fa-solid fa-chart-pie text-[9px]"></i> Desglose completo
-            </button>
-          </div>
-
-          <!-- Grupos: 2 columnas en móvil, 3 en escritorio -->
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-1.5">
+          <!-- Grupos: 2 columnas en móvil/tablet, 3 en escritorio amplio -->
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-1.5">
             ${Object.entries(participant.predictions).map(([grpName, teamList]) => `
-              <div class="rounded-xl border-l-2 md:border-l-4 p-1.5 ${getGroupBadgeClasses(grpName)} min-w-0">
+              <div class="rounded-xl border-l-2 lg:border-l-4 p-1.5 ${getGroupBadgeClasses(grpName)} min-w-0">
                 <div class="text-[9px] uppercase tracking-wider font-bold mb-1 text-slate-200">${grpName}</div>
                 <div class="space-y-1">
                   ${teamList.map(team => {
                     const tp = inlineTeamPoints[team];
                     const pts = tp ? tp.total : 0;
                     const ptsBadge = pts > 0
-                      ? `<span class="md:hidden shrink-0 text-[8px] font-black text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded px-1">+${formatPointsLabel(pts)}</span>`
-                      : `<span class="md:hidden shrink-0 text-[8px] text-slate-600 bg-slate-900 border border-slate-800 rounded px-1">0</span>`;
+                      ? `<span class="shrink-0 text-[8px] font-black text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded px-1">+${formatPointsLabel(pts)}</span>`
+                      : `<span class="shrink-0 text-[8px] text-slate-600 bg-slate-900 border border-slate-800 rounded px-1">0</span>`;
                     return `
                       <div class="flex items-center justify-between gap-0.5 min-w-0">
                         <div class="flex items-center gap-0.5 min-w-0">
@@ -942,8 +936,8 @@ function renderLeaderboard() {
             `).join('')}
           </div>
 
-          <!-- Goleadores: 2 columnas en móvil, 3 en escritorio -->
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-1">
+          <!-- Goleadores: 2 columnas en móvil/tablet, 3 en escritorio amplio -->
+          <div class="grid grid-cols-2 lg:grid-cols-3 gap-1">
             ${Object.entries(participant.scorers).map(([jGrp, player]) => {
               const pName = normalizePlayerName(player);
               const team = PLAYER_TEAMS[pName];
@@ -951,7 +945,7 @@ function renderLeaderboard() {
               const goals = (scorers.players && (scorers.players[key] || scorers.players[pName])) || 0;
               const pts = goals * (rules.points.goal_pts || 2);
               const ptsBadge = goals > 0
-                ? `<span class="md:hidden shrink-0 text-[8px] font-black text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded px-1 whitespace-nowrap">+${pts} pts</span>`
+                ? `<span class="shrink-0 text-[8px] font-black text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded px-1 whitespace-nowrap">+${pts} pts</span>`
                 : '';
               return `
                 <div class="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-950/80 px-1.5 py-1 min-w-0">
@@ -1034,6 +1028,18 @@ function computeParticipantTeamPoints(participant) {
   const teamPoints = {};
   const chosenTeams = new Set();
 
+  // Mismo criterio que computeScores(): determinar qué puntos de
+  // posición de grupo / pase de ronda son ya definitivos (no provisionales),
+  // para respetar el toggle global showProvisional también en este desglose.
+  const wcStandingsTP = computeOfficialGroupStandings(currentMatches);
+  const allGroupsFinishedTP = Object.keys(wcStandingsTP).length >= 12 &&
+    Object.values(wcStandingsTP).every(rows => rows.every(r => r.played >= 3));
+
+  function groupIsFinishedTP(teamName) {
+    const standing = Object.values(wcStandingsTP).flatMap(r => r).find(r => r.team === teamName);
+    return standing && standing.played >= 3;
+  }
+
   Object.values(participant.predictions).forEach(teamList => {
     teamList.forEach(teamName => {
       chosenTeams.add(teamName);
@@ -1114,8 +1120,7 @@ function computeParticipantTeamPoints(participant) {
   // Mismo criterio que en computeScores: si el admin ha fijado manualmente
   // actual_positions[grpName] se usa eso; si no, se calcula la posición
   // real (1º-4º) de cada equipo en su propio grupo oficial del Mundial.
-  const wcStandings = computeOfficialGroupStandings(currentMatches);
-  const teamRealPosition = buildTeamRealPositionMap(wcStandings);
+  const teamRealPosition = buildTeamRealPositionMap(wcStandingsTP);
 
   Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
     const manualOrder = currentActualResults.actual_positions[grpName] || [];
@@ -1129,6 +1134,11 @@ function computeParticipantTeamPoints(participant) {
         realPosNumber = teamRealPosition[teamName] || null;
       }
       if (realPosNumber === null) return;
+
+      // Solo contar si showProvisional o si el grupo ya está cerrado (definitivo),
+      // igual que en computeScores().
+      const isDefinitive = manualOrder.length > 0 || groupIsFinishedTP(teamName);
+      if (!showProvisional && !isDefinitive) return;
 
       if (realPosNumber === 1) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["1"]);
       else if (realPosNumber === 2) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["2"]);
@@ -1151,7 +1161,7 @@ function computeParticipantTeamPoints(participant) {
         const realIdx = manualOrder.indexOf(teamName);
         if (realIdx !== -1) { realPosNumber = realIdx + 1; groupFinished = true; }
       } else {
-        const teamStanding = Object.values(wcStandings)
+        const teamStanding = Object.values(wcStandingsTP)
           .flatMap(rows => rows)
           .find(r => r.team === teamName);
         if (teamStanding && teamStanding.played >= 3) {
@@ -1168,6 +1178,23 @@ function computeParticipantTeamPoints(participant) {
         if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.round_passed;
         if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.round_passed;
         addTeamPoint(teamPoints, teamName, 'rounds', pts);
+      }
+
+      // Pase 3º (mejores 8 terceros): provisional si ahora está en el top-8 de
+      // los grupos ya terminados (puede cambiar); definitivo solo cuando los
+      // 12 grupos hayan cerrado. Misma lógica que computeScores().
+      if (groupFinished && realPosNumber === 3) {
+        const bestThirdsNowTP = getBestThirds(wcStandingsTP);
+        const isInBestThirdsTP = bestThirdsNowTP.has(teamName);
+        if (isInBestThirdsTP && (showProvisional || allGroupsFinishedTP)) {
+          if (!roundsPassedByTeamsByPhase['groups_to_r16']) roundsPassedByTeamsByPhase['groups_to_r16'] = new Set();
+          roundsPassedByTeamsByPhase['groups_to_r16'].add(teamName);
+          const gp = getTeamGroup(teamName);
+          let pts = rules.points.round_passed_base;
+          if (gp === 'C' || gp === 'D') pts += rules.points.group_cd_extra.round_passed;
+          if (gp === 'E' || gp === 'F') pts += rules.points.group_ef_extra.round_passed;
+          addTeamPoint(teamPoints, teamName, 'rounds', pts);
+        }
       }
     });
   });

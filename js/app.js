@@ -490,6 +490,37 @@ function getTeamGroup(team) {
   return null;
 }
 
+/**
+ * Devuelve el grupo REAL del Mundial (A-L) de un equipo buscando en actual_positions.
+ * Necesario porque teams.json usa grupos de la porra (A-F, 8 equipos),
+ * mientras actual_positions usa grupos del Mundial (A-L, 4 equipos).
+ */
+function getTeamWCGroup(team, actualPositions) {
+  for (const [grp, list] of Object.entries(actualPositions || {})) {
+    if (Array.isArray(list) && list.includes(team)) return grp;
+  }
+  return null;
+}
+
+/**
+ * Devuelve la posición real (1-4) de un equipo en su grupo del Mundial,
+ * buscando primero en actual_positions (definitivo) y luego en wcStandings (provisional).
+ */
+function getTeamRealPos(team, actualPositions, wcStandingsMap) {
+  // 1) Buscar en actual_positions (definitivo)
+  for (const list of Object.values(actualPositions || {})) {
+    if (!Array.isArray(list) || list.length === 0) continue;
+    const idx = list.indexOf(team);
+    if (idx !== -1) return { pos: idx + 1, definitive: true };
+  }
+  // 2) Fallback: standings provisionales (played >= 3 = grupo terminado)
+  for (const rows of Object.values(wcStandingsMap || {})) {
+    const row = rows.find(r => r.team === team);
+    if (row) return { pos: row.position, definitive: row.played >= 3 };
+  }
+  return { pos: null, definitive: false };
+}
+
 function formatMatchDate(dateStr) {
   if (!dateStr) return '';
   const date = new Date(`${dateStr}T00:00:00`);
@@ -678,26 +709,14 @@ function computeScores() {
     // posición real (p.ej. si el grupo de porra junta a varios cabezas de
     // grupo, todos están en posición 1 a la vez).
     Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
-      const manualOrder = currentActualResults.actual_positions[grpName] || [];
-
-      predictedList.forEach((team_pred, index) => {
-        let realPosNumber = null;
-        if (manualOrder.length > 0) {
-          const realIdx = manualOrder.indexOf(team_pred);
-          if (realIdx !== -1) realPosNumber = realIdx + 1;
-        } else {
-          realPosNumber = teamRealPosition[team_pred] || null;
-        }
-
-        if (realPosNumber !== null) {
-          // Solo contar si showProvisional o si el grupo ya está cerrado (definitivo)
-          const isDefinitive = manualOrder.length > 0 || groupIsFinished(team_pred);
-          if (showProvisional || isDefinitive) {
-            if (realPosNumber === 1) scoreGroups += rules.points.group_position["1"];
-            else if (realPosNumber === 2) scoreGroups += rules.points.group_position["2"];
-            else if (realPosNumber === 3) scoreGroups += rules.points.group_position["3"];
-          }
-        }
+      predictedList.forEach((team_pred) => {
+        const { pos: realPosNumber, definitive: isDefinitive } =
+          getTeamRealPos(team_pred, currentActualResults.actual_positions, wcStandings);
+        if (realPosNumber === null) return;
+        if (!showProvisional && !isDefinitive) return;
+        if (realPosNumber === 1) scoreGroups += rules.points.group_position["1"];
+        else if (realPosNumber === 2) scoreGroups += rules.points.group_position["2"];
+        else if (realPosNumber === 3) scoreGroups += rules.points.group_position["3"];
       });
     });
 
@@ -707,28 +726,13 @@ function computeScores() {
     // Solo se suma si el participante lo tenía elegido y no se ha sumado ya
     // por un partido eliminatorio posterior.
     Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
-      const manualOrder = currentActualResults.actual_positions[grpName] || [];
-
       predictedList.forEach((team_pred) => {
         // Evitar doble conteo con fases eliminatorias ya procesadas
         const alreadyCounted = Object.values(roundsPassedByTeamsByPhase).some(s => s.has(team_pred));
         if (alreadyCounted) return;
 
-        let realPosNumber = null;
-        let groupFinished = false;
-
-        if (manualOrder.length > 0) {
-          const realIdx = manualOrder.indexOf(team_pred);
-          if (realIdx !== -1) { realPosNumber = realIdx + 1; groupFinished = true; }
-        } else {
-          const teamStanding = Object.values(wcStandings)
-            .flatMap(rows => rows)
-            .find(r => r.team === team_pred);
-          if (teamStanding && teamStanding.played >= 3) {
-            realPosNumber = teamRealPosition[team_pred] || null;
-            groupFinished = true;
-          }
-        }
+        const { pos: realPosNumber, definitive: groupFinished } =
+          getTeamRealPos(team_pred, currentActualResults.actual_positions, wcStandings);
 
         // Pase 1º/2º: definitivo en cuanto su propio grupo cierra los 3 partidos.
         // No es necesario esperar al inicio de eliminatorias.
@@ -1124,23 +1128,11 @@ function computeParticipantTeamPoints(participant) {
   const teamRealPosition = buildTeamRealPositionMap(wcStandingsTP);
 
   Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
-    const manualOrder = currentActualResults.actual_positions[grpName] || [];
-
     predictedList.forEach((teamName) => {
-      let realPosNumber = null;
-      if (manualOrder.length > 0) {
-        const realIdx = manualOrder.indexOf(teamName);
-        if (realIdx !== -1) realPosNumber = realIdx + 1;
-      } else {
-        realPosNumber = teamRealPosition[teamName] || null;
-      }
+      const { pos: realPosNumber, definitive: isDefinitive } =
+        getTeamRealPos(teamName, currentActualResults.actual_positions, wcStandingsTP);
       if (realPosNumber === null) return;
-
-      // Solo contar si showProvisional o si el grupo ya está cerrado (definitivo),
-      // igual que en computeScores().
-      const isDefinitive = manualOrder.length > 0 || groupIsFinishedTP(teamName);
       if (!showProvisional && !isDefinitive) return;
-
       if (realPosNumber === 1) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["1"]);
       else if (realPosNumber === 2) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["2"]);
       else if (realPosNumber === 3) addTeamPoint(teamPoints, teamName, 'groups', rules.points.group_position["3"]);
@@ -1149,27 +1141,12 @@ function computeParticipantTeamPoints(participant) {
 
   // 4b (modal). PASE DE RONDA: CLASIFICARSE A DIECISEISAVOS
   Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
-    const manualOrder = currentActualResults.actual_positions[grpName] || [];
-
     predictedList.forEach((teamName) => {
       const alreadyCounted = Object.values(roundsPassedByTeamsByPhase).some(s => s.has(teamName));
       if (alreadyCounted) return;
 
-      let realPosNumber = null;
-      let groupFinished = false;
-
-      if (manualOrder.length > 0) {
-        const realIdx = manualOrder.indexOf(teamName);
-        if (realIdx !== -1) { realPosNumber = realIdx + 1; groupFinished = true; }
-      } else {
-        const teamStanding = Object.values(wcStandingsTP)
-          .flatMap(rows => rows)
-          .find(r => r.team === teamName);
-        if (teamStanding && teamStanding.played >= 3) {
-          realPosNumber = teamRealPosition[teamName] || null;
-          groupFinished = true;
-        }
-      }
+      const { pos: realPosNumber, definitive: groupFinished } =
+        getTeamRealPos(teamName, currentActualResults.actual_positions, wcStandingsTP);
 
       if (groupFinished && (realPosNumber === 1 || realPosNumber === 2)) {
         if (!roundsPassedByTeamsByPhase['groups_to_r16']) roundsPassedByTeamsByPhase['groups_to_r16'] = new Set();
@@ -1341,8 +1318,6 @@ function showParticipantDetail(id) {
   const modalTeamRealPosition = buildTeamRealPositionMap(modalWcStandings);
 
   Object.entries(p.predictions).forEach(([grpName, teamList]) => {
-    const manualOrder = currentActualResults.actual_positions[grpName] || [];
-
     // Validación del número de selecciones por grupo (deberían ser 3)
     const expectedCount = 3;
     const groupInvalid = teamList.length !== expectedCount;
@@ -1355,14 +1330,9 @@ function showParticipantDetail(id) {
     `;
 
     teamList.forEach((teamName, index) => {
-      // Determinar si el equipo ya tiene posición real en fase de grupos
-      let realPosNumber = null;
-      if (manualOrder.length > 0) {
-        const realIdx = manualOrder.indexOf(teamName);
-        if (realIdx !== -1) realPosNumber = realIdx + 1;
-      } else {
-        realPosNumber = modalTeamRealPosition[teamName] || null;
-      }
+      // Usar getTeamRealPos para buscar en actual_positions por equipo (no por grupo de porra)
+      const { pos: realPosNumber } =
+        getTeamRealPos(teamName, currentActualResults.actual_positions, modalWcStandings);
       let statusIndicator = '';
       let textClass = 'text-slate-300';
 

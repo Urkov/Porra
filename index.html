@@ -598,11 +598,27 @@
       </form>
       
       <!-- Cabecera del Participante -->
-      <div class="flex flex-wrap items-center gap-3 mb-4 md:mb-6 border-b border-slate-800 pb-4">
+      <div class="flex flex-wrap items-center gap-3 mb-4 md:mb-6 border-b border-slate-800 pb-4 pr-10">
         <span class="text-3xl md:text-4xl shrink-0" id="modalPartIcon">🧐</span>
         <div class="min-w-0 flex-1">
           <h3 class="text-xl md:text-2xl font-black text-white truncate" id="modalPartName">Participante</h3>
           <p class="text-xs md:text-sm text-slate-400 flex flex-wrap items-center gap-1">Puntuación Total: <span class="badge badge-rose font-bold text-sm" id="modalPartRank">0 Ptos</span></p>
+        </div>
+        <!-- Navegación entre participantes -->
+        <div class="flex items-center shrink-0 bg-slate-950 border border-slate-800 rounded-full p-0.5 gap-0.5">
+          <button type="button" id="modalPartPrevBtn" onclick="navigateParticipantDetail(-1)"
+            class="group flex items-center gap-1.5 pl-3 pr-2.5 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-rose-500/15 active:scale-95 transition-all duration-150 disabled:opacity-25 disabled:hover:bg-transparent disabled:hover:text-slate-400 disabled:active:scale-100"
+            title="Participante anterior" aria-label="Participante anterior">
+            <i class="fa-solid fa-chevron-left text-[11px] group-hover:-translate-x-0.5 transition-transform duration-150"></i>
+            <span class="hidden sm:inline text-xs font-semibold">Anterior</span>
+          </button>
+          <span class="w-px h-4 bg-slate-800"></span>
+          <button type="button" id="modalPartNextBtn" onclick="navigateParticipantDetail(1)"
+            class="group flex items-center gap-1.5 pl-2.5 pr-3 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-rose-500/15 active:scale-95 transition-all duration-150 disabled:opacity-25 disabled:hover:bg-transparent disabled:hover:text-slate-400 disabled:active:scale-100"
+            title="Siguiente participante" aria-label="Siguiente participante">
+            <span class="hidden sm:inline text-xs font-semibold">Siguiente</span>
+            <i class="fa-solid fa-chevron-right text-[11px] group-hover:translate-x-0.5 transition-transform duration-150"></i>
+          </button>
         </div>
       </div>
 

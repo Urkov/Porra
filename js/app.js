@@ -673,8 +673,14 @@ function computeScores() {
         }
       }
 
-      // Evaluar si es ronda de eliminatoria y hay clasificado
-      if (match.phase !== 'groups') {
+      // Evaluar si es ronda de eliminatoria y hay clasificado.
+      // El partido por el 3er puesto (fase '3rd_place') queda excluido a
+      // propósito: aunque cuenta como partido normal (puntos de
+      // victoria/empate ya calculados arriba), NO da puntos de "pase de
+      // ronda" a ninguno de los dos equipos, porque no hay ninguna fase
+      // siguiente a la que clasificar desde ahí (ni para el que gana y
+      // queda 3º, ni para el que pierde y queda 4º).
+      if (match.phase !== 'groups' && match.phase !== '3rd_place') {
         const winner = match.decided_by === 'penalties' ? match.winner_passed : (match.score_home > match.score_away ? match.team_home : match.team_away);
 
         if (winner && chosenTeams.has(winner)) {
@@ -1103,7 +1109,11 @@ function computeParticipantTeamPoints(participant) {
       addTeamPoint(teamPoints, match.team_away, 'matches', pts);
     }
 
-    if (match.phase !== 'groups') {
+    // El partido por el 3er puesto (fase '3rd_place') queda excluido del
+    // cálculo de "pase de ronda": cuenta como partido normal (puntos de
+    // victoria/empate ya sumados arriba), pero no da puntos de pase de
+    // ronda a ninguno de los dos equipos, ya que no hay fase siguiente.
+    if (match.phase !== 'groups' && match.phase !== '3rd_place') {
       const winner = match.decided_by === 'penalties' ? match.winner_passed : (match.score_home > match.score_away ? match.team_home : match.team_away);
       if (winner && chosenTeams.has(winner)) {
         if (!roundsPassedByTeamsByPhase[match.phase]) {
@@ -1255,9 +1265,45 @@ function renderTeamPointsBadge(points, teamId) {
 }
 
 // DETALLES FLOTANTES (MODAL) TIPO PLANILLA ORIGINAL
+/**
+ * Navega al participante anterior o siguiente dentro del modal de detalle,
+ * siguiendo el mismo orden que el ranking visible (renderLeaderboard): por
+ * puntuación total descendente.
+ * @param {number} direction - -1 para el anterior, +1 para el siguiente
+ */
+function navigateParticipantDetail(direction) {
+  if (currentModalParticipantId === null) return;
+
+  const ranked = [...participants].sort((a, b) => b.score_details.total - a.score_details.total);
+  const currentIndex = ranked.findIndex(item => item.id === currentModalParticipantId);
+  if (currentIndex === -1) return;
+
+  const targetIndex = currentIndex + direction;
+  if (targetIndex < 0 || targetIndex >= ranked.length) return;
+
+  showParticipantDetail(ranked[targetIndex].id);
+}
+
+// Recuerda qué participante está abierto en el modal, para poder navegar
+// con los botones de anterior/siguiente sin tener que volver a buscarlo.
+let currentModalParticipantId = null;
+
 function showParticipantDetail(id) {
   const p = participants.find(item => item.id === id);
   if (!p) return;
+
+  currentModalParticipantId = id;
+
+  // Mismo orden que el ranking visible (renderLeaderboard): por puntuación
+  // total descendente. Así "siguiente" baja una posición en la tabla y
+  // "anterior" sube una, de forma consistente con lo que el usuario ve.
+  const ranked = [...participants].sort((a, b) => b.score_details.total - a.score_details.total);
+  const currentIndex = ranked.findIndex(item => item.id === id);
+
+  const prevBtn = document.getElementById('modalPartPrevBtn');
+  const nextBtn = document.getElementById('modalPartNextBtn');
+  if (prevBtn) prevBtn.disabled = currentIndex <= 0;
+  if (nextBtn) nextBtn.disabled = currentIndex === -1 || currentIndex >= ranked.length - 1;
 
   document.getElementById('modalPartName').innerText = p.name;
   document.getElementById('modalPartRank').innerText = `${p.score_details.total} pts`;

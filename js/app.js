@@ -1329,9 +1329,30 @@ function showParticipantDetail(id) {
         <div class="space-y-1 text-[11px]">
     `;
 
+    // ── Precalcular eliminaciones (calculado una vez fuera del forEach)
+    // Se calcula aquí dentro para no contaminar el scope global, pero solo
+    // la primera vez por llamada a showParticipantDetail.
+
+    // 1. Todos los grupos terminados (para saber cuándo los 4 peores terceros están fijos)
+    const modalAllGroupsFinished = Object.keys(modalWcStandings).length >= 12 &&
+      Object.values(modalWcStandings).every(rows => rows.every(r => r.played >= 3));
+
+    // 2. Mejores 8 terceros actuales
+    const modalBestThirds = getBestThirds(modalWcStandings);
+
+    // 3. Equipos eliminados en rondas eliminatorias (perdedores de partidos finalizados)
+    const knockoutEliminated = new Set();
+    currentMatches.forEach(m => {
+      if (m.status !== 'finished' || m.phase === 'groups') return;
+      const winner = m.decided_by === 'penalties' ? m.winner_passed
+                   : (m.score_home > m.score_away ? m.team_home : m.team_away);
+      if (winner === m.team_home) knockoutEliminated.add(m.team_away);
+      else if (winner === m.team_away) knockoutEliminated.add(m.team_home);
+    });
+
     teamList.forEach((teamName, index) => {
       // Usar getTeamRealPos para buscar en actual_positions por equipo (no por grupo de porra)
-      const { pos: realPosNumber } =
+      const { pos: realPosNumber, definitive: isDefinitive } =
         getTeamRealPos(teamName, currentActualResults.actual_positions, modalWcStandings);
       let statusIndicator = '';
       let textClass = 'text-slate-300';
@@ -1341,12 +1362,14 @@ function showParticipantDetail(id) {
       if (!isTeamOfficial) {
         textClass = 'text-rose-400 font-bold';
         statusIndicator = `<span class="badge badge-error text-slate-950 font-bold text-[9px]">Inválido</span>`;
-      } else if (realPosNumber !== null && realPosNumber >= 4) {
-        // Fase de grupos terminada para este equipo y quedó 4º (eliminado):
-        // se tacha, sin badge adicional. No hay bonus por acertar el orden
-        // exacto dentro de la fase de grupos (eso solo existe en el podio
-        // final del Mundial), así que no se muestra ningún indicador a los
-        // que siguen vivos en 1º, 2º o 3º puesto.
+      } else if (knockoutEliminated.has(teamName)) {
+        // Eliminado en una ronda eliminatoria (octavos, cuartos, semis, etc.)
+        textClass = 'text-slate-500 line-through';
+      } else if (isDefinitive && realPosNumber === 4) {
+        // Terminó definitivamente 4º en su grupo (ha jugado sus 3 partidos y quedó último)
+        textClass = 'text-slate-500 line-through';
+      } else if (modalAllGroupsFinished && isDefinitive && realPosNumber === 3 && !modalBestThirds.has(teamName)) {
+        // Todos los grupos terminados: es 3º pero no está entre los 8 mejores terceros
         textClass = 'text-slate-500 line-through';
       }
 

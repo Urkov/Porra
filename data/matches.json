@@ -970,10 +970,14 @@
     "date": "2026-06-25",
     "time": "22:00",
     "venue": "Estadio Filadelfia",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "E"
+    "score_away": 2,
+    "group": "E",
+    "scorers": [
+      "Costa de Marfil:Nicolas PEPE",
+      "Costa de Marfil:Nicolas PEPE"
+    ]
   },
   {
     "id": "400021466",
@@ -983,10 +987,15 @@
     "date": "2026-06-25",
     "time": "22:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "E"
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 1,
+    "group": "E",
+    "scorers": [
+      "Alemania:Leroy Sané",
+      "Ecuador:Nilson ANGULO",
+      "Ecuador:Gonzalo PLATA"
+    ]
   },
   {
     "id": "400021473",
@@ -1247,7 +1256,7 @@
   {
     "id": "400021514",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Costa de Marfil",
     "team_away": "Por definir",
     "date": "2026-06-30",
     "time": "19:00",

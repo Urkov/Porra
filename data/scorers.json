@@ -1,7 +1,7 @@
 {
   "max_goals": 5,
   "players": {
-    "México:Julian QUINONES": 1,
+    "México:Julian QUINONES": 2,
     "México:Raul JIMENEZ": 1,
     "República Checa:Ladislav KREJCI": 1,
     "Corea del Sur:HWANG Inbeom": 1,
@@ -12,8 +12,8 @@
     "Paraguay:MAURICIO": 1,
     "Estados Unidos:Giovanni REYNA": 1,
     "Suiza:Breel EMBOLO": 1,
-    "Marruecos:Ismael SAIBARI": 2,
-    "Brasil:Vinícius Jr.": 2,
+    "Marruecos:Ismael SAIBARI": 3,
+    "Brasil:Vinícius Jr.": 4,
     "Escocia:John McGinn": 1,
     "Australia:Nestory IRANKUNDA": 1,
     "Australia:Connor METCALFE": 1,
@@ -72,7 +72,7 @@
     "Canadá:Nathan SALIBA": 1,
     "México:Luis ROMO": 1,
     "Estados Unidos:Alex FREEMAN": 1,
-    "Brasil:MATHEUS CUNHA": 2,
+    "Brasil:MATHEUS CUNHA": 3,
     "Paraguay:Matias GALARZA": 1,
     "Países Bajos:Brian BROBBEY": 2,
     "Países Bajos:Cody GAKPO": 2,
@@ -101,12 +101,19 @@
     "Croacia:Ante BUDIMIR": 1,
     "Bosnia y Herzegovina:Kerim ALAJBEGOVIC": 1,
     "Catar:HASSAN ALHAYDOS": 1,
-    "Canadá:Promise DAVID": 1
+    "Canadá:Promise DAVID": 1,
+    "Marruecos:Achraf HAKIMI": 1,
+    "Haití:Wilson Isidor": 1,
+    "Marruecos:Soufiane RAHIMI": 1,
+    "Marruecos:Gessime YASSINE": 1,
+    "Sudáfrica:Thapelo MASEKO": 1,
+    "México:Mateo CHAVEZ": 1,
+    "México:Alvaro FIDALGO": 1
   },
   "max_assists": 3,
   "assists": {
     "México:Erik LIRA": 1,
-    "México:Roberto ALVARADO": 1,
+    "México:Roberto ALVARADO": 2,
     "República Checa:Vladimir COUFAL": 1,
     "Corea del Sur:LEE Kangin": 1,
     "Corea del Sur:HWANG Inbeom": 1,
@@ -117,7 +124,7 @@
     "Paraguay:Julio ENCISO": 2,
     "Estados Unidos:Alex FREEMAN": 1,
     "Marruecos:Brahim DIAZ": 2,
-    "Brasil:BRUNO GUIMARAES": 1,
+    "Brasil:BRUNO GUIMARAES": 3,
     "Australia:Paul OKON-ENGSTLER": 1,
     "Alemania:Florian WIRTZ": 1,
     "Alemania:Nathaniel BROWN": 1,
@@ -191,6 +198,14 @@
     "Bosnia y Herzegovina:Ivan BASIC": 1,
     "Catar:EDMILSON JUNIOR": 1,
     "Bosnia y Herzegovina:Dennis HADZIKADUNIC": 1,
-    "Suiza:Johan MANZAMBI": 1
+    "Suiza:Johan MANZAMBI": 1,
+    "Haití:Jean-Kevin DUVERNE": 1,
+    "Marruecos:Achraf HAKIMI": 1,
+    "Marruecos:Chadi RIAD": 1,
+    "Marruecos:Soufiane RAHIMI": 1,
+    "Brasil:RAYAN": 1,
+    "Sudáfrica:Tshepang MOREMI": 1,
+    "México:Luis ROMO": 1,
+    "México:Jorge SANCHEZ": 1
   }
 }

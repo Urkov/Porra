@@ -897,10 +897,18 @@
     "date": "2026-06-25",
     "time": "00:00",
     "venue": "Estadio Atlanta",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "C"
+    "status": "finished",
+    "score_home": 4,
+    "score_away": 2,
+    "group": "C",
+    "scorers": [
+      "Marruecos:Yassine BOUNOU (p.p.)",
+      "Marruecos:Achraf HAKIMI",
+      "Haití:Wilson Isidor",
+      "Marruecos:Ismael SAIBARI",
+      "Marruecos:Soufiane RAHIMI",
+      "Marruecos:Gessime YASSINE"
+    ]
   },
   {
     "id": "400021455",
@@ -910,10 +918,15 @@
     "date": "2026-06-25",
     "time": "00:00",
     "venue": "Estadio Miami",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "C"
+    "score_away": 3,
+    "group": "C",
+    "scorers": [
+      "Brasil:Vinícius Jr.",
+      "Brasil:Vinícius Jr.",
+      "Brasil:MATHEUS CUNHA"
+    ]
   },
   {
     "id": "400021445",
@@ -923,10 +936,13 @@
     "date": "2026-06-25",
     "time": "03:00",
     "venue": "Estadio Monterrey",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 1,
     "score_away": 0,
-    "group": "A"
+    "group": "A",
+    "scorers": [
+      "Sudáfrica:Thapelo MASEKO"
+    ]
   },
   {
     "id": "400021444",
@@ -936,10 +952,15 @@
     "date": "2026-06-25",
     "time": "03:00",
     "venue": "Estadio Ciudad de México",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "A"
+    "score_away": 3,
+    "group": "A",
+    "scorers": [
+      "México:Mateo CHAVEZ",
+      "México:Julian QUINONES",
+      "México:Alvaro FIDALGO"
+    ]
   },
   {
     "id": "400021468",
@@ -1178,7 +1199,7 @@
   {
     "id": "400021518",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Sudáfrica",
     "team_away": "Canadá",
     "date": "2026-06-28",
     "time": "21:00",
@@ -1190,7 +1211,7 @@
   {
     "id": "400021516",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Brasil",
     "team_away": "Por definir",
     "date": "2026-06-29",
     "time": "19:00",
@@ -1215,7 +1236,7 @@
     "id": "400021522",
     "phase": "Round of 32",
     "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_away": "Marruecos",
     "date": "2026-06-30",
     "time": "03:00",
     "venue": "Estadio Monterrey",

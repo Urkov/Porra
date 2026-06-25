@@ -1,13 +1,23 @@
 {
   "actual_positions": {
-    "A": [],
+    "A": [
+      "México",
+      "Sudáfrica",
+      "Corea del Sur",
+      "República Checa"
+    ],
     "B": [
       "Suiza",
       "Canadá",
       "Bosnia y Herzegovina",
       "Catar"
     ],
-    "C": [],
+    "C": [
+      "Brasil",
+      "Marruecos",
+      "Escocia",
+      "Haití"
+    ],
     "D": [],
     "E": [],
     "F": [],
@@ -31,49 +41,49 @@
     "A": [
       {
         "team": "México",
-        "played": 2,
-        "won": 2,
+        "played": 3,
+        "won": 3,
         "drawn": 0,
         "lost": 0,
-        "gf": 3,
+        "gf": 6,
         "ga": 0,
-        "gd": 3,
-        "points": 6,
+        "gd": 6,
+        "points": 9,
         "position": 1
       },
       {
-        "team": "Corea del Sur",
-        "played": 2,
+        "team": "Sudáfrica",
+        "played": 3,
         "won": 1,
-        "drawn": 0,
-        "lost": 1,
-        "gf": 2,
-        "ga": 2,
-        "gd": 0,
-        "points": 3,
-        "position": 2
-      },
-      {
-        "team": "República Checa",
-        "played": 2,
-        "won": 0,
         "drawn": 1,
         "lost": 1,
         "gf": 2,
         "ga": 3,
         "gd": -1,
-        "points": 1,
+        "points": 4,
+        "position": 2
+      },
+      {
+        "team": "Corea del Sur",
+        "played": 3,
+        "won": 1,
+        "drawn": 0,
+        "lost": 2,
+        "gf": 2,
+        "ga": 3,
+        "gd": -1,
+        "points": 3,
         "position": 3
       },
       {
-        "team": "Sudáfrica",
-        "played": 2,
+        "team": "República Checa",
+        "played": 3,
         "won": 0,
         "drawn": 1,
-        "lost": 1,
-        "gf": 1,
-        "ga": 3,
-        "gd": -2,
+        "lost": 2,
+        "gf": 2,
+        "ga": 6,
+        "gd": -4,
         "points": 1,
         "position": 4
       }
@@ -131,49 +141,49 @@
     "C": [
       {
         "team": "Brasil",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 1,
         "lost": 0,
-        "gf": 4,
+        "gf": 7,
         "ga": 1,
-        "gd": 3,
-        "points": 4,
+        "gd": 6,
+        "points": 7,
         "position": 1
       },
       {
         "team": "Marruecos",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 1,
         "lost": 0,
-        "gf": 2,
-        "ga": 1,
-        "gd": 1,
-        "points": 4,
+        "gf": 6,
+        "ga": 3,
+        "gd": 3,
+        "points": 7,
         "position": 2
       },
       {
         "team": "Escocia",
-        "played": 2,
+        "played": 3,
         "won": 1,
         "drawn": 0,
-        "lost": 1,
+        "lost": 2,
         "gf": 1,
-        "ga": 1,
-        "gd": 0,
+        "ga": 4,
+        "gd": -3,
         "points": 3,
         "position": 3
       },
       {
         "team": "Haití",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
-        "gf": 0,
-        "ga": 4,
-        "gd": -4,
+        "lost": 3,
+        "gf": 2,
+        "ga": 8,
+        "gd": -6,
         "points": 0,
         "position": 4
       }
@@ -629,5 +639,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-24T21:07:25.795Z"
+  "lastUpdate": "2026-06-25T06:05:02.870Z"
 }

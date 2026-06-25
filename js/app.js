@@ -1368,6 +1368,11 @@ function showParticipantDetail(id) {
       } else if (isDefinitive && realPosNumber === 4) {
         // Terminó definitivamente 4º en su grupo (ha jugado sus 3 partidos y quedó último)
         textClass = 'text-slate-500 line-through';
+      } else if (!isDefinitive && realPosNumber === 4 && checkFourthMathematicallyOut(teamName, modalWcStandings, currentMatches)) {
+        // Va 4º con partidos pendientes, pero ya no puede alcanzar al 3º
+        // ni ganando todo lo que le queda (eliminación matemática anticipada,
+        // considerando también los partidos pendientes entre sus rivales)
+        textClass = 'text-slate-500 line-through';
       } else if (modalAllGroupsFinished && isDefinitive && realPosNumber === 3 && !modalBestThirds.has(teamName)) {
         // Todos los grupos terminados: es 3º pero no está entre los 8 mejores terceros
         textClass = 'text-slate-500 line-through';
@@ -1439,6 +1444,104 @@ function buildOfficialGroupsFromMatches(matchList) {
     .map(grp => ({ group: grp, teams: [...groups[grp]].sort() }));
 }
 
+/**
+ * Ordena un array de estadísticas de equipos (de UN mismo grupo) aplicando
+ * el criterio de desempate REAL de la FIFA para el Mundial 2026:
+ *
+ *   Paso 1 (solo entre equipos empatados a puntos):
+ *     1a. puntos en los enfrentamientos directos entre ellos
+ *     1b. diferencia de goles en esos enfrentamientos directos
+ *     1c. goles marcados en esos enfrentamientos directos
+ *   Paso 2 (si el paso 1 no desempata a todos):
+ *     2a. diferencia de goles en TODOS los partidos de grupo
+ *     2b. goles marcados en TODOS los partidos de grupo
+ *     2c. fair play (no disponible en los datos de la app, se omite)
+ *   Paso 3: ranking FIFA (no disponible, se omite)
+ *
+ * El mini-table del paso 1 se construye, para cada subconjunto de equipos
+ * empatados a puntos, usando SOLO los partidos ya jugados ENTRE ESOS
+ * EQUIPOS (`playedMatches`, filtrados a la fase de grupos del grupo en
+ * cuestión). Un equipo que no haya jugado contra ninguno de sus rivales
+ * empatados arrastra un mini-table neutro (0 pts / 0 gd / 0 gf) en el
+ * paso 1, tal y como dicta el reglamento (el head-to-head se computa
+ * sobre los cruces disputados, no exige que todos hayan jugado contra
+ * todos dentro del subgrupo).
+ *
+ * @param {Array} statsArray - [{team, points, gf, ga, ...}] de un grupo
+ * @param {Array} playedMatches - partidos YA JUGADOS de ese mismo grupo,
+ *        cada uno {team_home, team_away, score_home, score_away}
+ * @returns {Array} mismo array, con position (1..n) añadido, ordenado
+ */
+function sortStandingsFIFA(statsArray, playedMatches) {
+  const matches = playedMatches || [];
+
+  // Head-to-head entre un subconjunto de equipos, basado solo en los
+  // partidos ya jugados entre ellos.
+  function headToHeadStats(teamNames) {
+    const h2h = {};
+    teamNames.forEach(t => { h2h[t] = { pts: 0, gf: 0, ga: 0 }; });
+    matches.forEach(m => {
+      if (!teamNames.includes(m.team_home) || !teamNames.includes(m.team_away)) return;
+      const sh = Number(m.score_home) || 0;
+      const sa = Number(m.score_away) || 0;
+      h2h[m.team_home].gf += sh;
+      h2h[m.team_home].ga += sa;
+      h2h[m.team_away].gf += sa;
+      h2h[m.team_away].ga += sh;
+      if (sh > sa) h2h[m.team_home].pts += 3;
+      else if (sh < sa) h2h[m.team_away].pts += 3;
+      else { h2h[m.team_home].pts += 1; h2h[m.team_away].pts += 1; }
+    });
+    return h2h;
+  }
+
+  // Ordena un grupo de equipos empatados a puntos (mejor primero)
+  function rankTiedTeams(tiedRows) {
+    if (tiedRows.length === 1) return tiedRows;
+
+    const names = tiedRows.map(r => r.team);
+    const h2h = headToHeadStats(names);
+
+    const withH2H = tiedRows.map(r => ({
+      row: r,
+      h2hPts: h2h[r.team].pts,
+      h2hGd: h2h[r.team].gf - h2h[r.team].ga,
+      h2hGf: h2h[r.team].gf,
+      globalGd: r.gf - r.ga,
+      globalGf: r.gf
+    }));
+
+    withH2H.sort((a, b) => {
+      // Paso 1: head-to-head (solo entre los empatados)
+      if (b.h2hPts !== a.h2hPts) return b.h2hPts - a.h2hPts;
+      if (b.h2hGd !== a.h2hGd) return b.h2hGd - a.h2hGd;
+      if (b.h2hGf !== a.h2hGf) return b.h2hGf - a.h2hGf;
+      // Paso 2: estadísticas globales
+      if (b.globalGd !== a.globalGd) return b.globalGd - a.globalGd;
+      if (b.globalGf !== a.globalGf) return b.globalGf - a.globalGf;
+      // Paso 3 (fair play / ranking FIFA): no disponible, desempate estable
+      return a.row.team.localeCompare(b.row.team, 'es');
+    });
+
+    return withH2H.map(t => t.row);
+  }
+
+  // Agrupar por puntos y aplicar el desempate FIFA solo dentro de cada
+  // grupo de empatados, preservando el orden relativo entre grupos.
+  const byPoints = {};
+  statsArray.forEach(r => {
+    if (!byPoints[r.points]) byPoints[r.points] = [];
+    byPoints[r.points].push(r);
+  });
+
+  const sorted = Object.keys(byPoints)
+    .map(Number)
+    .sort((a, b) => b - a)
+    .flatMap(pts => rankTiedTeams(byPoints[pts]));
+
+  return sorted.map((r, index) => ({ ...r, position: index + 1 }));
+}
+
 function computeOfficialGroupStandings(matchList) {
   const standings = {};
   const officialGroups = buildOfficialGroupsFromMatches(matchList);
@@ -1459,11 +1562,12 @@ function computeOfficialGroupStandings(matchList) {
       };
     });
 
-    matchList
+    const playedGroupMatches = matchList
       .filter(m => m.phase === 'groups' && m.group === group && m.status === 'finished'
         && m.team_home && m.team_home !== 'Por definir'
-        && m.team_away && m.team_away !== 'Por definir')
-      .forEach(m => {
+        && m.team_away && m.team_away !== 'Por definir');
+
+    playedGroupMatches.forEach(m => {
         const home = stats[m.team_home];
         const away = stats[m.team_away];
         if (!home || !away) return;
@@ -1494,21 +1598,153 @@ function computeOfficialGroupStandings(matchList) {
         }
       });
 
-    const sorted = Object.values(stats)
-      .map(s => ({ ...s, gd: s.gf - s.ga }))
-      .sort((a, b) => {
-        if (b.points !== a.points) return b.points - a.points;
-        if (b.gd !== a.gd) return b.gd - a.gd;
-        if (b.gf !== a.gf) return b.gf - a.gf;
-        return a.team.localeCompare(b.team, 'es');
-      })
-      .map((s, index) => ({ ...s, position: index + 1 }));
-
-    standings[group] = sorted;
+    const statsWithGd = Object.values(stats).map(s => ({ ...s, gd: s.gf - s.ga }));
+    standings[group] = sortStandingsFIFA(statsWithGd, playedGroupMatches);
   });
 
   return standings;
 }
+
+
+/**
+ * Determina si un equipo que va 4º en su grupo oficial del Mundial está
+ * MATEMÁTICAMENTE eliminado de poder alcanzar al 3º, considerando TODOS
+ * los partidos de grupo aún pendientes (no solo los suyos), y aplicando
+ * el criterio de desempate REAL de la FIFA cuando dos o más equipos
+ * acaban empatados a puntos:
+ *
+ *   Paso 1 (solo entre los equipos empatados a puntos):
+ *     1a. puntos obtenidos en los enfrentamientos directos entre ellos
+ *     1b. diferencia de goles en esos enfrentamientos directos
+ *     1c. goles marcados en esos enfrentamientos directos
+ *   Paso 2 (si el paso 1 no desempata a todos):
+ *     2a. diferencia de goles en TODOS los partidos de grupo
+ *     2b. goles marcados en TODOS los partidos de grupo
+ *     2c. fair play (no disponible aquí, se omite)
+ *   Paso 3: ranking FIFA (no disponible aquí, se omite)
+ *
+ * Pasos 2c y 3 no están disponibles en los datos de la app, así que en el
+ * remoto caso de que ni el paso 1 ni el 2a/2b desempaten, se asume que el
+ * equipo SÍ podría alcanzar la posición (no se tacha) para no arriesgarse
+ * a un falso positivo.
+ *
+ * Importante: un partido pendiente ENTRE OTROS DOS RIVALES del propio
+ * grupo también afecta a la eliminación del 4º, porque reparte puntos
+ * garantizados entre ellos. Ejemplo real (grupo D, Mundial 2026): Turquía
+ * es 4ª con 0 pts (2 jugados, 1 pendiente vs EEUU). Su techo ganando ese
+ * partido es 3 pts. El partido pendiente Paraguay-Australia (actuales 2º
+ * y 3º) garantiza que el peor situado entre ambos se queda en mínimo 3
+ * pts; y si empatan a 3 con Turquía, el desempate directo ya está resuelto
+ * porque Turquía perdió 0-1 contra Paraguay en la fase de grupos.
+ *
+ * Algoritmo: se simulan TODAS las combinaciones posibles (victoria local,
+ * empate, victoria visitante) de los partidos de grupo aún no jugados. En
+ * los partidos del propio equipo siempre se le hace ganar (su mejor
+ * escenario). Si en el PEOR de esos resultados el equipo no logra
+ * terminar entre los 3 primeros (aplicando el desempate FIFA de dos
+ * pasos), está matemáticamente eliminado.
+ *
+ * @param {string} team - equipo a comprobar (debe ir 4º con partidos pendientes)
+ * @param {Array} groupRows - filas de standings de su grupo (computeOfficialGroupStandings)
+ * @param {Array} pendingGroupMatches - partidos de ESE grupo con status !== 'finished'
+ * @param {Array} playedGroupMatches - partidos de ESE grupo con status === 'finished'
+ *        (necesarios para el head-to-head, que solo se basa en lo ya jugado)
+ * @returns {boolean}
+ */
+function isFourthMathematicallyOut(team, groupRows, pendingGroupMatches, playedGroupMatches) {
+  const teamRow = groupRows.find(r => r.team === team);
+  if (!teamRow || teamRow.position !== 4 || teamRow.played >= 3) return false;
+  if (!pendingGroupMatches || pendingGroupMatches.length === 0) return false;
+
+  const playedMatches = playedGroupMatches || [];
+
+  // Estado base de puntos/gf/ga por equipo, partiendo de los standings actuales
+  const baseStats = {};
+  groupRows.forEach(r => {
+    baseStats[r.team] = { team: r.team, points: r.points, gf: r.gf, ga: r.ga };
+  });
+
+  const RESULTS = ['home', 'draw', 'away'];
+
+  // Genera todas las combinaciones de resultados para los partidos pendientes
+  function* combinations(matches, idx = 0) {
+    if (idx === matches.length) {
+      yield [];
+      return;
+    }
+    for (const r of RESULTS) {
+      for (const rest of combinations(matches, idx + 1)) {
+        yield [r, ...rest];
+      }
+    }
+  }
+
+  let teamCanReachThird = false;
+
+  outer:
+  for (const combo of combinations(pendingGroupMatches)) {
+    // Aplicar la combinación sobre una copia de las stats
+    const stats = {};
+    Object.entries(baseStats).forEach(([t, s]) => { stats[t] = { ...s }; });
+
+    pendingGroupMatches.forEach((m, i) => {
+      let outcome = combo[i];
+      // Forzar el mejor resultado posible para "team" en sus propios partidos
+      if (m.team_home === team) outcome = 'home';
+      else if (m.team_away === team) outcome = 'away';
+
+      if (outcome === 'home') {
+        stats[m.team_home].points += 3;
+      } else if (outcome === 'away') {
+        stats[m.team_away].points += 3;
+      } else {
+        stats[m.team_home].points += 1;
+        stats[m.team_away].points += 1;
+      }
+      // No se simulan goles concretos de los partidos pendientes (el
+      // marcador exacto es indeterminado); gf/ga globales se mantienen
+      // como están y el desempate de paso 2 (dentro de sortStandingsFIFA)
+      // usa solo lo ya jugado. Esto es deliberadamente conservador: si con
+      // esos goles ya no alcanza, con cualquier marcador real tampoco lo
+      // hará salvo que el equipo controle también el resultado de los
+      // demás, que no es el caso.
+    });
+
+    const finalOrder = sortStandingsFIFA(Object.values(stats), playedMatches);
+    const teamFinalPos = finalOrder.findIndex(r => r.team === team) + 1;
+    if (teamFinalPos <= 3) {
+      teamCanReachThird = true;
+      break outer;
+    }
+  }
+
+  return !teamCanReachThird;
+}
+
+/**
+ * Wrapper de isFourthMathematicallyOut: localiza automáticamente el grupo
+ * oficial (A-L) al que pertenece `team` dentro de `wcStandings` y filtra de
+ * `matchList` los partidos de ESE grupo que aún no han terminado (y los ya
+ * jugados, para el head-to-head), para pasárselos a
+ * isFourthMathematicallyOut. Pensado para usarse directamente desde el
+ * render (modal de detalle, listados, etc.) sin repetir la lógica de
+ * búsqueda de grupo/partidos en cada punto de llamada.
+ */
+function checkFourthMathematicallyOut(team, wcStandings, matchList) {
+  for (const [groupName, rows] of Object.entries(wcStandings || {})) {
+    if (!rows.some(r => r.team === team)) continue;
+    const groupMatches = (matchList || []).filter(m =>
+      m.phase === 'groups' && m.group === groupName
+      && m.team_home && m.team_home !== 'Por definir'
+      && m.team_away && m.team_away !== 'Por definir'
+    );
+    const pendingGroupMatches = groupMatches.filter(m => m.status !== 'finished');
+    const playedGroupMatches = groupMatches.filter(m => m.status === 'finished');
+    return isFourthMathematicallyOut(team, rows, pendingGroupMatches, playedGroupMatches);
+  }
+  return false;
+}
+
 
 
 /**
@@ -1641,6 +1877,22 @@ function renderOfficialGroups() {
     return;
   }
 
+  // ── Precalcular eliminaciones para poder tachar selecciones en la tabla ──
+  // Mismo criterio que en el modal de detalle de participante (showParticipantDetail):
+  // 1. Todos los grupos terminados (para saber cuándo los 4 peores terceros están fijos)
+  const ogAllGroupsFinished = Object.keys(standings).length >= 12 &&
+    Object.values(standings).every(rows => rows.every(r => r.played >= 3));
+
+  // 2. Equipos eliminados en rondas eliminatorias (perdedores de partidos finalizados)
+  const ogKnockoutEliminated = new Set();
+  currentMatches.forEach(m => {
+    if (m.status !== 'finished' || m.phase === 'groups') return;
+    const winner = m.decided_by === 'penalties' ? m.winner_passed
+                 : (m.score_home > m.score_away ? m.team_home : m.team_away);
+    if (winner === m.team_home) ogKnockoutEliminated.add(m.team_away);
+    else if (winner === m.team_away) ogKnockoutEliminated.add(m.team_home);
+  });
+
   // ── Puntos por equipo según su puesto REAL 1º-4º en su grupo oficial ──────
   // Importante: estos +10/+6/+2 son los puntos que ese equipo le da a quien
   // lo predijo en su grupo de la porra, y dependen ÚNICAMENTE de la posición
@@ -1703,6 +1955,14 @@ function renderOfficialGroups() {
       const isChosen  = selPart ? chosenTeams.has(row.team) : false;
       const isBest3   = bestThirds.has(row.team);
       const baseClass = getStandingsRowClass(row.position, hasPlayed, isBest3);
+
+      // Eliminación: mismo criterio que en el modal de detalle de participante.
+      const isDefinitiveRow = row.played >= 3;
+      const isEliminatedRow = ogKnockoutEliminated.has(row.team)
+        || (isDefinitiveRow && row.position === 4)
+        || (!isDefinitiveRow && row.position === 4 && checkFourthMathematicallyOut(row.team, standings, currentMatches))
+        || (ogAllGroupsFinished && isDefinitiveRow && row.position === 3 && !isBest3);
+      const teamNameClass = isEliminatedRow ? 'line-through text-slate-500' : 'text-slate-200';
 
       // Resaltar si el participante eligió este equipo
       const chosenClass = isChosen
@@ -1789,7 +2049,7 @@ function renderOfficialGroups() {
           <div class="flex items-center gap-1.5 rounded-md pl-1.5 pr-1 py-1 ${baseClass} ${chosenClass} ${noFilterChosenClass} ${hoverClass} transition-colors" ${clickable}>
             <span class="text-[10px] font-black text-slate-500 w-3 shrink-0 text-center">${hasPlayed ? row.position : '·'}</span>
             <span class="shrink-0">${getTeamFlag(row.team, true)}</span>
-            <span class="truncate font-semibold text-slate-200 text-[11px] flex-1" title="${row.team}">${row.team}</span>
+            <span class="truncate font-semibold ${teamNameClass} text-[11px] flex-1" title="${row.team}">${row.team}</span>
             <span class="font-black text-emerald-400 text-xs w-4 text-right shrink-0">${row.points}</span>
           </div>
           ${statsHtml}

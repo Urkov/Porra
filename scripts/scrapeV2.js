@@ -489,6 +489,97 @@ async function main() {
   // --------------------------------------------------------------------
   // Clasificaciones oficiales de grupo (A-L)
   // --------------------------------------------------------------------
+  //
+  // Desempate FIFA real (Mundial 2026) cuando 2+ equipos empatan a puntos:
+  //   Paso 1 (solo entre los equipos empatados, head-to-head):
+  //     1a. puntos en los enfrentamientos directos entre ellos
+  //     1b. diferencia de goles en esos enfrentamientos directos
+  //     1c. goles marcados en esos enfrentamientos directos
+  //   Paso 2 (si el paso 1 no desempata a todos, estadísticas globales):
+  //     2a. diferencia de goles en TODOS los partidos de grupo
+  //     2b. goles marcados en TODOS los partidos de grupo
+  //     2c. fair play (no disponible en estos datos, se omite)
+  //   Paso 3: ranking FIFA (no disponible en estos datos, se omite)
+  //
+  // El mini-table del paso 1 se construye, para cada subconjunto de
+  // equipos empatados a puntos, usando SOLO los partidos ya jugados ENTRE
+  // ESOS EQUIPOS. Un equipo que no haya jugado contra ninguno de sus
+  // rivales empatados arrastra un mini-table neutro (0 pts/0 gd/0 gf) en
+  // el paso 1, tal y como dicta el reglamento.
+  //
+  // Si ni el paso 1 ni el paso 2a/2b desempatan (fair play/ranking FIFA no
+  // disponibles aquí), se mantiene el orden alfabético como último
+  // recurso estable; en ese caso excepcional conviene revisar
+  // manual_overrides.json y fijar el orden real a mano.
+  function headToHeadStats(teamNames, playedMatches) {
+    const h2h = {};
+    teamNames.forEach((t) => { h2h[t] = { pts: 0, gf: 0, ga: 0 }; });
+    playedMatches.forEach((m) => {
+      if (!teamNames.includes(m.team_home) || !teamNames.includes(m.team_away)) return;
+      const sh = Number(m.score_home) || 0;
+      const sa = Number(m.score_away) || 0;
+      h2h[m.team_home].gf += sh;
+      h2h[m.team_home].ga += sa;
+      h2h[m.team_away].gf += sa;
+      h2h[m.team_away].ga += sh;
+      if (sh > sa) h2h[m.team_home].pts += 3;
+      else if (sh < sa) h2h[m.team_away].pts += 3;
+      else { h2h[m.team_home].pts += 1; h2h[m.team_away].pts += 1; }
+    });
+    return h2h;
+  }
+
+  function rankTiedTeams(tiedRows, playedMatches) {
+    if (tiedRows.length === 1) return tiedRows;
+
+    const names = tiedRows.map((r) => r.team);
+    const h2h = headToHeadStats(names, playedMatches);
+
+    const withH2H = tiedRows.map((r) => ({
+      row: r,
+      h2hPts: h2h[r.team].pts,
+      h2hGd: h2h[r.team].gf - h2h[r.team].ga,
+      h2hGf: h2h[r.team].gf,
+      globalGd: r.gf - r.ga,
+      globalGf: r.gf,
+    }));
+
+    withH2H.sort((a, b) => {
+      // Paso 1: head-to-head (solo entre los empatados)
+      if (b.h2hPts !== a.h2hPts) return b.h2hPts - a.h2hPts;
+      if (b.h2hGd !== a.h2hGd) return b.h2hGd - a.h2hGd;
+      if (b.h2hGf !== a.h2hGf) return b.h2hGf - a.h2hGf;
+      // Paso 2: estadísticas globales
+      if (b.globalGd !== a.globalGd) return b.globalGd - a.globalGd;
+      if (b.globalGf !== a.globalGf) return b.globalGf - a.globalGf;
+      // Paso 3 (fair play / ranking FIFA): no disponible, desempate estable
+      return a.row.team.localeCompare(b.row.team, 'es');
+    });
+
+    return withH2H.map((t) => t.row);
+  }
+
+  /**
+   * Ordena las filas de un grupo aplicando el desempate FIFA de dos pasos.
+   * @param {Array} statsArray - [{team, points, gf, ga, ...}] de un grupo
+   * @param {Array} playedMatches - partidos ya jugados de ese mismo grupo
+   * @returns {Array} mismo array, con position (1..n) añadido, ordenado
+   */
+  function sortStandingsFIFA(statsArray, playedMatches) {
+    const byPoints = {};
+    statsArray.forEach((r) => {
+      if (!byPoints[r.points]) byPoints[r.points] = [];
+      byPoints[r.points].push(r);
+    });
+
+    const sorted = Object.keys(byPoints)
+      .map(Number)
+      .sort((a, b) => b - a)
+      .flatMap((pts) => rankTiedTeams(byPoints[pts], playedMatches));
+
+    return sorted.map((r, index) => ({ ...r, position: index + 1 }));
+  }
+
   const officialStandings = {};
   const actualPositions = { ...(previousResults.actual_positions || {}) };
 
@@ -505,9 +596,10 @@ async function main() {
       stats[team] = { team, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0, gd: 0, points: 0 };
     });
 
-    matchesOut
-      .filter((m) => m.phase === 'groups' && m.group === group && m.status === 'finished')
-      .forEach((m) => {
+    const playedGroupMatches = matchesOut
+      .filter((m) => m.phase === 'groups' && m.group === group && m.status === 'finished');
+
+    playedGroupMatches.forEach((m) => {
         const home = stats[m.team_home];
         const away = stats[m.team_away];
         if (!home || !away) return;
@@ -535,16 +627,8 @@ async function main() {
         }
       });
 
-    const sorted = Object.values(stats)
-      .map((s) => ({ ...s, gd: s.gf - s.ga }))
-      .sort(
-        (a, b) =>
-          b.points - a.points ||
-          b.gd - a.gd ||
-          b.gf - a.gf ||
-          a.team.localeCompare(b.team, 'es')
-      )
-      .map((s, i) => ({ ...s, position: i + 1 }));
+    const statsWithGd = Object.values(stats).map((s) => ({ ...s, gd: s.gf - s.ga }));
+    const sorted = sortStandingsFIFA(statsWithGd, playedGroupMatches);
 
     officialStandings[group] = sorted;
 

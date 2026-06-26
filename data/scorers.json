@@ -89,9 +89,9 @@
     "Egipto:MOSTAFA ZICO": 1,
     "Egipto:Mohamed Salah": 1,
     "Egipto:TREZEGUET": 1,
-    "Francia:Ousmane Dembélé": 1,
+    "Francia:Ousmane Dembélé": 4,
     "Noruega:Marcus HOLMGREN PEDERSEN": 1,
-    "Senegal:Ismaila SARR": 2,
+    "Senegal:Ismaila SARR": 3,
     "Jordania:NIZAR ALRASHDAN": 1,
     "Argelia:Nadhir BENBOUALI": 1,
     "Argelia:Amine GOUIRI": 1,
@@ -120,7 +120,12 @@
     "Turquía:Arda Güler": 1,
     "Turquía:Baris Alper YILMAZ": 1,
     "Estados Unidos:Sebastian BERHALTER": 1,
-    "Turquía:Kaan Ayhan": 1
+    "Turquía:Kaan Ayhan": 1,
+    "Senegal:Habib DIARRA": 1,
+    "Senegal:Pape GUEYE": 2,
+    "Senegal:Iliman NDIAYE": 1,
+    "Noruega:Thelo AASGAARD": 1,
+    "Francia:Desire DOUE": 1
   },
   "max_assists": 3,
   "assists": {
@@ -155,7 +160,7 @@
     "Irán:Ramin REZAEIAN": 1,
     "Francia:Michael OLISE": 3,
     "Francia:Adrien RABIOT": 1,
-    "Senegal:Iliman NDIAYE": 1,
+    "Senegal:Iliman NDIAYE": 2,
     "Noruega:David MOLLER WOLFE": 1,
     "Irak:AMIR ALAMMARI": 1,
     "Noruega:Martin ODEGAARD": 2,
@@ -228,6 +233,14 @@
     "Japón:Ritsu DOAN": 1,
     "Estados Unidos:Sebastian BERHALTER": 1,
     "Turquía:Baris Alper YILMAZ": 1,
-    "Turquía:Orkun KOKCU": 1
+    "Turquía:Orkun KOKCU": 1,
+    "Senegal:Abdoulaye Seck": 1,
+    "Senegal:Lamine CAMARA": 1,
+    "Senegal:Ismaila SARR": 1,
+    "Senegal:Pape GUEYE": 1,
+    "Francia:Kylian Mbappé": 2,
+    "Noruega:Andreas SCHJELDERUP": 1,
+    "Francia:Aurelien TCHOUAMENI": 1,
+    "Francia:Bradley BARCOLA": 1
   }
 }

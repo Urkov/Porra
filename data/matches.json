@@ -1074,10 +1074,17 @@
     "date": "2026-06-26",
     "time": "21:00",
     "venue": "Estadio de Toronto",
-    "status": "scheduled",
-    "score_home": 0,
+    "status": "finished",
+    "score_home": 5,
     "score_away": 0,
-    "group": "I"
+    "group": "I",
+    "scorers": [
+      "Senegal:Habib DIARRA",
+      "Senegal:Ismaila SARR",
+      "Senegal:Pape GUEYE",
+      "Senegal:Pape GUEYE",
+      "Senegal:Iliman NDIAYE"
+    ]
   },
   {
     "id": "400021489",
@@ -1087,10 +1094,17 @@
     "date": "2026-06-26",
     "time": "21:00",
     "venue": "Estadio Boston",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "I"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 4,
+    "group": "I",
+    "scorers": [
+      "Francia:Ousmane Dembélé",
+      "Francia:Ousmane Dembélé",
+      "Noruega:Thelo AASGAARD",
+      "Francia:Ousmane Dembélé",
+      "Francia:Desire DOUE"
+    ]
   },
   {
     "id": "400021484",
@@ -1274,7 +1288,7 @@
     "id": "400021514",
     "phase": "Round of 32",
     "team_home": "Costa de Marfil",
-    "team_away": "Por definir",
+    "team_away": "Noruega",
     "date": "2026-06-30",
     "time": "19:00",
     "venue": "Estadio Dallas",
@@ -1285,7 +1299,7 @@
   {
     "id": "400021523",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Francia",
     "team_away": "Por definir",
     "date": "2026-06-30",
     "time": "23:00",

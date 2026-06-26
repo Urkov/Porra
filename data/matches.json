@@ -1005,10 +1005,16 @@
     "date": "2026-06-26",
     "time": "01:00",
     "venue": "Estadio Kansas City",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "F"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 3,
+    "group": "F",
+    "scorers": [
+      "Túnez:Ellyes SKHIRI (p.p.)",
+      "Países Bajos:Brian BROBBEY",
+      "Túnez:Hazem MASTOURI",
+      "Países Bajos:Jan Paul VAN HECKE"
+    ]
   },
   {
     "id": "400021471",
@@ -1018,10 +1024,14 @@
     "date": "2026-06-26",
     "time": "01:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "F"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 1,
+    "group": "F",
+    "scorers": [
+      "Japón:Daizen MAEDA",
+      "Suecia:Anthony ELANGA"
+    ]
   },
   {
     "id": "400021461",
@@ -1031,7 +1041,7 @@
     "date": "2026-06-26",
     "time": "04:00",
     "venue": "Estadio de la Bahía de San Francisco",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
     "score_away": 0,
     "group": "D"
@@ -1044,10 +1054,17 @@
     "date": "2026-06-26",
     "time": "04:00",
     "venue": "Estadio Los Angeles",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "D"
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 2,
+    "group": "D",
+    "scorers": [
+      "Estados Unidos:Auston TRUSTY",
+      "Turquía:Arda Güler",
+      "Turquía:Baris Alper YILMAZ",
+      "Estados Unidos:Sebastian BERHALTER",
+      "Turquía:Kaan Ayhan"
+    ]
   },
   {
     "id": "400021493",
@@ -1221,7 +1238,7 @@
     "id": "400021516",
     "phase": "Round of 32",
     "team_home": "Brasil",
-    "team_away": "Por definir",
+    "team_away": "Japón",
     "date": "2026-06-29",
     "time": "19:00",
     "venue": "Estadio Houston",
@@ -1244,7 +1261,7 @@
   {
     "id": "400021522",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Países Bajos",
     "team_away": "Marruecos",
     "date": "2026-06-30",
     "time": "03:00",
@@ -1317,7 +1334,7 @@
     "id": "400021524",
     "phase": "Round of 32",
     "team_home": "Estados Unidos",
-    "team_away": "Por definir",
+    "team_away": "Bosnia y Herzegovina",
     "date": "2026-07-02",
     "time": "02:00",
     "venue": "Estadio de la Bahía de San Francisco",
@@ -1364,7 +1381,7 @@
   {
     "id": "400021515",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Australia",
     "team_away": "Por definir",
     "date": "2026-07-03",
     "time": "20:00",

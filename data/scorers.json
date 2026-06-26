@@ -74,9 +74,9 @@
     "Estados Unidos:Alex FREEMAN": 1,
     "Brasil:MATHEUS CUNHA": 3,
     "Paraguay:Matias GALARZA": 1,
-    "Países Bajos:Brian BROBBEY": 2,
+    "Países Bajos:Brian BROBBEY": 3,
     "Países Bajos:Cody GAKPO": 2,
-    "Suecia:Anthony ELANGA": 1,
+    "Suecia:Anthony ELANGA": 2,
     "Costa de Marfil:Franck KESSIE": 1,
     "Japón:Ayase UEDA": 2,
     "Japón:Junya ITO": 1,
@@ -112,7 +112,15 @@
     "Costa de Marfil:Nicolas PEPE": 2,
     "Alemania:Leroy Sané": 1,
     "Ecuador:Nilson ANGULO": 1,
-    "Ecuador:Gonzalo PLATA": 1
+    "Ecuador:Gonzalo PLATA": 1,
+    "Túnez:Hazem MASTOURI": 1,
+    "Países Bajos:Jan Paul VAN HECKE": 1,
+    "Japón:Daizen MAEDA": 1,
+    "Estados Unidos:Auston TRUSTY": 1,
+    "Turquía:Arda Güler": 1,
+    "Turquía:Baris Alper YILMAZ": 1,
+    "Estados Unidos:Sebastian BERHALTER": 1,
+    "Turquía:Kaan Ayhan": 1
   },
   "max_assists": 3,
   "assists": {
@@ -138,8 +146,8 @@
     "Japón:Takefusa KUBO": 1,
     "Japón:Koki OGAWA": 1,
     "Costa de Marfil:Wilfried SINGO": 1,
-    "Suecia:Viktor Gyökeres": 1,
-    "Túnez:Hannibal MEJBRI": 1,
+    "Suecia:Viktor Gyökeres": 2,
+    "Túnez:Hannibal MEJBRI": 2,
     "Suecia:Alexander Isak": 3,
     "Suecia:Lucas BERGVALL": 1,
     "Egipto:Mohamed Salah": 2,
@@ -214,6 +222,12 @@
     "Costa de Marfil:Yan DIOMANDE": 1,
     "Costa de Marfil:Ibrahim SANGARE": 1,
     "Ecuador:Pedro VITE": 1,
-    "Ecuador:Kevin RODRIGUEZ": 1
+    "Ecuador:Kevin RODRIGUEZ": 1,
+    "Países Bajos:Virgil VAN DIJK": 1,
+    "Países Bajos:Tijjani REIJNDERS": 1,
+    "Japón:Ritsu DOAN": 1,
+    "Estados Unidos:Sebastian BERHALTER": 1,
+    "Turquía:Baris Alper YILMAZ": 1,
+    "Turquía:Orkun KOKCU": 1
   }
 }

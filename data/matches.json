@@ -1114,10 +1114,13 @@
     "date": "2026-06-27",
     "time": "02:00",
     "venue": "Estadio Guadalajara",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "H"
+    "score_away": 1,
+    "group": "H",
+    "scorers": [
+      "España:Alex BAENA"
+    ]
   },
   {
     "id": "400021485",
@@ -1127,7 +1130,7 @@
     "date": "2026-06-27",
     "time": "02:00",
     "venue": "Estadio Houston",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
     "score_away": 0,
     "group": "H"
@@ -1140,10 +1143,18 @@
     "date": "2026-06-27",
     "time": "05:00",
     "venue": "Estadio BC Place Vancouver",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "G"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 5,
+    "group": "G",
+    "scorers": [
+      "Bélgica:Leandro TROSSARD",
+      "Bélgica:Leandro TROSSARD",
+      "Bélgica:Kevin De Bruyne",
+      "Nueva Zelanda:Elijah JUST",
+      "Bélgica:Romelu Lukaku",
+      "Bélgica:Alexis SAELEMAEKERS"
+    ]
   },
   {
     "id": "400021479",
@@ -1153,10 +1164,14 @@
     "date": "2026-06-27",
     "time": "05:00",
     "venue": "Estadio de Seattle",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "G"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 1,
+    "group": "G",
+    "scorers": [
+      "Egipto:MAHMOUD SABER",
+      "Irán:Ramin REZAEIAN"
+    ]
   },
   {
     "id": "400021508",
@@ -1264,7 +1279,7 @@
     "id": "400021513",
     "phase": "Round of 32",
     "team_home": "Alemania",
-    "team_away": "Por definir",
+    "team_away": "Paraguay",
     "date": "2026-06-29",
     "time": "22:30",
     "venue": "Estadio Boston",
@@ -1300,7 +1315,7 @@
     "id": "400021523",
     "phase": "Round of 32",
     "team_home": "Francia",
-    "team_away": "Por definir",
+    "team_away": "Suecia",
     "date": "2026-06-30",
     "time": "23:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
@@ -1335,7 +1350,7 @@
   {
     "id": "400021525",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Bélgica",
     "team_away": "Por definir",
     "date": "2026-07-01",
     "time": "22:00",
@@ -1359,7 +1374,7 @@
   {
     "id": "400021519",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "España",
     "team_away": "Por definir",
     "date": "2026-07-02",
     "time": "21:00",
@@ -1396,7 +1411,7 @@
     "id": "400021515",
     "phase": "Round of 32",
     "team_home": "Australia",
-    "team_away": "Por definir",
+    "team_away": "Egipto",
     "date": "2026-07-03",
     "time": "20:00",
     "venue": "Estadio Dallas",
@@ -1408,7 +1423,7 @@
     "id": "400021521",
     "phase": "Round of 32",
     "team_home": "Argentina",
-    "team_away": "Por definir",
+    "team_away": "Cabo Verde",
     "date": "2026-07-04",
     "time": "00:00",
     "venue": "Estadio Miami",

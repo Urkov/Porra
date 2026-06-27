@@ -37,8 +37,8 @@
     "Egipto:EMAM ASHOUR": 1,
     "Arabia Saudita:Abdulelah ALAMRI": 1,
     "Uruguay:Maxi ARAUJO": 2,
-    "Nueva Zelanda:Elijah JUST": 2,
-    "Irán:Ramin REZAEIAN": 1,
+    "Nueva Zelanda:Elijah JUST": 3,
+    "Irán:Ramin REZAEIAN": 2,
     "Irán:Mohammad MOHEBBI": 1,
     "Francia:Kylian Mbappé": 4,
     "Francia:Bradley BARCOLA": 1,
@@ -125,7 +125,13 @@
     "Senegal:Pape GUEYE": 2,
     "Senegal:Iliman NDIAYE": 1,
     "Noruega:Thelo AASGAARD": 1,
-    "Francia:Desire DOUE": 1
+    "Francia:Desire DOUE": 1,
+    "España:Alex BAENA": 1,
+    "Bélgica:Leandro TROSSARD": 2,
+    "Bélgica:Kevin De Bruyne": 1,
+    "Bélgica:Romelu Lukaku": 1,
+    "Bélgica:Alexis SAELEMAEKERS": 1,
+    "Egipto:MAHMOUD SABER": 1
   },
   "max_assists": 3,
   "assists": {
@@ -241,6 +247,11 @@
     "Francia:Kylian Mbappé": 2,
     "Noruega:Andreas SCHJELDERUP": 1,
     "Francia:Aurelien TCHOUAMENI": 1,
-    "Francia:Bradley BARCOLA": 1
+    "Francia:Bradley BARCOLA": 1,
+    "España:Marcos LLORENTE": 1,
+    "Bélgica:Hans VANAKEN": 1,
+    "Bélgica:Nicolas RASKIN": 1,
+    "Bélgica:Romelu Lukaku": 1,
+    "Egipto:TREZEGUET": 1
   }
 }

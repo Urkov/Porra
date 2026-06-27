@@ -472,16 +472,16 @@
           <div id="officialGroupsSection" class="space-y-3">
 
             <!-- Filtro de participante -->
-            <div class="flex flex-wrap items-center gap-3 pb-1">
-              <div class="flex items-center gap-2">
-                <i class="fa-solid fa-user text-rose-400/70 text-[10px]"></i>
-                <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Ver elecciones de:</span>
-                <select id="officialGroupsParticipantFilter" onchange="renderOfficialGroups()"
-                  class="select select-bordered select-xs bg-slate-950 border-slate-800 text-slate-200 text-[11px]">
-                  <option value="all">Vista general</option>
-                  <!-- Se rellena con JS -->
-                </select>
-              </div>
+            <div class="flex items-center gap-2 p-2 rounded-xl bg-rose-500/[0.07] border border-rose-500/25">
+              <i class="fa-solid fa-user text-rose-400 text-[11px] shrink-0"></i>
+              <label for="officialGroupsParticipantFilter" class="hidden sm:inline text-[11px] text-slate-300 font-semibold whitespace-nowrap shrink-0">
+                Ver elecciones de:
+              </label>
+              <select id="officialGroupsParticipantFilter" onchange="renderOfficialGroups()"
+                class="select select-bordered select-xs sm:select-sm bg-slate-950 border-rose-500/40 text-slate-100 text-[11px] sm:text-[12px] font-semibold focus:border-rose-400 min-w-0 flex-1 sm:flex-none">
+                <option value="all">Vista general</option>
+                <!-- Se rellena con JS -->
+              </select>
             </div>
 
             <!-- Leyenda -->
@@ -507,7 +507,24 @@
               Ocultar cuadro eliminatorias
             </button>
           </div>
-          <div id="bracketSection">
+          <div id="bracketSection" class="space-y-3">
+            <!-- Filtro de participante -->
+            <div class="flex items-center gap-2 p-2 rounded-xl bg-rose-500/[0.07] border border-rose-500/25">
+              <i class="fa-solid fa-user text-rose-400 text-[11px] shrink-0"></i>
+              <label for="bracketParticipantFilter" class="hidden sm:inline text-[11px] text-slate-300 font-semibold whitespace-nowrap shrink-0">
+                Ver elecciones de:
+              </label>
+              <select id="bracketParticipantFilter" onchange="window.renderKnockoutBracket()"
+                class="select select-bordered select-xs sm:select-sm bg-slate-950 border-rose-500/40 text-slate-100 text-[11px] sm:text-[12px] font-semibold focus:border-rose-400 min-w-0 flex-1 sm:flex-none">
+                <option value="all">Vista general</option>
+                <!-- Se rellena con JS -->
+              </select>
+            </div>
+            <!-- Pista: las selecciones son clicables -->
+            <p class="text-[10px] text-slate-500 flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-info text-rose-400/70"></i>
+              Toca el nombre de una selección para ver qué participantes la eligieron.
+            </p>
             <div id="knockout-bracket"></div>
           </div>
         </section>

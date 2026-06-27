@@ -2050,7 +2050,8 @@ function renderOfficialGroups() {
         : '<span class="w-5 shrink-0"></span>';
       const statsHtml = hasPlayed ? `
         <div class="text-[9px] text-slate-500 pl-1.5 -mt-0.5 pb-0.5 flex items-center gap-1.5 ${selPart && !isChosen ? 'opacity-40' : ''}">
-          ${chooserBadge}<span>${row.played}PJ · ${row.won}V ${row.drawn}E ${row.lost}D · ${row.gf}-${row.ga} (${row.gd >= 0 ? '+' : ''}${row.gd})</span>
+          ${chooserBadge}<span class="flex-1">${row.played}PJ · ${row.won}V ${row.drawn}E ${row.lost}D · ${row.gf}-${row.ga} (${row.gd >= 0 ? '+' : ''}${row.gd})</span>
+          ${choosers.length > 0 ? `<i class="fa-solid fa-chevron-down text-[8px] text-rose-400/70 shrink-0 transition-transform" id="${teamPanelId}_caret"></i>` : ''}
         </div>` : '';
 
       // Puntos compartidos: todos los que eligen el mismo equipo acumulan
@@ -2086,7 +2087,7 @@ function renderOfficialGroups() {
       const anyChosen = choosers.length > 0;
       const noFilterChosenClass = (!selPart && anyChosen) ? 'bg-slate-800/20' : '';
       const clickable = anyChosen
-        ? `onclick="event.stopPropagation(); document.getElementById('${teamPanelId}').classList.toggle('hidden')" style="cursor:pointer"`
+        ? `onclick="event.stopPropagation(); document.getElementById('${teamPanelId}').classList.toggle('hidden'); document.getElementById('${teamPanelId}_caret').classList.toggle('rotate-180')" style="cursor:pointer"`
         : '';
       const hoverClass = anyChosen ? 'hover:bg-slate-800/40' : '';
 

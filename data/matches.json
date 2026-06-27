@@ -1181,10 +1181,14 @@
     "date": "2026-06-27",
     "time": "23:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0,
-    "group": "L"
+    "score_away": 2,
+    "group": "L",
+    "scorers": [
+      "Inglaterra:Jude Bellingham",
+      "Inglaterra:Harry Kane"
+    ]
   },
   {
     "id": "400021509",
@@ -1194,10 +1198,15 @@
     "date": "2026-06-27",
     "time": "23:00",
     "venue": "Estadio Filadelfia",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "L"
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 1,
+    "group": "L",
+    "scorers": [
+      "Croacia:Petar SUCIC",
+      "Ghana:Derrick LUCKASSEN",
+      "Croacia:Nikola VLASIC"
+    ]
   },
   {
     "id": "400021500",
@@ -1327,7 +1336,7 @@
     "id": "400021520",
     "phase": "Round of 32",
     "team_home": "México",
-    "team_away": "Por definir",
+    "team_away": "Ecuador",
     "date": "2026-07-01",
     "time": "03:00",
     "venue": "Estadio Ciudad de México",
@@ -1338,7 +1347,7 @@
   {
     "id": "400021512",
     "phase": "Round of 32",
-    "team_home": "Por definir",
+    "team_home": "Inglaterra",
     "team_away": "Por definir",
     "date": "2026-07-01",
     "time": "18:00",
@@ -1387,7 +1396,7 @@
     "id": "400021526",
     "phase": "Round of 32",
     "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_away": "Croacia",
     "date": "2026-07-03",
     "time": "01:00",
     "venue": "Estadio de Toronto",
@@ -1435,7 +1444,7 @@
     "id": "400021517",
     "phase": "Round of 32",
     "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_away": "Ghana",
     "date": "2026-07-04",
     "time": "03:30",
     "venue": "Estadio Kansas City",

@@ -56,7 +56,12 @@
     ],
     "J": [],
     "K": [],
-    "L": []
+    "L": [
+      "Inglaterra",
+      "Croacia",
+      "Ghana",
+      "Panamá"
+    ]
   },
   "actual_podium": {
     "P1": "",
@@ -621,53 +626,53 @@
     "L": [
       {
         "team": "Inglaterra",
-        "played": 2,
-        "won": 1,
+        "played": 3,
+        "won": 2,
         "drawn": 1,
         "lost": 0,
-        "gf": 4,
+        "gf": 6,
         "ga": 2,
-        "gd": 2,
-        "points": 4,
+        "gd": 4,
+        "points": 7,
         "position": 1
       },
       {
-        "team": "Ghana",
-        "played": 2,
-        "won": 1,
-        "drawn": 1,
-        "lost": 0,
-        "gf": 1,
-        "ga": 0,
-        "gd": 1,
-        "points": 4,
+        "team": "Croacia",
+        "played": 3,
+        "won": 2,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 5,
+        "ga": 5,
+        "gd": 0,
+        "points": 6,
         "position": 2
       },
       {
-        "team": "Croacia",
-        "played": 2,
+        "team": "Ghana",
+        "played": 3,
         "won": 1,
-        "drawn": 0,
+        "drawn": 1,
         "lost": 1,
-        "gf": 3,
-        "ga": 4,
-        "gd": -1,
-        "points": 3,
+        "gf": 2,
+        "ga": 2,
+        "gd": 0,
+        "points": 4,
         "position": 3
       },
       {
         "team": "Panamá",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
+        "lost": 3,
         "gf": 0,
-        "ga": 2,
-        "gd": -2,
+        "ga": 4,
+        "gd": -4,
         "points": 0,
         "position": 4
       }
     ]
   },
-  "lastUpdate": "2026-06-27T05:52:10.132Z"
+  "lastUpdate": "2026-06-27T23:03:44.513Z"
 }

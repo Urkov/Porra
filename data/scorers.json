@@ -52,10 +52,10 @@
     "Austria:Marko ARNAUTOVIC": 1,
     "Portugal:JOAO NEVES": 1,
     "RD Congo:Yoane WISSA": 1,
-    "Inglaterra:Harry Kane": 2,
+    "Inglaterra:Harry Kane": 3,
     "Croacia:Martin BATURINA": 1,
     "Croacia:Petar Musa": 1,
-    "Inglaterra:Jude Bellingham": 1,
+    "Inglaterra:Jude Bellingham": 2,
     "Inglaterra:Marcus RASHFORD": 1,
     "Ghana:Caleb YIRENKYI": 1,
     "Colombia:Daniel MUNOZ": 2,
@@ -131,7 +131,10 @@
     "Bélgica:Kevin De Bruyne": 1,
     "Bélgica:Romelu Lukaku": 1,
     "Bélgica:Alexis SAELEMAEKERS": 1,
-    "Egipto:MAHMOUD SABER": 1
+    "Egipto:MAHMOUD SABER": 1,
+    "Croacia:Petar SUCIC": 1,
+    "Ghana:Derrick LUCKASSEN": 1,
+    "Croacia:Nikola VLASIC": 1
   },
   "max_assists": 3,
   "assists": {
@@ -180,7 +183,7 @@
     "Inglaterra:Declan RICE": 1,
     "Croacia:Ivan PERISIC": 1,
     "Inglaterra:Elliot ANDERSON": 1,
-    "Inglaterra:Bukayo Saka": 1,
+    "Inglaterra:Bukayo Saka": 2,
     "Colombia:Luis Díaz": 1,
     "Colombia:Gustavo PUERTA": 1,
     "Colombia:Cucho HERNANDEZ": 1,
@@ -252,6 +255,10 @@
     "Bélgica:Hans VANAKEN": 1,
     "Bélgica:Nicolas RASKIN": 1,
     "Bélgica:Romelu Lukaku": 1,
-    "Egipto:TREZEGUET": 1
+    "Egipto:TREZEGUET": 1,
+    "Inglaterra:Jude Bellingham": 1,
+    "Croacia:Mateo KOVACIC": 1,
+    "Ghana:Ernest NUAMAH": 1,
+    "Croacia:Luka MODRIC": 1
   }
 }

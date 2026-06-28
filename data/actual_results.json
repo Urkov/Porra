@@ -55,7 +55,12 @@
       "Irak"
     ],
     "J": [],
-    "K": [],
+    "K": [
+      "Colombia",
+      "Portugal",
+      "RD Congo",
+      "Uzbekistán"
+    ],
     "L": [
       "Inglaterra",
       "Croacia",
@@ -600,25 +605,25 @@
       },
       {
         "team": "RD Congo",
-        "played": 2,
-        "won": 0,
+        "played": 3,
+        "won": 1,
         "drawn": 1,
         "lost": 1,
-        "gf": 1,
-        "ga": 2,
-        "gd": -1,
-        "points": 1,
+        "gf": 4,
+        "ga": 3,
+        "gd": 1,
+        "points": 4,
         "position": 3
       },
       {
         "team": "Uzbekistán",
-        "played": 2,
+        "played": 3,
         "won": 0,
         "drawn": 0,
-        "lost": 2,
-        "gf": 1,
-        "ga": 8,
-        "gd": -7,
+        "lost": 3,
+        "gf": 2,
+        "ga": 11,
+        "gd": -9,
         "points": 0,
         "position": 4
       }
@@ -674,5 +679,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-06-28T01:29:50.765Z"
+  "lastUpdate": "2026-06-28T01:33:41.177Z"
 }

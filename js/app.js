@@ -733,8 +733,10 @@ function computeScores() {
     // por un partido eliminatorio posterior.
     Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
       predictedList.forEach((team_pred) => {
-        // Evitar doble conteo con fases eliminatorias ya procesadas
-        const alreadyCounted = Object.values(roundsPassedByTeamsByPhase).some(s => s.has(team_pred));
+        // Evitar doble conteo: solo saltar si ya se sumó este pase concreto (grupos → dieciseisavos).
+        // No saltar si el equipo ya aparece en fases eliminatorias posteriores, porque esos son
+        // pases de ronda distintos (dieciseisavos → octavos, etc.) que se suman por separado.
+        const alreadyCounted = roundsPassedByTeamsByPhase['groups_to_r16']?.has(team_pred);
         if (alreadyCounted) return;
 
         const { pos: realPosNumber, definitive: groupFinished } =
@@ -1192,7 +1194,7 @@ function computeParticipantTeamPoints(participant) {
   // 4b (modal). PASE DE RONDA: CLASIFICARSE A DIECISEISAVOS
   Object.entries(participant.predictions).forEach(([grpName, predictedList]) => {
     predictedList.forEach((teamName) => {
-      const alreadyCounted = Object.values(roundsPassedByTeamsByPhase).some(s => s.has(teamName));
+      const alreadyCounted = roundsPassedByTeamsByPhase['groups_to_r16']?.has(teamName);
       if (alreadyCounted) return;
 
       const { pos: realPosNumber, definitive: groupFinished } =

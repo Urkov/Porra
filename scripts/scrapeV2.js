@@ -397,6 +397,7 @@ async function main() {
 
     const match = {
       id: m.IdMatch,
+      idStage: m.IdStage || null,
       phase,
       team_home: homeName,
       team_away: awayName,

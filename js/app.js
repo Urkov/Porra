@@ -831,6 +831,41 @@ function renderLeaderboard() {
 
   tbody.innerHTML = '';
 
+  // Precalcular equipos eliminados para el contador de selecciones vivas
+  const wcStandingsLB = computeOfficialGroupStandings(currentMatches);
+  const allGroupsFinishedLB = Object.keys(wcStandingsLB).length >= 12 &&
+    Object.values(wcStandingsLB).every(rows => rows.every(r => r.played >= 3));
+  const bestThirdsLB = getBestThirds(wcStandingsLB);
+  const knockoutEliminatedLB = new Set();
+  currentMatches.forEach(m => {
+    if (m.status !== 'finished' || m.phase === 'groups') return;
+    const winner = m.decided_by === 'penalties' ? m.winner_passed
+                 : (m.score_home > m.score_away ? m.team_home : m.team_away);
+    if (winner === m.team_home) knockoutEliminatedLB.add(m.team_away);
+    else if (winner === m.team_away) knockoutEliminatedLB.add(m.team_home);
+  });
+
+  function isTeamAlive(teamName) {
+    if (knockoutEliminatedLB.has(teamName)) return false;
+    // Buscar su posición real en grupos
+    for (const rows of Object.values(wcStandingsLB)) {
+      const row = rows.find(r => r.team === teamName);
+      if (!row) continue;
+      if (row.played >= 3) {
+        if (row.position === 4) return false;
+        if (row.position === 3 && allGroupsFinishedLB && !bestThirdsLB.has(teamName)) return false;
+      } else if (row.position === 4 && checkFourthMathematicallyOut(teamName, wcStandingsLB, currentMatches)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function countAliveSelections(participant) {
+    const allTeams = Object.values(participant.predictions).flat();
+    return allTeams.filter(t => isTeamAlive(t)).length;
+  }
+
   sorted.forEach((participant, idx) => {
     const isFirst = idx === 0;
     const isSecond = idx === 1;
@@ -859,6 +894,11 @@ function renderLeaderboard() {
       highlightClass = "bg-rose-950/5 border-l-4 border-rose-500";
     }
 
+    const aliveCount = countAliveSelections(participant);
+    const totalSelections = Object.values(participant.predictions).flat().length;
+    const aliveColor = aliveCount === 0 ? 'text-rose-500' : aliveCount <= 3 ? 'text-amber-400' : 'text-emerald-400';
+    const aliveHtml = `<span class="text-[10px] font-normal ${aliveColor} ml-1">(${aliveCount} de ${totalSelections})</span>`;
+
     const tr = document.createElement('tr');
     tr.className = `hover:bg-slate-900 border-b border-slate-900/60 cursor-pointer transition ${highlightClass}`;
     tr.onclick = () => showParticipantDetail(participant.id);
@@ -874,7 +914,7 @@ function renderLeaderboard() {
       <td class="font-bold text-white text-sm md:text-base py-2 md:py-3">
         <div class="flex items-center justify-between gap-2">
           <div class="min-w-0">
-            <div class="truncate">${participant.name}</div>
+            <div class="truncate">${participant.name}${aliveHtml}</div>
             ${isLast ? '<span class="text-[10px] text-rose-500 block font-normal">Sótano (10% premio)</span>' : ''}
             ${isFirst ? '<span class="text-[10px] text-amber-400 block font-normal">Líder Provisional (50% premio)</span>' : ''}
             <div class="flex lg:hidden flex-wrap gap-x-2 gap-y-0.5 mt-1">
@@ -2383,6 +2423,16 @@ async function renderMatches() {
       </div>
 
       <div class="border-t border-slate-900/60 pt-2 text-[10px] text-slate-400 flex flex-col gap-1">
+        ${isFinished && m.id ? `
+        <div class="flex justify-center pb-1">
+          <button onclick="openFifaSummary('${m.id}', '${m.idStage || ''}', '${m.team_home}', '${m.team_away}')"
+            class="btn btn-xs btn-ghost text-slate-400 border border-slate-800 hover:border-rose-500/40 hover:text-rose-400 gap-1.5 h-auto py-1 transition-colors">
+            <i class="fa-solid fa-chart-bar text-[10px]"></i>
+            <span class="text-[10px]">Resumen del partido</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-60"></i>
+          </button>
+        </div>
+        ` : ''}
         <div class="flex justify-between items-center text-slate-450 gap-2">
            <span class="shrink-0 flex items-center gap-1.5">
             <i class="fa-solid fa-calendar-day text-rose-500/80"></i>
@@ -2519,4 +2569,16 @@ function renderScorers() {
       </div>
     `;
   });
+}
+
+/**
+ * Abre una confirmación para ver el resumen del partido en FIFA.com
+ */
+function openFifaSummary(matchId, idStage, teamHome, teamAway) {
+  const stage = idStage || '289273';
+  const url = `https://www.fifa.com/es/match-centre/match/17/285023/${stage}/${matchId}`;
+  const confirmed = window.confirm(`¿Abrir el resumen de ${teamHome} vs ${teamAway} en la web oficial de la FIFA?`);
+  if (confirmed) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
 }

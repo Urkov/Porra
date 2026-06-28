@@ -410,7 +410,7 @@
             <tr>
               <th class="w-[28px] px-0 text-center"></th>
 
-              <th class="min-w-[140px]">Participante</th>
+              <th class="min-w-[140px]">Participante <span class="text-[9px] font-normal text-slate-500 normal-case">(Selec. Vivos)</span></th>
 
               <th class="hidden lg:table-cell text-center w-16">Partidos</th>
               <th class="hidden lg:table-cell text-center w-16">Goles</th>
@@ -453,41 +453,31 @@
         </div>
 
         <div class="space-y-3">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div class="space-y-1">
-              <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                  <i class="fa-solid fa-people-group text-emerald-500"></i> Grupos Oficiales
-                </h3>
-              <p class="text-[10px] text-slate-500 leading-relaxed">
-                Clasificación en vivo según los resultados de fase de grupos. Se recalcula automáticamente con cada actualización del scraper diario.
-              </p>
+          <div class="space-y-1.5">
+            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                <i class="fa-solid fa-people-group text-emerald-500 shrink-0"></i> Grupos Oficiales
+              </h3>
+            <div class="flex flex-wrap items-center gap-2 w-full">
+              <button id="toggleOfficialGroupsBtn" type="button" onclick="toggleOfficialGroups()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900" style="flex: 1 1 140px;">
+                Ocultar grupos oficiales
+              </button>
+              <div class="flex items-center gap-1.5 p-1.5 rounded-xl bg-rose-500/[0.07] border border-rose-500/25 overflow-hidden" style="flex: 2 1 180px;">
+                <i class="fa-solid fa-user text-rose-400 text-[11px] shrink-0"></i>
+                <select id="officialGroupsParticipantFilter" onchange="renderOfficialGroups()"
+                  class="select select-bordered select-xs bg-slate-950 border-rose-500/40 text-slate-100 text-[11px] font-semibold focus:border-rose-400 w-0 flex-1 min-w-0">
+                  <option value="all">Vista general</option>
+                  <!-- Se rellena con JS -->
+                </select>
+              </div>
             </div>
-            <button id="toggleOfficialGroupsBtn" type="button" onclick="toggleOfficialGroups()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
-              Ocultar grupos oficiales
-            </button>
           </div>
-
-          
 
           <div id="officialGroupsSection" class="space-y-3">
 
-            <!-- Filtro de participante -->
-            <div class="flex items-center gap-2 p-2 rounded-xl bg-rose-500/[0.07] border border-rose-500/25">
-              <i class="fa-solid fa-user text-rose-400 text-[11px] shrink-0"></i>
-              <label for="officialGroupsParticipantFilter" class="hidden sm:inline text-[11px] text-slate-300 font-semibold whitespace-nowrap shrink-0">
-                Ver elecciones de:
-              </label>
-              <select id="officialGroupsParticipantFilter" onchange="renderOfficialGroups()"
-                class="select select-bordered select-xs sm:select-sm bg-slate-950 border-rose-500/40 text-slate-100 text-[11px] sm:text-[12px] font-semibold focus:border-rose-400 min-w-0 flex-1 sm:flex-none">
-                <option value="all">Vista general</option>
-                <!-- Se rellena con JS -->
-              </select>
-            </div>
-
             <!-- Leyenda -->
             <div class="flex flex-wrap gap-3 text-[9px] text-slate-500 pt-0.5">
-              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-emerald-500/80"></span> Clasificados (1º-2º + mejores 3os)</span>
-              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-amber-500/60"></span> Posible 3º fuera del top 8</span>
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-emerald-500/80"></span> 1º-2º + mejores 3os</span>
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-sm bg-amber-500/60"></span> 3º fuera del top 8</span>
               <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm ring-1 ring-rose-400/70 bg-rose-500/10"></span> Selección elegida</span>
             </div>
 
@@ -499,27 +489,25 @@
 
         <!-- ═══ Cuadro de Eliminatorias ═══════════════════════════════════════════ -->
         <section id="bracket" class="space-y-3">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+          <div class="space-y-1.5">
             <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <i class="fa-solid fa-sitemap text-rose-500"></i> Cuadro Eliminatorias
+              <i class="fa-solid fa-sitemap text-rose-500 shrink-0"></i> Cuadro Eliminatorias
             </h3>
-            <button id="toggleBracketBtn" type="button" onclick="toggleBracket()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900">
-              Ocultar cuadro eliminatorias
-            </button>
+            <div class="flex flex-wrap items-center gap-2 w-full">
+              <button id="toggleBracketBtn" type="button" onclick="toggleBracket()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900" style="flex: 1 1 140px;">
+                Ocultar cuadro eliminatorias
+              </button>
+              <div class="flex items-center gap-1.5 p-1.5 rounded-xl bg-rose-500/[0.07] border border-rose-500/25 overflow-hidden" style="flex: 2 1 180px;">
+                <i class="fa-solid fa-user text-rose-400 text-[11px] shrink-0"></i>
+                <select id="bracketParticipantFilter" onchange="window.renderKnockoutBracket()"
+                  class="select select-bordered select-xs bg-slate-950 border-rose-500/40 text-slate-100 text-[11px] font-semibold focus:border-rose-400 w-0 flex-1 min-w-0">
+                  <option value="all">Vista general</option>
+                  <!-- Se rellena con JS -->
+                </select>
+              </div>
+            </div>
           </div>
           <div id="bracketSection" class="space-y-3">
-            <!-- Filtro de participante -->
-            <div class="flex items-center gap-2 p-2 rounded-xl bg-rose-500/[0.07] border border-rose-500/25">
-              <i class="fa-solid fa-user text-rose-400 text-[11px] shrink-0"></i>
-              <label for="bracketParticipantFilter" class="hidden sm:inline text-[11px] text-slate-300 font-semibold whitespace-nowrap shrink-0">
-                Ver elecciones de:
-              </label>
-              <select id="bracketParticipantFilter" onchange="window.renderKnockoutBracket()"
-                class="select select-bordered select-xs sm:select-sm bg-slate-950 border-rose-500/40 text-slate-100 text-[11px] sm:text-[12px] font-semibold focus:border-rose-400 min-w-0 flex-1 sm:flex-none">
-                <option value="all">Vista general</option>
-                <!-- Se rellena con JS -->
-              </select>
-            </div>
             <!-- Pista: las selecciones son clicables -->
             <p class="text-[10px] text-slate-500 flex items-center gap-1.5">
               <i class="fa-solid fa-circle-info text-rose-400/70"></i>
@@ -533,17 +521,17 @@
           <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
             <i class="fa-solid fa-calendar-days text-emerald-500"></i> Calendario
           </h3>
-          <div class="flex items-center gap-2">
-            <button id="toggleFinishedBtn" type="button" onclick="toggleFinishedMatches()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900 flex-1 md:flex-none">
-              <i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i>
+          <div class="flex items-stretch gap-2">
+            <button id="toggleFinishedBtn" type="button" onclick="toggleFinishedMatches()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900 flex-1 md:flex-none h-auto min-h-[1.75rem] py-1 items-start whitespace-normal text-left">
+              <i class="fa-solid fa-eye-slash text-rose-400 mr-1 mt-0.5 shrink-0"></i>
               <span class="hidden sm:inline">Ocultar</span>finalizados
             </button>
-            <button id="toggleFreeToAirBtn" type="button" onclick="toggleFreeToAirMatches()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900 flex-1 md:flex-none">
-              <i class="fa-solid fa-tv text-slate-400 mr-1"></i>
+            <button id="toggleFreeToAirBtn" type="button" onclick="toggleFreeToAirMatches()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900 flex-1 md:flex-none h-auto min-h-[1.75rem] py-1 items-start whitespace-normal text-left">
+              <i class="fa-solid fa-tv text-slate-400 mr-1 mt-0.5 shrink-0"></i>
               <span class="hidden sm:inline">Partidos</span>en Abierto
             </button>
-            <button id="toggleCalendarBtn" type="button" onclick="toggleCalendar()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900 flex-1 md:flex-none">
-              <i class="fa-solid fa-eye-slash text-rose-400 mr-1"></i><span class="hidden sm:inline">Ocultar</span>calendario
+            <button id="toggleCalendarBtn" type="button" onclick="toggleCalendar()" class="btn btn-xs btn-ghost text-slate-300 border border-slate-800 hover:bg-slate-900 flex-1 md:flex-none h-auto min-h-[1.75rem] py-1 items-start whitespace-normal text-left">
+              <i class="fa-solid fa-eye-slash text-rose-400 mr-1 mt-0.5 shrink-0"></i><span class="hidden sm:inline">Ocultar</span>calendario
             </button>
           </div>
         </div>
@@ -610,32 +598,32 @@
   <!-- Modal Detallado de Participante -->
   <dialog id="participantModal" class="modal bg-slate-950/80 backdrop-blur-sm">
     <div class="modal-box bg-slate-900 border border-rose-500/30 w-[calc(100vw-1.5rem)] max-w-4xl p-3 md:p-6 rounded-2xl shadow-2xl relative overflow-y-auto overflow-x-hidden">
-      <form method="dialog">
-        <button type="submit" class="btn btn-sm btn-circle btn-ghost absolute right-4 top-4 text-slate-400 hover:text-white">✕</button>
-      </form>
-      
-      <!-- Cabecera del Participante -->
-      <div class="flex flex-wrap items-center gap-3 mb-4 md:mb-6 border-b border-slate-800 pb-4 pr-10">
-        <span class="text-3xl md:text-4xl shrink-0" id="modalPartIcon">🧐</span>
-        <div class="min-w-0 flex-1">
-          <h3 class="text-xl md:text-2xl font-black text-white truncate" id="modalPartName">Participante</h3>
-          <p class="text-xs md:text-sm text-slate-400 flex flex-wrap items-center gap-1">Puntuación Total: <span class="badge badge-rose font-bold text-sm" id="modalPartRank">0 Ptos</span></p>
-        </div>
-        <!-- Navegación entre participantes -->
-        <div class="flex items-center shrink-0 bg-slate-950 border border-slate-800 rounded-full p-0.5 gap-0.5">
+      <!-- Top-right: flechas de navegación + cerrar -->
+      <div class="absolute right-4 top-3.5 flex items-center gap-1.5">
+        <div class="flex items-center bg-slate-950 border border-slate-800 rounded-full p-0.5 gap-0.5">
           <button type="button" id="modalPartPrevBtn" onclick="navigateParticipantDetail(-1)"
-            class="group flex items-center gap-1.5 pl-3 pr-2.5 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-rose-500/15 active:scale-95 transition-all duration-150 disabled:opacity-25 disabled:hover:bg-transparent disabled:hover:text-slate-400 disabled:active:scale-100"
+            class="group flex items-center gap-1 pl-2 pr-1.5 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-rose-500/15 active:scale-95 transition-all duration-150 disabled:opacity-25 disabled:hover:bg-transparent disabled:hover:text-slate-400 disabled:active:scale-100"
             title="Participante anterior" aria-label="Participante anterior">
             <i class="fa-solid fa-chevron-left text-[11px] group-hover:-translate-x-0.5 transition-transform duration-150"></i>
-            <span class="hidden sm:inline text-xs font-semibold">Anterior</span>
           </button>
           <span class="w-px h-4 bg-slate-800"></span>
           <button type="button" id="modalPartNextBtn" onclick="navigateParticipantDetail(1)"
-            class="group flex items-center gap-1.5 pl-2.5 pr-3 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-rose-500/15 active:scale-95 transition-all duration-150 disabled:opacity-25 disabled:hover:bg-transparent disabled:hover:text-slate-400 disabled:active:scale-100"
+            class="group flex items-center gap-1 pl-1.5 pr-2 py-1.5 rounded-full text-slate-400 hover:text-white hover:bg-rose-500/15 active:scale-95 transition-all duration-150 disabled:opacity-25 disabled:hover:bg-transparent disabled:hover:text-slate-400 disabled:active:scale-100"
             title="Siguiente participante" aria-label="Siguiente participante">
-            <span class="hidden sm:inline text-xs font-semibold">Siguiente</span>
             <i class="fa-solid fa-chevron-right text-[11px] group-hover:translate-x-0.5 transition-transform duration-150"></i>
           </button>
+        </div>
+        <form method="dialog">
+          <button type="submit" class="btn btn-sm btn-circle btn-ghost text-slate-400 hover:text-white">✕</button>
+        </form>
+      </div>
+
+      <!-- Cabecera del Participante -->
+      <div class="flex items-center gap-3 mb-4 md:mb-6 border-b border-slate-800 pb-4 pr-28">
+        <span class="text-3xl md:text-4xl shrink-0" id="modalPartIcon">🧐</span>
+        <div class="min-w-0 flex-1">
+          <h3 class="text-xl md:text-2xl font-black text-white truncate" id="modalPartName">Participante</h3>
+          <p class="text-xs md:text-sm text-slate-400 flex items-center gap-1 flex-nowrap">Puntuación Total: <span class="badge badge-rose font-bold text-sm whitespace-nowrap" id="modalPartRank">0 Ptos</span></p>
         </div>
       </div>
 

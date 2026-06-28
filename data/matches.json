@@ -1319,10 +1319,18 @@
     "date": "2026-06-28",
     "time": "04:00",
     "venue": "Estadio Kansas City",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "J"
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 3,
+    "group": "J",
+    "scorers": [
+      "Austria:Marko ARNAUTOVIC",
+      "Argelia:Rafik BELGHALI",
+      "Austria:Marcel SABITZER",
+      "Argelia:Riyad Mahrez",
+      "Argelia:Riyad Mahrez",
+      "Austria:Sasa KALAJDZIC"
+    ]
   },
   {
     "id": "400021495",
@@ -1333,10 +1341,16 @@
     "date": "2026-06-28",
     "time": "04:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0,
-    "group": "J"
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 3,
+    "group": "J",
+    "scorers": [
+      "Argentina:Giovani Lo Celso",
+      "Argentina:Lautaro Martínez",
+      "Jordania:MOUSA ALTAMARI",
+      "Argentina:Lionel Messi"
+    ]
   },
   {
     "id": "400021518",
@@ -1473,7 +1487,7 @@
     "idStage": "289287",
     "phase": "Round of 32",
     "team_home": "España",
-    "team_away": "Por definir",
+    "team_away": "Austria",
     "date": "2026-07-02",
     "time": "21:00",
     "venue": "Estadio Los Angeles",
@@ -1499,7 +1513,7 @@
     "idStage": "289287",
     "phase": "Round of 32",
     "team_home": "Suiza",
-    "team_away": "Por definir",
+    "team_away": "Argelia",
     "date": "2026-07-03",
     "time": "05:00",
     "venue": "Estadio BC Place Vancouver",

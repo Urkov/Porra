@@ -1,5 +1,5 @@
 {
-  "max_goals": 5,
+  "max_goals": 6,
   "players": {
     "México:Julian QUINONES": 2,
     "México:Raul JIMENEZ": 1,
@@ -46,10 +46,10 @@
     "Noruega:Erling Haaland": 4,
     "Irak:AYMEN HUSSEIN": 1,
     "Noruega:Leo OSTIGARD": 1,
-    "Argentina:Lionel Messi": 5,
+    "Argentina:Lionel Messi": 6,
     "Austria:Romano SCHMID": 1,
     "Jordania:ALI OLWAN": 1,
-    "Austria:Marko ARNAUTOVIC": 1,
+    "Austria:Marko ARNAUTOVIC": 2,
     "Portugal:JOAO NEVES": 1,
     "RD Congo:Yoane WISSA": 3,
     "Inglaterra:Harry Kane": 3,
@@ -136,7 +136,14 @@
     "Ghana:Derrick LUCKASSEN": 1,
     "Croacia:Nikola VLASIC": 1,
     "Uzbekistán:Eldor SHOMURODOV": 1,
-    "RD Congo:Fiston MAYELE": 1
+    "RD Congo:Fiston MAYELE": 1,
+    "Argelia:Rafik BELGHALI": 1,
+    "Austria:Marcel SABITZER": 1,
+    "Argelia:Riyad Mahrez": 2,
+    "Austria:Sasa KALAJDZIC": 1,
+    "Argentina:Giovani Lo Celso": 1,
+    "Argentina:Lautaro Martínez": 1,
+    "Jordania:MOUSA ALTAMARI": 1
   },
   "max_assists": 3,
   "assists": {
@@ -263,6 +270,11 @@
     "Ghana:Ernest NUAMAH": 1,
     "Croacia:Luka MODRIC": 1,
     "Uzbekistán:Akmal MOZGOVOY": 1,
-    "RD Congo:Meschack ELIA": 1
+    "RD Congo:Meschack ELIA": 1,
+    "Austria:David ALABA": 1,
+    "Austria:Konrad LAIMER": 1,
+    "Argelia:Houssem Aouar": 2,
+    "Austria:Michael Gregoritsch": 1,
+    "Jordania:EHSAN HADDAD": 1
   }
 }

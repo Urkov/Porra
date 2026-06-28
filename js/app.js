@@ -2037,6 +2037,7 @@ function renderOfficialGroups() {
       // ── Panel de participantes que han elegido este equipo ───────────────
       const teamPanelId = `og_team_${group}_${row.team.replace(/[^a-zA-Z0-9]/g, '_')}`;
 
+      // Participantes que lo tienen en sus selecciones de grupo
       const choosers = participants
         .filter(p => Object.values(p.predictions).flat().includes(row.team))
         .map(p => {
@@ -2044,14 +2045,18 @@ function renderOfficialGroups() {
           return { name: p.name, tp };
         });
 
+      // Hay algo que mostrar en el panel expandible
+      const anyChosen = choosers.length > 0;
+      const hasPanel = anyChosen;
+
       // Stats de partido + contador de participantes que lo eligieron (en todos los tamaños)
-      const chooserBadge = choosers.length > 0
+      const chooserBadge = anyChosen
         ? `<span class="text-slate-500 shrink-0 flex items-center gap-0.5"><i class="fa-solid fa-user text-[8px]"></i>${choosers.length}</span>`
         : '<span class="w-5 shrink-0"></span>';
       const statsHtml = hasPlayed ? `
         <div class="text-[9px] text-slate-500 pl-1.5 -mt-0.5 pb-0.5 flex items-center gap-1.5 ${selPart && !isChosen ? 'opacity-40' : ''}">
           ${chooserBadge}<span class="flex-1">${row.played}PJ · ${row.won}V ${row.drawn}E ${row.lost}D · ${row.gf}-${row.ga} (${row.gd >= 0 ? '+' : ''}${row.gd})</span>
-          ${choosers.length > 0 ? `<i class="fa-solid fa-chevron-down text-[8px] text-rose-400/70 shrink-0 transition-transform" id="${teamPanelId}_caret"></i>` : ''}
+          ${hasPanel ? `<i class="fa-solid fa-chevron-down text-[8px] text-rose-400/70 shrink-0 transition-transform" id="${teamPanelId}_caret"></i>` : ''}
         </div>` : '';
 
       // Puntos compartidos: todos los que eligen el mismo equipo acumulan
@@ -2062,34 +2067,40 @@ function renderOfficialGroups() {
       const sharedRounds  = refTp ? refTp.rounds  : 0;
 
       let teamPanelHtml = '';
-      if (choosers.length > 0) {
-        const namesHtml = choosers.map(c => c.name).join(', ');
-
-        const breakdownParts = [];
-        if (sharedMatches > 0) breakdownParts.push({ label: 'Partidos', val: sharedMatches, color: 'bg-sky-950/60 border-sky-700/50 text-sky-300' });
-        if (sharedGroups  > 0) breakdownParts.push({ label: 'F.Grupo',   val: sharedGroups,  color: 'bg-violet-950/60 border-violet-700/50 text-violet-300' });
-        if (sharedRounds  > 0) breakdownParts.push({ label: 'Rondas',   val: sharedRounds,  color: 'bg-emerald-950/60 border-emerald-700/50 text-emerald-300' });
-        const breakdownHtml = breakdownParts.length > 0
-          ? `<div class="flex flex-wrap gap-1 mt-0.5">${breakdownParts.map(b => `
-              <span class="inline-flex items-center gap-0.5 border rounded px-1 py-px text-[8px] font-bold ${b.color}">
-                ${b.label} <span class="font-black">+${formatPointsLabel(b.val)}</span>
-              </span>`).join('')}</div>`
-          : `<span class="text-slate-600 text-[9px]">Sin puntos por ahora</span>`;
+      if (hasPanel) {
+        // Sección: participantes que lo seleccionaron en grupos
+        let selectorsHtml = '';
+        if (choosers.length > 0) {
+          const namesHtml = choosers.map(c => c.name).join(', ');
+          const breakdownParts = [];
+          if (sharedMatches > 0) breakdownParts.push({ label: 'Partidos', val: sharedMatches, color: 'bg-sky-950/60 border-sky-700/50 text-sky-300' });
+          if (sharedGroups  > 0) breakdownParts.push({ label: 'F.Grupo',  val: sharedGroups,  color: 'bg-violet-950/60 border-violet-700/50 text-violet-300' });
+          if (sharedRounds  > 0) breakdownParts.push({ label: 'Rondas',   val: sharedRounds,  color: 'bg-emerald-950/60 border-emerald-700/50 text-emerald-300' });
+          const breakdownHtml = breakdownParts.length > 0
+            ? `<div class="flex flex-wrap gap-1 mt-0.5">${breakdownParts.map(b => `
+                <span class="inline-flex items-center gap-0.5 border rounded px-1 py-px text-[8px] font-bold ${b.color}">
+                  ${b.label} <span class="font-black">+${formatPointsLabel(b.val)}</span>
+                </span>`).join('')}</div>`
+            : `<span class="text-slate-600 text-[9px]">Sin puntos por ahora</span>`;
+          selectorsHtml = `
+            <div class="space-y-0.5">
+              <span class="text-slate-200 text-[9px]">${namesHtml}</span>
+              <div>${breakdownHtml}</div>
+            </div>`;
+        }
 
         teamPanelHtml = `
           <div id="${teamPanelId}" class="hidden mt-0.5 mb-0.5 bg-slate-900/60 border border-slate-800 rounded-lg px-2.5 py-1.5 space-y-1 text-[9px]">
-            <span class="text-slate-200">${namesHtml}</span>
-            <div>${breakdownHtml}</div>
+            ${selectorsHtml}
           </div>`;
       }
 
       // Color tenue en la fila si alguien la eligió (sin filtro activo) o ya resaltada con filtro
-      const anyChosen = choosers.length > 0;
       const noFilterChosenClass = (!selPart && anyChosen) ? 'bg-slate-800/20' : '';
-      const clickable = anyChosen
+      const clickable = hasPanel
         ? `onclick="event.stopPropagation(); document.getElementById('${teamPanelId}').classList.toggle('hidden'); document.getElementById('${teamPanelId}_caret').classList.toggle('rotate-180')" style="cursor:pointer"`
         : '';
-      const hoverClass = anyChosen ? 'hover:bg-slate-800/40' : '';
+      const hoverClass = hasPanel ? 'hover:bg-slate-800/40' : '';
 
       return `
         <div>

@@ -191,6 +191,7 @@
   }
 
   const PODIUM_LABELS = { P1: '🥇 1.º', P2: '🥈 2.º', P3: '🥉 3.º', P4: '4️⃣ 4.º' };
+  const PODIUM_LABELS_SHORT = { P1: '1.º', P2: '2.º', P3: '3.º', P4: '4.º' };
 
   /**
    * Para un equipo dado, devuelve qué participantes lo eligieron, tanto en
@@ -324,21 +325,85 @@
     return timeStr.substring(0, 5);
   }
 
-  function teamRow(name, code, score, isWinner, finished, chosenTeams) {
+  function teamDetailPanel(panelId, teamName) {
+    const participantsArr = (typeof participants !== 'undefined') ? participants : [];
+    const { rounds, podium } = getParticipantsForTeam(teamName, participantsArr);
+
+    if (rounds.length === 0 && podium.length === 0) {
+      return `<div id="${panelId}" class="bracket-team-panel" style="display:none;padding:6px 10px 8px;font-size:10.5px;color:#475569;">
+                Nadie la eligió todavía.
+              </div>`;
+    }
+
+    let sectionsHtml = '';
+
+    // ── Sección: seleccionadores (predicciones de grupo) ─────────────────────
+    if (rounds.length > 0) {
+      const namesHtml = rounds.map(r =>
+        `<span style="font-size:10.5px;font-weight:600;color:#e2e8f0;">${r.name}</span>`
+      ).join('<span style="color:#475569;margin:0 2px">,</span> ');
+
+      sectionsHtml += `
+        <div style="margin-bottom:${podium.length > 0 ? '4px' : '0'};">
+          <div style="line-height:1.3;font-size:10.5px;color:#e2e8f0;">${rounds.map(r => r.name).join(', ')}</div>
+        </div>`;
+    }
+
+    // ── Separador ─────────────────────────────────────────────────────────────
+    if (rounds.length > 0 && podium.length > 0) {
+      sectionsHtml += `<div style="height:1px;background:#1e293b;margin:3px 0;"></div>`;
+    }
+
+    // ── Sección: apostadores de podio, compacto con iconos de medalla ────────
+    if (podium.length > 0) {
+      // Agrupar por posición
+      const byPos = { P1: [], P2: [], P3: [], P4: [] };
+      podium.forEach(p => { if (byPos[p.pos]) byPos[p.pos].push(p.name); });
+
+      const ICONS = { P1: '🥇', P2: '🥈', P3: '🥉', P4: '4️⃣' };
+      const podiumLines = ['P1','P2','P3','P4']
+        .filter(pos => byPos[pos].length > 0)
+        .map(pos => `
+          <div style="line-height:1.3;font-size:10.5px;color:#cbd5e1;">
+            <span style="margin-right:3px;">${ICONS[pos]}</span>${byPos[pos].join(', ')}
+          </div>`).join('');
+
+      sectionsHtml += `
+        <div>
+          <div style="font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+                      color:#64748b;margin-bottom:2px;">
+            <i class="fa-solid fa-trophy" style="font-size:7px;margin-right:3px;"></i>Top4
+          </div>
+          <div style="display:flex;flex-direction:column;gap:0px;">${podiumLines}</div>
+        </div>`;
+    }
+
+    return `
+      <div id="${panelId}" class="bracket-team-panel" style="display:none;padding:6px 10px 8px;">
+        ${sectionsHtml}
+      </div>`;
+  }
+
+  function teamRow(name, code, score, isWinner, finished, chosenTeams, panelId) {
     const confirmed = !!name;
     const isChosen = confirmed && chosenTeams && chosenTeams.has(name);
     const isDimmed = confirmed && chosenTeams && !isChosen;
 
-    const clickHandler = confirmed
-      ? `onclick="window.showBracketTeamPopover('${name.replace(/'/g, "\\'")}', event)"`
+    // Comprobar si hay algo que mostrar en el panel antes de poner chevron
+    const participantsArr = (typeof participants !== 'undefined') ? participants : [];
+    const { rounds, podium } = confirmed ? getParticipantsForTeam(name, participantsArr) : { rounds: [], podium: [] };
+    const hasPanel = rounds.length > 0 || podium.length > 0;
+
+    const togglePanel = confirmed && panelId && hasPanel
+      ? `onclick="window.toggleBracketTeamPanel('${panelId}', event)"`
       : '';
-    const rowCursor = confirmed ? 'cursor:pointer;' : '';
+    const rowCursor = confirmed && hasPanel ? 'cursor:pointer;' : '';
     const rowHighlight = isChosen
       ? 'background:rgba(244,63,94,.12);box-shadow:inset 2px 0 0 #f43f5e;'
       : '';
     const rowOpacity = isDimmed ? 'opacity:.35;' : '';
-    const caretIcon = confirmed
-      ? `<i class="fa-solid fa-chevron-down" style="font-size:8px;color:#fb7185;opacity:.7;flex-shrink:0;"></i>`
+    const caretIcon = confirmed && hasPanel
+      ? `<i class="fa-solid fa-chevron-down" id="${panelId}_caret" style="font-size:8px;color:#fb7185;opacity:.7;flex-shrink:0;transition:transform .15s;"></i>`
       : '';
     const displayName = confirmed
       ? `<span style="text-decoration:underline;text-decoration-color:transparent;text-decoration-style:dotted;
@@ -356,7 +421,7 @@
       : (confirmed ? 'color:#cbd5e1' : '');
 
     return `
-      <div ${clickHandler} style="display:flex;align-items:center;gap:7px;padding:5px 10px;min-height:30px;
+      <div ${togglePanel} style="display:flex;align-items:center;gap:7px;padding:5px 10px;min-height:30px;
                   transition:opacity .15s,background .15s;${rowCursor}${rowHighlight}${rowOpacity}">
         <span style="width:20px;flex-shrink:0;">${flagHtml}</span>
         <span style="flex:1;font-size:11.5px;white-space:nowrap;overflow:hidden;
@@ -392,15 +457,20 @@
                         ${dateTime ? `<span style="color:#64748b">${dateTime}</span>` : ''}
                      </div>`;
 
+    const homePanelId = slot.home ? `bp_${slot.id}_home` : null;
+    const awayPanelId = slot.away ? `bp_${slot.id}_away` : null;
+
     return `
       <div style="background:#1e293b;border:1px solid #334155;border-radius:8px;
                   overflow:hidden;margin:0 3px;">
         ${labelHtml}
         ${metaHtml}
         <div style="border-top:1px solid #334155;">
-          ${teamRow(slot.home, slot.homeCode, slot.scoreHome, homeWon, slot.finished, chosenTeams)}
+          ${teamRow(slot.home, slot.homeCode, slot.scoreHome, homeWon, slot.finished, chosenTeams, homePanelId)}
+          ${homePanelId ? teamDetailPanel(homePanelId, slot.home) : ''}
           <div style="height:1px;background:#334155;margin:0 10px;"></div>
-          ${teamRow(slot.away, slot.awayCode, slot.scoreAway, awayWon, slot.finished, chosenTeams)}
+          ${teamRow(slot.away, slot.awayCode, slot.scoreAway, awayWon, slot.finished, chosenTeams, awayPanelId)}
+          ${awayPanelId ? teamDetailPanel(awayPanelId, slot.away) : ''}
         </div>
       </div>`;
   }
@@ -435,130 +505,17 @@
       </div>`;
   }
 
-  // ─── Popover: qué participantes eligieron este equipo ─────────────────────
+  // ─── Desplegable inline: qué participantes eligieron este equipo ──────────
 
-  let bracketPopoverEl = null;
-
-  function closeBracketTeamPopover() {
-    if (bracketPopoverEl) {
-      bracketPopoverEl.remove();
-      bracketPopoverEl = null;
-      document.removeEventListener('click', handleOutsideClick, true);
-      window.removeEventListener('resize', closeBracketTeamPopover);
-      window.removeEventListener('scroll', closeBracketTeamPopover, true);
-    }
-  }
-
-  function handleOutsideClick(ev) {
-    if (bracketPopoverEl && !bracketPopoverEl.contains(ev.target)) {
-      closeBracketTeamPopover();
-    }
-  }
-
-  function popoverRow(label, sublabel) {
-    const sublabelHtml = sublabel
-      ? `<span style="font-size:9.5px;font-weight:700;color:#fb7185;background:rgba(244,63,94,.12);
-                       padding:2px 6px;border-radius:4px;white-space:nowrap;">${sublabel}</span>`
-      : '';
-    return `
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;
-                  padding:5px 8px;border-radius:5px;background:#0f172a;">
-        <span style="font-size:11.5px;font-weight:600;color:#e2e8f0;">${label}</span>
-        ${sublabelHtml}
-      </div>`;
-  }
-
-  window.showBracketTeamPopover = function (teamName, ev) {
+  window.toggleBracketTeamPanel = function (panelId, ev) {
     if (ev) ev.stopPropagation();
-    closeBracketTeamPopover();
-
-    const participantsArr = (typeof participants !== 'undefined') ? participants : [];
-    const { rounds, podium } = getParticipantsForTeam(teamName, participantsArr);
-
-    const roundsHtml = rounds.length
-      ? rounds.map(r => popoverRow(r.name)).join('')
-      : `<div style="font-size:11px;color:#475569;padding:4px 8px;">Nadie la eligió para pasar de ronda</div>`;
-
-    const podiumHtml = podium.length
-      ? podium.map(p => popoverRow(p.name, PODIUM_LABELS[p.pos] || p.pos)).join('')
-      : `<div style="font-size:11px;color:#475569;padding:4px 8px;">Nadie la eligió en el podio</div>`;
-
-    const el = document.createElement('div');
-    el.style.cssText = `
-      position:fixed;z-index:9999;width:240px;max-width:calc(100vw - 24px);
-      background:#1e293b;border:1px solid #f43f5e;border-radius:10px;
-      box-shadow:0 12px 32px rgba(0,0,0,.5);font-family:inherit;
-      display:flex;flex-direction:column;overflow:hidden;
-      animation:bracketPopoverIn .12s ease-out;`;
-    el.innerHTML = `
-      <div style="display:flex;align-items:center;justify-content:space-between;
-                  gap:8px;padding:9px 10px;border-bottom:1px solid #334155;flex-shrink:0;">
-        <span style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:800;color:#fff;">
-          ${flag(teamName)} ${teamName}
-        </span>
-        <button onclick="window.closeBracketTeamPopoverPublic()"
-                style="background:none;border:none;color:#64748b;cursor:pointer;
-                       font-size:14px;line-height:1;padding:2px;flex-shrink:0;">✕</button>
-      </div>
-      <div style="padding:8px 10px;display:flex;flex-direction:column;gap:6px;
-                  overflow-y:auto;flex:1;min-height:0;-webkit-overflow-scrolling:touch;">
-        <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-                    color:#64748b;padding:0 2px;flex-shrink:0;">Apostaron que pasaba de ronda</div>
-        <div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;">${roundsHtml}</div>
-        <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-                    color:#64748b;padding:6px 2px 0;border-top:1px solid #334155;margin-top:2px;flex-shrink:0;">
-          Apostaron en el podio
-        </div>
-        <div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;">${podiumHtml}</div>
-      </div>`;
-
-    document.body.appendChild(el);
-    bracketPopoverEl = el;
-
-    // Posicionar cerca del clic, garantizando que el popover ENTERO quepa
-    // en la pantalla (con su propio scroll interno si el contenido es muy
-    // largo, en vez de quedar cortado y sin forma de verlo, que es lo que
-    // pasaba antes en móvil con muchos participantes).
-    const margin = 12;
-    const viewportH = window.innerHeight;
-    const viewportW = window.innerWidth;
-
-    // Altura máxima que el popover puede ocupar sin salirse de la pantalla
-    const maxPopoverHeight = viewportH - margin * 2;
-    el.style.maxHeight = maxPopoverHeight + 'px';
-
-    const rect = el.getBoundingClientRect();
-    const popoverHeight = Math.min(rect.height, maxPopoverHeight);
-
-    let top  = ev ? ev.clientY + 14 : 100;
-    let left = ev ? ev.clientX - 120 : 100;
-
-    if (left < margin) left = margin;
-    if (left + rect.width > viewportW - margin) left = viewportW - rect.width - margin;
-    if (top + popoverHeight > viewportH - margin) top = viewportH - popoverHeight - margin;
-    if (top < margin) top = margin;
-
-    el.style.top  = top + 'px';
-    el.style.left = left + 'px';
-
-    setTimeout(() => document.addEventListener('click', handleOutsideClick, true), 0);
-    window.addEventListener('resize', closeBracketTeamPopover);
-    window.addEventListener('scroll', closeBracketTeamPopover, true);
+    const panel = document.getElementById(panelId);
+    const caret = document.getElementById(panelId + '_caret');
+    if (!panel) return;
+    const isOpen = panel.style.display !== 'none';
+    panel.style.display = isOpen ? 'none' : 'block';
+    if (caret) caret.style.transform = isOpen ? '' : 'rotate(180deg)';
   };
-
-  window.closeBracketTeamPopoverPublic = closeBracketTeamPopover;
-
-  // Inyectar keyframes de animación una sola vez
-  if (!document.getElementById('bracket-popover-style')) {
-    const styleEl = document.createElement('style');
-    styleEl.id = 'bracket-popover-style';
-    styleEl.textContent = `
-      @keyframes bracketPopoverIn {
-        from { opacity:0; transform:translateY(-4px); }
-        to   { opacity:1; transform:translateY(0); }
-      }`;
-    document.head.appendChild(styleEl);
-  }
 
   // ─── Punto de entrada público ─────────────────────────────────────────────
 

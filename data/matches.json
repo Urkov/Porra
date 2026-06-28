@@ -1361,9 +1361,12 @@
     "date": "2026-06-28",
     "time": "21:00",
     "venue": "Estadio Los Angeles",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 1,
+    "scorers": [
+      "Canadá:Stephen EUSTAQUIO"
+    ]
   },
   {
     "id": "400021516",
@@ -1564,7 +1567,7 @@
     "id": "400021530",
     "idStage": "289288",
     "phase": "Round of 16",
-    "team_home": "Por definir",
+    "team_home": "Canadá",
     "team_away": "Por definir",
     "date": "2026-07-04",
     "time": "19:00",

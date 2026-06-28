@@ -51,7 +51,7 @@
     "Jordania:ALI OLWAN": 1,
     "Austria:Marko ARNAUTOVIC": 1,
     "Portugal:JOAO NEVES": 1,
-    "RD Congo:Yoane WISSA": 1,
+    "RD Congo:Yoane WISSA": 2,
     "Inglaterra:Harry Kane": 3,
     "Croacia:Martin BATURINA": 1,
     "Croacia:Petar Musa": 1,
@@ -134,7 +134,9 @@
     "Egipto:MAHMOUD SABER": 1,
     "Croacia:Petar SUCIC": 1,
     "Ghana:Derrick LUCKASSEN": 1,
-    "Croacia:Nikola VLASIC": 1
+    "Croacia:Nikola VLASIC": 1,
+    "Uzbekistán:Eldor SHOMURODOV": 1,
+    "RD Congo:Fiston MAYELE": 1
   },
   "max_assists": 3,
   "assists": {
@@ -259,6 +261,8 @@
     "Inglaterra:Jude Bellingham": 1,
     "Croacia:Mateo KOVACIC": 1,
     "Ghana:Ernest NUAMAH": 1,
-    "Croacia:Luka MODRIC": 1
+    "Croacia:Luka MODRIC": 1,
+    "Uzbekistán:Akmal MOZGOVOY": 1,
+    "RD Congo:Meschack ELIA": 1
   }
 }

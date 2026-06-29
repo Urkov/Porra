@@ -144,9 +144,12 @@
     "Argentina:Giovani Lo Celso": 1,
     "Argentina:Lautaro Martínez": 1,
     "Jordania:MOUSA ALTAMARI": 1,
-    "Canadá:Stephen EUSTAQUIO": 1
+    "Canadá:Stephen EUSTAQUIO": 1,
+    "Japón:Kaishu SANO": 1,
+    "Brasil:CASEMIRO": 1,
+    "Brasil:GABRIEL MARTINELLI": 1
   },
-  "max_assists": 3,
+  "max_assists": 4,
   "assists": {
     "México:Erik LIRA": 1,
     "México:Roberto ALVARADO": 2,
@@ -160,7 +163,7 @@
     "Paraguay:Julio ENCISO": 2,
     "Estados Unidos:Alex FREEMAN": 1,
     "Marruecos:Brahim DIAZ": 2,
-    "Brasil:BRUNO GUIMARAES": 3,
+    "Brasil:BRUNO GUIMARAES": 4,
     "Australia:Paul OKON-ENGSTLER": 1,
     "Alemania:Florian WIRTZ": 2,
     "Alemania:Nathaniel BROWN": 1,
@@ -276,6 +279,7 @@
     "Austria:Konrad LAIMER": 1,
     "Argelia:Houssem Aouar": 2,
     "Austria:Michael Gregoritsch": 1,
-    "Jordania:EHSAN HADDAD": 1
+    "Jordania:EHSAN HADDAD": 1,
+    "Brasil:GABRIEL MAGALHAES": 1
   }
 }

@@ -476,13 +476,60 @@
   }
 
   function renderBracket(resolved, chosenTeams) {
-    const roundCols = ['r32','r16','qf','sf','final'].map(key => {
+
+    function makeRoundColumn(key, slots) {
       const round = BRACKET_STRUCTURE[key];
-      const slots = resolved[key] || [];
-      const cards = slots.map(slot => `
-        <div style="display:flex;flex-direction:column;justify-content:center;flex:1;">
-          ${matchCard(slot, chosenTeams)}
-        </div>`).join('');
+
+      // ── FINAL: 3er puesto y Final centrados y juntos ─────────────────────
+      if (key === 'final') {
+        const slot3rd   = slots.find(s => s.label === '3er puesto');
+        const slotFinal = slots.find(s => s.label === 'Final');
+        return `
+          <div style="display:flex;flex-direction:column;min-width:148px;flex:1;">
+            <div style="font-size:10px;font-weight:700;text-align:center;
+                        text-transform:uppercase;letter-spacing:.06em;
+                        color:#94a3b8;padding:0 4px 8px;">
+              ${round.label}
+            </div>
+            <div style="display:flex;flex-direction:column;flex:1;justify-content:center;align-items:stretch;gap:12px;">
+              ${slot3rd   ? matchCard(slot3rd,   chosenTeams) : ''}
+              ${slotFinal ? matchCard(slotFinal, chosenTeams) : ''}
+            </div>
+          </div>`;
+      }
+
+      // ── R32 / R16 / QF / SF: partidos uniformes con divisores ────────────
+      // Divisores (basados en posición 1-based dentro de R32):
+      //   - múltiplo de 8  → divisor CENTRAL (rojo vivo, llega hasta QF)
+      //   - múltiplo de 4 no de 8 → sub-divisor (gris, llega hasta R16)
+      // R16: central tras 4, sub tras 2 y 6.  QF: central tras 2.  SF: central tras 1.
+      const total = slots.length;
+      let cards = '';
+      slots.forEach((slot, i) => {
+        cards += `
+          <div style="display:flex;flex-direction:column;justify-content:center;flex:1;">
+            ${matchCard(slot, chosenTeams)}
+          </div>`;
+
+        const pos    = i + 1;
+        const isLast = i === total - 1;
+        if (isLast) return;
+
+        const isCentral =
+          (key === 'r32' && pos % 8 === 0) ||
+          (key === 'r16' && pos % 4 === 0) ||
+          (key === 'qf'  && pos % 2 === 0) ||
+          (key === 'sf'  && pos % 1 === 0);
+        const isSub =
+          (key === 'r32' && pos % 4 === 0 && pos % 8 !== 0) ||
+          (key === 'r16' && pos % 2 === 0 && pos % 4 !== 0);
+
+        if (isCentral) {
+          cards += `<div style="height:3px;background:#f43f5e;margin:6px 4px;flex-shrink:0;border-radius:1px;opacity:.9;"></div>`;
+        } else if (isSub) {
+          cards += `<div style="height:2px;background:#ffffff;margin:5px 6px;flex-shrink:0;border-radius:1px;opacity:.9;"></div>`;
+        }
+      });
 
       return `
         <div style="display:flex;flex-direction:column;min-width:148px;flex:1;">
@@ -495,7 +542,11 @@
             ${cards}
           </div>
         </div>`;
-    }).join('');
+    }
+
+    const roundCols = ['r32','r16','qf','sf','final']
+      .map(key => makeRoundColumn(key, resolved[key] || []))
+      .join('');
 
     return `
       <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">

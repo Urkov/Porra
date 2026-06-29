@@ -1395,9 +1395,20 @@
     "date": "2026-06-29",
     "time": "22:30",
     "venue": "Estadio Boston",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 1,
+    "scorers": [
+      "Paraguay:Julio ENCISO",
+      "Alemania:Kai Havertz",
+      "Paraguay:MAURICIO",
+      "Alemania:Joshua KIMMICH",
+      "Paraguay:Gustavo GOMEZ",
+      "Alemania:Jamal MUSIALA",
+      "Paraguay:Matias GALARZA",
+      "Alemania:Nadiem Amiri",
+      "Paraguay:Jose CANALE"
+    ]
   },
   {
     "id": "400021522",

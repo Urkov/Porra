@@ -9,7 +9,7 @@
     "Bosnia y Herzegovina:Jovo LUKIC": 1,
     "Canadá:Cyle LARIN": 2,
     "Estados Unidos:Folarin BALOGUN": 2,
-    "Paraguay:MAURICIO": 1,
+    "Paraguay:MAURICIO": 2,
     "Estados Unidos:Giovanni REYNA": 1,
     "Suiza:Breel EMBOLO": 1,
     "Marruecos:Ismael SAIBARI": 3,
@@ -20,8 +20,8 @@
     "Alemania:Felix NMECHA": 1,
     "Curazao:Livano COMENENCIA": 1,
     "Alemania:Nico SCHLOTTERBECK": 1,
-    "Alemania:Kai Havertz": 2,
-    "Alemania:Jamal MUSIALA": 1,
+    "Alemania:Kai Havertz": 3,
+    "Alemania:Jamal MUSIALA": 2,
     "Alemania:Nathaniel BROWN": 1,
     "Alemania:Deniz UNDAV": 3,
     "Países Bajos:Virgil VAN DIJK": 1,
@@ -73,7 +73,7 @@
     "México:Luis ROMO": 1,
     "Estados Unidos:Alex FREEMAN": 1,
     "Brasil:MATHEUS CUNHA": 3,
-    "Paraguay:Matias GALARZA": 1,
+    "Paraguay:Matias GALARZA": 2,
     "Países Bajos:Brian BROBBEY": 3,
     "Países Bajos:Cody GAKPO": 2,
     "Suecia:Anthony ELANGA": 2,
@@ -147,7 +147,12 @@
     "Canadá:Stephen EUSTAQUIO": 1,
     "Japón:Kaishu SANO": 1,
     "Brasil:CASEMIRO": 1,
-    "Brasil:GABRIEL MARTINELLI": 1
+    "Brasil:GABRIEL MARTINELLI": 1,
+    "Paraguay:Julio ENCISO": 1,
+    "Alemania:Joshua KIMMICH": 1,
+    "Paraguay:Gustavo GOMEZ": 1,
+    "Alemania:Nadiem Amiri": 1,
+    "Paraguay:Jose CANALE": 1
   },
   "max_assists": 4,
   "assists": {
@@ -165,7 +170,7 @@
     "Marruecos:Brahim DIAZ": 2,
     "Brasil:BRUNO GUIMARAES": 4,
     "Australia:Paul OKON-ENGSTLER": 1,
-    "Alemania:Florian WIRTZ": 2,
+    "Alemania:Florian WIRTZ": 3,
     "Alemania:Nathaniel BROWN": 1,
     "Alemania:Joshua KIMMICH": 2,
     "Alemania:Deniz UNDAV": 2,
@@ -280,6 +285,7 @@
     "Argelia:Houssem Aouar": 2,
     "Austria:Michael Gregoritsch": 1,
     "Jordania:EHSAN HADDAD": 1,
-    "Brasil:GABRIEL MAGALHAES": 1
+    "Brasil:GABRIEL MAGALHAES": 1,
+    "Paraguay:Matias GALARZA": 1
   }
 }

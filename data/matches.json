@@ -1455,9 +1455,14 @@
     "date": "2026-06-30",
     "time": "23:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 0,
+    "scorers": [
+      "Francia:Kylian Mbappé",
+      "Francia:Bradley BARCOLA",
+      "Francia:Kylian Mbappé"
+    ]
   },
   {
     "id": "400021520",
@@ -1607,7 +1612,7 @@
     "idStage": "289288",
     "phase": "Round of 16",
     "team_home": "Paraguay",
-    "team_away": "Por definir",
+    "team_away": "Francia",
     "date": "2026-07-04",
     "time": "23:00",
     "venue": "Estadio Filadelfia",

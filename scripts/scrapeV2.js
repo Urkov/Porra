@@ -89,6 +89,18 @@ const GOAL_EVENT_TYPES = new Set([
   EVENT_TYPES.PENALTY_GOAL,
 ]);
 
+// Código de "Period" que la API de FIFA usa para marcar la tanda de
+// penaltis tras la prórroga. Los goles marcados durante la tanda (Type 41,
+// PENALTY_GOAL) NO deben contar como goles del partido ni sumar al
+// pichichi/estadísticas de goleadores: solo sirven para resolver el
+// ganador (ya cubierto por m.Home.PenaltyScore / m.Away.PenaltyScore).
+// Si en algún momento se detecta que este valor no es correcto (p.ej. un
+// partido decidido en penaltis sigue arrastrando goles de la tanda en
+// match.scorers), revisar el log de aviso de abajo y ajustar este valor
+// comprobando el campo "Period" real de los eventos de tipo 41 de ese
+// partido en la respuesta de /timelines.
+const PENALTY_SHOOTOUT_PERIOD = 11;
+
 // Algunos nombres de selección pueden variar entre la API de FIFA y los
 // nombres usados en teams.json / actual_results.json. Si ves un aviso de
 // "selección no reconocida" en los logs, añade aquí el alias correspondiente.
@@ -295,19 +307,26 @@ function mapPhase(stageDesc, hasGroup) {
 function toMadridDateTime(isoDate) {
   if (!isoDate) return { date: '', time: '' };
   const d = new Date(isoDate);
-  const dateFmt = new Intl.DateTimeFormat('en-CA', {
+
+  // Usamos formatToParts para construir la fecha en formato YYYY-MM-DD
+  // de forma independiente al locale del sistema operativo.
+  // (En Windows, Intl.DateTimeFormat('en-CA') devuelve MM/DD/YYYY en vez de
+  // YYYY-MM-DD, lo que causa inconsistencias entre GitHub Actions y local.)
+  const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: 'Europe/Madrid',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  });
-  const timeFmt = new Intl.DateTimeFormat('es-ES', {
-    timeZone: 'Europe/Madrid',
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-  });
-  return { date: dateFmt.format(d), time: timeFmt.format(d) };
+  }).formatToParts(d);
+
+  const get = (type) => (parts.find((p) => p.type === type) || {}).value || '';
+  const date = `${get('year')}-${get('month')}-${get('day')}`;
+  const time = `${get('hour').replace('24', '00')}:${get('minute')}`;
+
+  return { date, time };
 }
 
 // --------------------------------------------------------------------------
@@ -417,19 +436,22 @@ async function main() {
     // calendario como "Grupo A" en vez de "Dieciseisavos de Final".
     if (group && phase === 'groups') match.group = group;
 
-    // Tanda de penaltis
-    const penHome = m.Home && m.Home.PenaltyScore;
-    const penAway = m.Away && m.Away.PenaltyScore;
+    // Tanda de penaltis: detección preliminar a partir del calendario (puede
+    // venir vacía si la API de calendario no rellena PenaltyScore; en ese
+    // caso se completa más abajo con el evento Type=8 de la timeline, que
+    // es la fuente fiable observada).
+    const penHomeCal = m.Home && m.Home.PenaltyScore;
+    const penAwayCal = m.Away && m.Away.PenaltyScore;
     if (
       status === 'finished' &&
-      penHome != null &&
-      penAway != null &&
-      (penHome > 0 || penAway > 0)
+      penHomeCal != null &&
+      penAwayCal != null &&
+      (penHomeCal > 0 || penAwayCal > 0)
     ) {
       match.decided_by = 'penalties';
-      match.score_home_penalties = penHome;
-      match.score_away_penalties = penAway;
-      match.winner_passed = penHome > penAway ? homeName : awayName;
+      match.score_home_penalties = penHomeCal;
+      match.score_away_penalties = penAwayCal;
+      match.winner_passed = penHomeCal > penAwayCal ? homeName : awayName;
     }
 
     // Goles / autogoles / asistencias (solo partidos jugados o en juego)
@@ -442,8 +464,38 @@ async function main() {
         const teamNameById = { [homeId]: homeName, [awayId]: awayName };
         const otherTeamId = (id) => (id === homeId ? awayId : homeId);
 
+        // Fuente fiable de la tanda de penaltis: evento Type=8
+        // ("Hora de finalización" de la tanda), Period=11, con
+        // HomePenaltyGoals/AwayPenaltyGoals ya totalizados por la API.
+        // Si por lo que sea hay varios eventos así (no debería), nos
+        // quedamos con el último cronológicamente.
+        const PENALTY_SHOOTOUT_END_TYPE = 8;
+        const shootoutEndEvents = events.filter(
+          (ev) => ev.Period === PENALTY_SHOOTOUT_PERIOD && ev.Type === PENALTY_SHOOTOUT_END_TYPE
+        );
+        if (shootoutEndEvents.length > 0) {
+          const last = shootoutEndEvents[shootoutEndEvents.length - 1];
+          const penHome = last.HomePenaltyGoals;
+          const penAway = last.AwayPenaltyGoals;
+          if (penHome != null && penAway != null) {
+            match.decided_by = 'penalties';
+            match.score_home_penalties = penHome;
+            match.score_away_penalties = penAway;
+            match.winner_passed = penHome > penAway ? homeName : awayName;
+          }
+        }
+
         const scorers = [];
         for (const ev of events) {
+          // Excluir eventos ocurridos en la tanda de penaltis: no cuentan
+          // como goles del partido ni para el cómputo de goleadores/asistencias.
+          const isShootoutEvent = ev.Period === PENALTY_SHOOTOUT_PERIOD;
+          if (isShootoutEvent && GOAL_EVENT_TYPES.has(ev.Type)) {
+            console.log(
+              `  (info) Penalti de la tanda excluido del cómputo: partido ${m.IdMatch}, jugador ${ev.IdPlayer}, Period=${ev.Period}, Type=${ev.Type}`
+            );
+            continue;
+          }
           if (GOAL_EVENT_TYPES.has(ev.Type)) {
             // Gol normal / falta directa / penalti -> cuenta para el equipo de IdTeam
             const team = teamNameById[ev.IdTeam] || '';
@@ -462,6 +514,7 @@ async function main() {
             scorers.push(`${team}:${player} (p.p.)`);
             // No se contabiliza en scorers.json: un autogol no cuenta para el pichichi
           } else if (ev.Type === EVENT_TYPES.ASSIST) {
+            if (isShootoutEvent) continue; // por si acaso la API marcase asistencias en la tanda
             const team = teamNameById[ev.IdTeam] || '';
             const rawPlayer = await resolvePlayerName(ev.IdPlayer);
             const player = normalizePlayerName(rawPlayer);

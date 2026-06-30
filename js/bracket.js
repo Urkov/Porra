@@ -287,6 +287,8 @@
         const finished  = m && m.status === 'finished';
         const scoreHome = finished ? m.score_home : null;
         const scoreAway = finished ? m.score_away : null;
+        const penHome   = finished ? m.score_home_penalties : null;
+        const penAway   = finished ? m.score_away_penalties : null;
         const winner    = finished ? winnerOf(m)  : null;
         const loser     = finished ? loserOf(m)   : null;
         const date      = m ? m.date : null;
@@ -302,7 +304,7 @@
           id: slot.id, num,
           home, homeCode,
           away, awayCode,
-          scoreHome, scoreAway,
+          scoreHome, scoreAway, penHome, penAway,
           winner, finished, date, time, extra,
           label: slot.label || null
         };
@@ -384,7 +386,7 @@
       </div>`;
   }
 
-  function teamRow(name, code, score, isWinner, finished, chosenTeams, panelId) {
+  function teamRow(name, code, score, penScore, isWinner, finished, chosenTeams, panelId) {
     const confirmed = !!name;
     const isChosen = confirmed && chosenTeams && chosenTeams.has(name);
     const isDimmed = confirmed && chosenTeams && !isChosen;
@@ -404,7 +406,7 @@
     const rowOpacity = isDimmed ? 'opacity:.35;' : '';
     const caretIcon = confirmed && hasPanel
       ? `<i class="fa-solid fa-chevron-down" id="${panelId}_caret" style="font-size:8px;color:#fb7185;opacity:.7;flex-shrink:0;transition:transform .15s;"></i>`
-      : '';
+      : `<span style="display:inline-block;width:8px;flex-shrink:0;"></span>`;
     const displayName = confirmed
       ? `<span style="text-decoration:underline;text-decoration-color:transparent;text-decoration-style:dotted;
                       transition:text-decoration-color .15s;"
@@ -412,9 +414,14 @@
                onmouseout="this.style.textDecorationColor='transparent'">${name}</span>`
       : `<span style="font-style:italic;color:#475569;font-size:10.5px">${pendingLabel(code)}</span>`;
     const flagHtml = confirmed ? flag(name) : '';
+    const penHtml = (penScore !== null && penScore !== undefined)
+      ? `<span style="font-size:10px;font-weight:700;color:#fb7185;margin-left:2px;">(${penScore})</span>`
+      : '';
     const scoreHtml = finished && score !== null
-      ? `<span style="font-size:13px;font-weight:700;min-width:16px;text-align:right;
-                      color:${isWinner ? '#f0fdf4' : '#94a3b8'}">${score}</span>`
+      ? `<span style="display:flex;align-items:baseline;min-width:16px;text-align:right;">
+           <span style="font-size:13px;font-weight:700;
+                      color:${isWinner ? '#f0fdf4' : '#94a3b8'}">${score}</span>${penHtml}
+         </span>`
       : '';
     const boldStyle = isWinner
       ? 'font-weight:600;color:#f8fafc'
@@ -436,13 +443,10 @@
   function matchCard(slot, chosenTeams) {
     const homeWon = slot.finished && slot.winner === slot.home;
     const awayWon = slot.finished && slot.winner === slot.away;
-    const extraBadge = slot.extra === 'penalties'
+    const extraBadge = slot.extra === 'extra_time'
       ? `<span style="font-size:9px;background:#1e293b;color:#94a3b8;
-                      padding:1px 5px;border-radius:3px;margin-left:4px">PEN</span>`
-      : (slot.extra === 'extra_time'
-          ? `<span style="font-size:9px;background:#1e293b;color:#94a3b8;
-                          padding:1px 5px;border-radius:3px;margin-left:4px">ET</span>`
-          : '');
+                      padding:1px 5px;border-radius:3px;margin-left:4px">ET</span>`
+      : '';
 
     const labelHtml = slot.label
       ? `<div style="font-size:9.5px;font-weight:700;text-align:center;
@@ -466,10 +470,10 @@
         ${labelHtml}
         ${metaHtml}
         <div style="border-top:1px solid #334155;">
-          ${teamRow(slot.home, slot.homeCode, slot.scoreHome, homeWon, slot.finished, chosenTeams, homePanelId)}
+          ${teamRow(slot.home, slot.homeCode, slot.scoreHome, slot.penHome, homeWon, slot.finished, chosenTeams, homePanelId)}
           ${homePanelId ? teamDetailPanel(homePanelId, slot.home) : ''}
           <div style="height:1px;background:#334155;margin:0 10px;"></div>
-          ${teamRow(slot.away, slot.awayCode, slot.scoreAway, awayWon, slot.finished, chosenTeams, awayPanelId)}
+          ${teamRow(slot.away, slot.awayCode, slot.scoreAway, slot.penAway, awayWon, slot.finished, chosenTeams, awayPanelId)}
           ${awayPanelId ? teamDetailPanel(awayPanelId, slot.away) : ''}
         </div>
       </div>`;

@@ -2375,10 +2375,12 @@ async function renderMatches() {
     let scoreSection = `<span class="badge badge-sm bg-slate-900 border-slate-800 text-slate-400 font-bold px-2 py-0.5">VS</span>`;
     if (isFinished) {
       if (m.decided_by === 'penalties') {
+        const penHome = m.score_home_penalties != null ? ` <span class="text-rose-400">(${m.score_home_penalties})</span>` : '';
+        const penAway = m.score_away_penalties != null ? ` <span class="text-rose-400">(${m.score_away_penalties})</span>` : '';
         scoreSection = `
           <div class="flex flex-col items-center gap-1">
             <span class="text-[9px] text-rose-400 font-bold uppercase tracking-wider">Ganó Pen. ${m.winner_passed}</span>
-            <span class="text-xl font-black text-rose-500">${m.score_home} - ${m.score_away}</span>
+            <span class="text-xl font-black text-rose-500">${m.score_home}${penHome} - ${m.score_away}${penAway}</span>
           </div>
         `;
       } else {

@@ -1398,16 +1398,13 @@
     "status": "finished",
     "score_home": 1,
     "score_away": 1,
+    "decided_by": "penalties",
+    "score_home_penalties": 3,
+    "score_away_penalties": 4,
+    "winner_passed": "Paraguay",
     "scorers": [
       "Paraguay:Julio ENCISO",
-      "Alemania:Kai Havertz",
-      "Paraguay:MAURICIO",
-      "Alemania:Joshua KIMMICH",
-      "Paraguay:Gustavo GOMEZ",
-      "Alemania:Jamal MUSIALA",
-      "Paraguay:Matias GALARZA",
-      "Alemania:Nadiem Amiri",
-      "Paraguay:Jose CANALE"
+      "Alemania:Kai Havertz"
     ]
   },
   {
@@ -1596,7 +1593,7 @@
     "id": "400021533",
     "idStage": "289288",
     "phase": "Round of 16",
-    "team_home": "Por definir",
+    "team_home": "Paraguay",
     "team_away": "Por definir",
     "date": "2026-07-04",
     "time": "23:00",

@@ -28,7 +28,7 @@
     "Japón:Keito Nakamura": 1,
     "Países Bajos:Crysencio SUMMERVILLE": 2,
     "Japón:Daichi KAMADA": 2,
-    "Costa de Marfil:Amad DIALLO": 1,
+    "Costa de Marfil:Amad DIALLO": 2,
     "Suecia:Yasin AYARI": 2,
     "Suecia:Alexander Isak": 1,
     "Túnez:Omar Rekik": 1,
@@ -43,7 +43,7 @@
     "Francia:Kylian Mbappé": 4,
     "Francia:Bradley BARCOLA": 1,
     "Senegal:Ibrahim MBAYE": 1,
-    "Noruega:Erling Haaland": 4,
+    "Noruega:Erling Haaland": 5,
     "Irak:AYMEN HUSSEIN": 1,
     "Noruega:Leo OSTIGARD": 1,
     "Argentina:Lionel Messi": 6,
@@ -149,7 +149,8 @@
     "Brasil:CASEMIRO": 1,
     "Brasil:GABRIEL MARTINELLI": 1,
     "Paraguay:Julio ENCISO": 1,
-    "Marruecos:Issa Diop": 1
+    "Marruecos:Issa Diop": 1,
+    "Noruega:Antonio NUSA": 1
   },
   "max_assists": 4,
   "assists": {
@@ -187,7 +188,7 @@
     "Senegal:Iliman NDIAYE": 2,
     "Noruega:David MOLLER WOLFE": 1,
     "Irak:AMIR ALAMMARI": 1,
-    "Noruega:Martin ODEGAARD": 2,
+    "Noruega:Martin ODEGAARD": 3,
     "Argentina:Rodrigo DE PAUL": 1,
     "Argentina:Nico GONZALEZ": 1,
     "Austria:Xaver Schlager": 1,
@@ -228,7 +229,7 @@
     "Argentina:Facundo MEDINA": 1,
     "Francia:Ousmane Dembélé": 1,
     "Senegal:Sadio MANE": 1,
-    "Noruega:Patrick BERG": 1,
+    "Noruega:Patrick BERG": 2,
     "Senegal:Nicolas JACKSON": 1,
     "Jordania:MOUSA ALTAMARI": 1,
     "Argelia:Riyad Mahrez": 1,
@@ -284,6 +285,7 @@
     "Jordania:EHSAN HADDAD": 1,
     "Brasil:GABRIEL MAGALHAES": 1,
     "Paraguay:Matias GALARZA": 1,
-    "Marruecos:Chemsdine TALBI": 1
+    "Marruecos:Chemsdine TALBI": 1,
+    "Costa de Marfil:Nicolas PEPE": 1
   }
 }

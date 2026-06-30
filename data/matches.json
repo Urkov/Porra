@@ -1437,9 +1437,14 @@
     "date": "2026-06-30",
     "time": "19:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 2,
+    "scorers": [
+      "Noruega:Antonio NUSA",
+      "Costa de Marfil:Amad DIALLO",
+      "Noruega:Erling Haaland"
+    ]
   },
   {
     "id": "400021523",
@@ -1615,7 +1620,7 @@
     "idStage": "289288",
     "phase": "Round of 16",
     "team_home": "Brasil",
-    "team_away": "Por definir",
+    "team_away": "Noruega",
     "date": "2026-07-05",
     "time": "22:00",
     "venue": "Estadio Nueva York/Nueva Jersey",

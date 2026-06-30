@@ -1416,9 +1416,17 @@
     "date": "2026-06-30",
     "time": "03:00",
     "venue": "Estadio Monterrey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 1,
+    "decided_by": "penalties",
+    "score_home_penalties": 2,
+    "score_away_penalties": 3,
+    "winner_passed": "Marruecos",
+    "scorers": [
+      "Países Bajos:Cody GAKPO",
+      "Marruecos:Issa Diop"
+    ]
   },
   {
     "id": "400021514",
@@ -1581,7 +1589,7 @@
     "idStage": "289288",
     "phase": "Round of 16",
     "team_home": "Canadá",
-    "team_away": "Por definir",
+    "team_away": "Marruecos",
     "date": "2026-07-04",
     "time": "19:00",
     "venue": "Estadio Houston",

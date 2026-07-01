@@ -1508,9 +1508,16 @@
     "date": "2026-07-01",
     "time": "22:00",
     "venue": "Estadio de Seattle",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 2,
+    "scorers": [
+      "Senegal:Habib DIARRA",
+      "Senegal:Ismaila SARR",
+      "Bélgica:Romelu Lukaku",
+      "Bélgica:Youri TIELEMANS",
+      "Bélgica:Youri TIELEMANS"
+    ]
   },
   {
     "id": "400021524",
@@ -1647,7 +1654,7 @@
     "idStage": "289288",
     "phase": "Round of 16",
     "team_home": "México",
-    "team_away": "Por definir",
+    "team_away": "Inglaterra",
     "date": "2026-07-06",
     "time": "02:00",
     "venue": "Estadio Ciudad de México",
@@ -1673,7 +1680,7 @@
     "idStage": "289288",
     "phase": "Round of 16",
     "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_away": "Bélgica",
     "date": "2026-07-07",
     "time": "02:00",
     "venue": "Estadio de Seattle",

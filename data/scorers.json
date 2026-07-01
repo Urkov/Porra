@@ -91,7 +91,7 @@
     "Egipto:TREZEGUET": 1,
     "Francia:Ousmane Dembélé": 4,
     "Noruega:Marcus HOLMGREN PEDERSEN": 1,
-    "Senegal:Ismaila SARR": 3,
+    "Senegal:Ismaila SARR": 4,
     "Jordania:NIZAR ALRASHDAN": 1,
     "Argelia:Nadhir BENBOUALI": 1,
     "Argelia:Amine GOUIRI": 1,
@@ -121,7 +121,7 @@
     "Turquía:Baris Alper YILMAZ": 1,
     "Estados Unidos:Sebastian BERHALTER": 1,
     "Turquía:Kaan Ayhan": 1,
-    "Senegal:Habib DIARRA": 1,
+    "Senegal:Habib DIARRA": 2,
     "Senegal:Pape GUEYE": 2,
     "Senegal:Iliman NDIAYE": 1,
     "Noruega:Thelo AASGAARD": 1,
@@ -129,7 +129,7 @@
     "España:Alex BAENA": 1,
     "Bélgica:Leandro TROSSARD": 2,
     "Bélgica:Kevin De Bruyne": 1,
-    "Bélgica:Romelu Lukaku": 1,
+    "Bélgica:Romelu Lukaku": 2,
     "Bélgica:Alexis SAELEMAEKERS": 1,
     "Egipto:MAHMOUD SABER": 1,
     "Croacia:Petar SUCIC": 1,
@@ -151,7 +151,8 @@
     "Paraguay:Julio ENCISO": 1,
     "Marruecos:Issa Diop": 1,
     "Noruega:Antonio NUSA": 1,
-    "RD Congo:Brian CIPENGA": 1
+    "RD Congo:Brian CIPENGA": 1,
+    "Bélgica:Youri TIELEMANS": 2
   },
   "max_assists": 5,
   "assists": {
@@ -290,6 +291,9 @@
     "Costa de Marfil:Nicolas PEPE": 1,
     "México:Julian QUINONES": 1,
     "RD Congo:Chancel MBEMBA": 1,
-    "Inglaterra:Anthony GORDON": 2
+    "Inglaterra:Anthony GORDON": 2,
+    "Senegal:Moussa Niakhate": 1,
+    "Bélgica:Thomas MEUNIER": 1,
+    "Bélgica:Leandro TROSSARD": 1
   }
 }

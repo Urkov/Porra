@@ -52,7 +52,7 @@
     "Austria:Marko ARNAUTOVIC": 2,
     "Portugal:JOAO NEVES": 1,
     "RD Congo:Yoane WISSA": 3,
-    "Inglaterra:Harry Kane": 3,
+    "Inglaterra:Harry Kane": 5,
     "Croacia:Martin BATURINA": 1,
     "Croacia:Petar Musa": 1,
     "Inglaterra:Jude Bellingham": 2,
@@ -150,7 +150,8 @@
     "Brasil:GABRIEL MARTINELLI": 1,
     "Paraguay:Julio ENCISO": 1,
     "Marruecos:Issa Diop": 1,
-    "Noruega:Antonio NUSA": 1
+    "Noruega:Antonio NUSA": 1,
+    "RD Congo:Brian CIPENGA": 1
   },
   "max_assists": 5,
   "assists": {
@@ -287,6 +288,8 @@
     "Paraguay:Matias GALARZA": 1,
     "Marruecos:Chemsdine TALBI": 1,
     "Costa de Marfil:Nicolas PEPE": 1,
-    "México:Julian QUINONES": 1
+    "México:Julian QUINONES": 1,
+    "RD Congo:Chancel MBEMBA": 1,
+    "Inglaterra:Anthony GORDON": 2
   }
 }

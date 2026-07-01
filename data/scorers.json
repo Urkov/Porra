@@ -1,8 +1,8 @@
 {
   "max_goals": 6,
   "players": {
-    "México:Julian QUINONES": 2,
-    "México:Raul JIMENEZ": 1,
+    "México:Julian QUINONES": 3,
+    "México:Raul JIMENEZ": 2,
     "República Checa:Ladislav KREJCI": 1,
     "Corea del Sur:HWANG Inbeom": 1,
     "Corea del Sur:OH Hyeongyu": 1,
@@ -155,7 +155,7 @@
   "max_assists": 5,
   "assists": {
     "México:Erik LIRA": 1,
-    "México:Roberto ALVARADO": 2,
+    "México:Roberto ALVARADO": 3,
     "República Checa:Vladimir COUFAL": 1,
     "Corea del Sur:LEE Kangin": 1,
     "Corea del Sur:HWANG Inbeom": 1,
@@ -286,6 +286,7 @@
     "Brasil:GABRIEL MAGALHAES": 1,
     "Paraguay:Matias GALARZA": 1,
     "Marruecos:Chemsdine TALBI": 1,
-    "Costa de Marfil:Nicolas PEPE": 1
+    "Costa de Marfil:Nicolas PEPE": 1,
+    "México:Julian QUINONES": 1
   }
 }

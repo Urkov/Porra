@@ -1471,11 +1471,15 @@
     "team_home": "México",
     "team_away": "Ecuador",
     "date": "2026-07-01",
-    "time": "03:00",
+    "time": "04:00",
     "venue": "Estadio Ciudad de México",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 0,
+    "scorers": [
+      "México:Julian QUINONES",
+      "México:Raul JIMENEZ"
+    ]
   },
   {
     "id": "400021512",
@@ -1637,7 +1641,7 @@
     "id": "400021531",
     "idStage": "289288",
     "phase": "Round of 16",
-    "team_home": "Por definir",
+    "team_home": "México",
     "team_away": "Por definir",
     "date": "2026-07-06",
     "time": "02:00",

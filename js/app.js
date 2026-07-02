@@ -2530,6 +2530,17 @@ function renderScorers() {
     .sort((a, b) => b[1] - a[1]);
 
   const realPichichiKey = sortedPlayers.length > 0 ? sortedPlayers[0][0] : null;
+
+  // Mapa jugador (nombre canónico) → participantes que lo eligieron
+  const pickersByPlayer = {};
+  participants.forEach(p => {
+    Object.values(p.scorers).forEach(rawName => {
+      const canonical = normalizePlayerName(rawName.trim());
+      if (!pickersByPlayer[canonical]) pickersByPlayer[canonical] = [];
+      pickersByPlayer[canonical].push(p.name);
+    });
+  });
+
   let rank = 0;
   sortedPlayers.forEach(([key, goals]) => {
     const parts = key.split(':');
@@ -2564,12 +2575,38 @@ function renderScorers() {
       ? `<span class="inline-block w-12 text-right text-[10px] text-slate-400 font-normal">${assists} ➡ </span>`
       : `<span class="inline-block w-12"></span>`;
 
+    // Chevron si alguien lo eligió en la porra; hueco vacío si no para mantener alineación
+    const pickers = pickersByPlayer[playerName] || [];
+    const panelId = `scorer_panel_${rank}`;
+    const caretHtml = pickers.length > 0
+      ? `<i id="${panelId}_caret" class="fa-solid fa-chevron-down"
+            style="font-size:8px;color:#fb7185;opacity:.7;flex-shrink:0;transition:transform .15s;cursor:pointer;"></i>`
+      : `<span style="display:inline-block;width:8px;flex-shrink:0;"></span>`;
+
+    // Panel expandible con los participantes que lo eligieron
+    const pickerPanel = pickers.length > 0 ? `
+      <div id="${panelId}" style="display:none;">
+        <div style="padding:4px 8px 6px 28px;display:flex;flex-wrap:wrap;gap:4px;">
+          ${pickers.map(name => `<span style="font-size:10px;background:#1e293b;color:#94a3b8;padding:2px 7px;border-radius:9999px;white-space:nowrap;">${name}</span>`).join('')}
+        </div>
+      </div>` : '';
+
     container.innerHTML += `
-      <div class="flex items-center py-2 text-xs gap-1.5">
-        <span class="font-bold text-slate-500 w-5 shrink-0 text-right">${rank}.</span>
-        <span class="shrink-0">${flagHtml}</span>
-        <span class="truncate flex-1 ${nameClass}">${playerName}</span>
-        ${goalsHtml}${assistsHtml}
+      <div>
+        <div class="flex items-center py-2 text-xs gap-1.5"
+             ${pickers.length > 0 ? `style="cursor:pointer;" onclick="
+               const panel = document.getElementById('${panelId}');
+               const caret  = document.getElementById('${panelId}_caret');
+               const open   = panel.style.display !== 'none';
+               panel.style.display = open ? 'none' : 'block';
+               caret.style.transform = open ? '' : 'rotate(180deg)';
+             "` : ''}>
+          <span class="font-bold text-slate-500 w-5 shrink-0 text-right">${rank}.</span>
+          <span class="shrink-0">${flagHtml}</span>
+          <span class="truncate flex-1 ${nameClass}">${playerName}</span>
+          ${goalsHtml}${assistsHtml}${caretHtml}
+        </div>
+        ${pickerPanel}
       </div>
     `;
   });

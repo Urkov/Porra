@@ -1545,9 +1545,14 @@
     "date": "2026-07-02",
     "time": "21:00",
     "venue": "Estadio Los Angeles",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 0,
+    "scorers": [
+      "España:Mikel Oyarzabal",
+      "España:Pedro PORRO",
+      "España:Mikel Oyarzabal"
+    ]
   },
   {
     "id": "400021526",
@@ -1671,7 +1676,7 @@
     "idStage": "289288",
     "phase": "Round of 16",
     "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_away": "España",
     "date": "2026-07-06",
     "time": "21:00",
     "venue": "Estadio Dallas",

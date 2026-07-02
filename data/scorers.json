@@ -81,7 +81,7 @@
     "Japón:Ayase UEDA": 2,
     "Japón:Junya ITO": 1,
     "España:Lamine Yamal": 1,
-    "España:Mikel Oyarzabal": 2,
+    "España:Mikel Oyarzabal": 4,
     "Cabo Verde:KEVIN PINA": 1,
     "Uruguay:Agustin CANOBBIO": 1,
     "Cabo Verde:HELIO VARELA": 1,
@@ -153,7 +153,8 @@
     "Noruega:Antonio NUSA": 1,
     "RD Congo:Brian CIPENGA": 1,
     "Bélgica:Youri TIELEMANS": 2,
-    "Estados Unidos:Malik TILLMAN": 1
+    "Estados Unidos:Malik TILLMAN": 1,
+    "España:Pedro PORRO": 1
   },
   "max_assists": 5,
   "assists": {
@@ -295,6 +296,8 @@
     "Inglaterra:Anthony GORDON": 2,
     "Senegal:Moussa Niakhate": 1,
     "Bélgica:Thomas MEUNIER": 1,
-    "Bélgica:Leandro TROSSARD": 1
+    "Bélgica:Leandro TROSSARD": 1,
+    "España:Marc CUCURELLA": 2,
+    "España:Alex BAENA": 1
   }
 }

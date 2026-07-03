@@ -1563,7 +1563,7 @@
     "date": "2026-07-03",
     "time": "01:00",
     "venue": "Estadio de Toronto",
-    "status": "live",
+    "status": "finished",
     "score_home": 2,
     "score_away": 1,
     "scorers": [
@@ -1680,7 +1680,7 @@
     "id": "400021529",
     "idStage": "289288",
     "phase": "Round of 16",
-    "team_home": "Por definir",
+    "team_home": "Portugal",
     "team_away": "España",
     "date": "2026-07-06",
     "time": "21:00",

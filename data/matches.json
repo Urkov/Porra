@@ -1563,9 +1563,14 @@
     "date": "2026-07-03",
     "time": "01:00",
     "venue": "Estadio de Toronto",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "live",
+    "score_home": 2,
+    "score_away": 1,
+    "scorers": [
+      "Croacia:Ivan PERISIC",
+      "Portugal:Cristiano Ronaldo",
+      "Portugal:GONCALO RAMOS"
+    ]
   },
   {
     "id": "400021527",

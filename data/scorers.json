@@ -95,7 +95,7 @@
     "Jordania:NIZAR ALRASHDAN": 1,
     "Argelia:Nadhir BENBOUALI": 1,
     "Argelia:Amine GOUIRI": 1,
-    "Portugal:Cristiano Ronaldo": 2,
+    "Portugal:Cristiano Ronaldo": 3,
     "Portugal:NUNO MENDES": 1,
     "Portugal:Rafael Leao": 1,
     "Croacia:Ante BUDIMIR": 1,
@@ -154,7 +154,9 @@
     "RD Congo:Brian CIPENGA": 1,
     "Bélgica:Youri TIELEMANS": 2,
     "Estados Unidos:Malik TILLMAN": 1,
-    "España:Pedro PORRO": 1
+    "España:Pedro PORRO": 1,
+    "Croacia:Ivan PERISIC": 1,
+    "Portugal:GONCALO RAMOS": 1
   },
   "max_assists": 5,
   "assists": {
@@ -298,6 +300,7 @@
     "Bélgica:Thomas MEUNIER": 1,
     "Bélgica:Leandro TROSSARD": 1,
     "España:Marc CUCURELLA": 2,
-    "España:Alex BAENA": 1
+    "España:Alex BAENA": 1,
+    "Portugal:Rafael Leao": 1
   }
 }

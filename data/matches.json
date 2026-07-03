@@ -1598,9 +1598,17 @@
     "date": "2026-07-03",
     "time": "20:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 1,
+    "decided_by": "penalties",
+    "score_home_penalties": 2,
+    "score_away_penalties": 4,
+    "winner_passed": "Egipto",
+    "scorers": [
+      "Egipto:EMAM ASHOUR",
+      "Egipto:MOHAMED HANY (p.p.)"
+    ]
   },
   {
     "id": "400021521",

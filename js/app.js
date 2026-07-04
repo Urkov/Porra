@@ -456,15 +456,22 @@ function scrollToSection(id) {
 // Carga simultánea de todas las fuentes de datos estáticas
 async function loadDatabase() {
   try {
-    const [rulesRes, teamsRes, playersRes, participantsRes, matchesRes, scorersRes, actualResultsRes] = await Promise.all([
-      fetch('data/rules.json').then(r => r.json()),
-      fetch('data/teams.json').then(r => r.json()),
-      fetch('data/players.json').then(r => r.json()),
-      fetch('data/participants.json').then(r => r.json()),
-      fetch('data/matches.json').then(r => r.json()),
-      fetch('data/scorers.json').then(r => r.json()),
-      fetch('data/actual_results.json').then(r => r.json())
-    ]);
+    const dataFiles = [
+      'data/rules.json',
+      'data/teams.json',
+      'data/players.json',
+      'data/participants.json',
+      'data/matches.json',
+      'data/scorers.json',
+      'data/actual_results.json'
+    ];
+
+    const responses = await Promise.all(dataFiles.map(url => fetch(url)));
+    updateLastUpdatedFromResponses(responses);
+
+    const [rulesRes, teamsRes, playersRes, participantsRes, matchesRes, scorersRes, actualResultsRes] = await Promise.all(
+      responses.map(r => r.json())
+    );
 
     rules = rulesRes;
     teams = teamsRes;
@@ -479,6 +486,44 @@ async function loadDatabase() {
     currentActualResults = JSON.parse(JSON.stringify(actualResults));
   } catch (error) {
     console.error('Error cargando los ficheros JSON estáticos de la porra:', error);
+  }
+}
+
+// Calcula la fecha de modificación más reciente entre los ficheros de datos
+// (a partir de la cabecera HTTP "Last-Modified") y la muestra en la cabecera
+// de la web, formateada en hora española (Europe/Madrid).
+function updateLastUpdatedFromResponses(responses) {
+  try {
+    let latest = null;
+    responses.forEach(res => {
+      const header = res.headers.get('last-modified');
+      if (!header) return;
+      const date = new Date(header);
+      if (!isNaN(date.getTime()) && (!latest || date > latest)) {
+        latest = date;
+      }
+    });
+
+    const el = document.getElementById('lastUpdatedText');
+    if (!el) return;
+
+    if (!latest) {
+      el.textContent = 'Actualizado: --';
+      return;
+    }
+
+    const formatted = new Intl.DateTimeFormat('es-ES', {
+      timeZone: 'Europe/Madrid',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(latest);
+
+    el.textContent = `Actualizado: ${formatted}`;
+  } catch (error) {
+    console.error('Error calculando la fecha de última actualización:', error);
   }
 }
 

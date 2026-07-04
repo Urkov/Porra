@@ -1,5 +1,5 @@
 {
-  "max_goals": 6,
+  "max_goals": 7,
   "players": {
     "México:Julian QUINONES": 3,
     "México:Raul JIMENEZ": 2,
@@ -46,7 +46,7 @@
     "Noruega:Erling Haaland": 5,
     "Irak:AYMEN HUSSEIN": 1,
     "Noruega:Leo OSTIGARD": 1,
-    "Argentina:Lionel Messi": 6,
+    "Argentina:Lionel Messi": 7,
     "Austria:Romano SCHMID": 1,
     "Jordania:ALI OLWAN": 1,
     "Austria:Marko ARNAUTOVIC": 2,
@@ -157,7 +157,11 @@
     "España:Pedro PORRO": 1,
     "Croacia:Ivan PERISIC": 1,
     "Portugal:GONCALO RAMOS": 1,
-    "Suiza:Dan NDOYE": 1
+    "Suiza:Dan NDOYE": 1,
+    "Cabo Verde:DEROY DUARTE": 1,
+    "Argentina:Lisandro MARTINEZ": 1,
+    "Cabo Verde:SIDNY LOPES CABRAL": 1,
+    "Colombia:Jhon ARIAS": 1
   },
   "max_assists": 5,
   "assists": {
@@ -303,6 +307,11 @@
     "España:Marc CUCURELLA": 2,
     "España:Alex BAENA": 1,
     "Portugal:Rafael Leao": 1,
-    "Egipto:KARIM HAFEZ": 1
+    "Egipto:KARIM HAFEZ": 1,
+    "Argentina:Lisandro MARTINEZ": 1,
+    "Cabo Verde:RYAN MENDES": 1,
+    "Argentina:Alexis MAC ALLISTER": 1,
+    "Cabo Verde:YANNICK SEMEDO": 1,
+    "Colombia:Luis SUAREZ": 1
   }
 }

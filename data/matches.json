@@ -1619,9 +1619,16 @@
     "date": "2026-07-04",
     "time": "00:00",
     "venue": "Estadio Miami",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 2,
+    "scorers": [
+      "Argentina:Lionel Messi",
+      "Cabo Verde:DEROY DUARTE",
+      "Argentina:Lisandro MARTINEZ",
+      "Cabo Verde:SIDNY LOPES CABRAL",
+      "Cabo Verde:DINEY BORGES (p.p.)"
+    ]
   },
   {
     "id": "400021517",
@@ -1632,9 +1639,12 @@
     "date": "2026-07-04",
     "time": "03:30",
     "venue": "Estadio Kansas City",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 0,
+    "scorers": [
+      "Colombia:Jhon ARIAS"
+    ]
   },
   {
     "id": "400021530",
@@ -1718,8 +1728,8 @@
     "id": "400021528",
     "idStage": "289288",
     "phase": "Round of 16",
-    "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_home": "Argentina",
+    "team_away": "Egipto",
     "date": "2026-07-07",
     "time": "18:00",
     "venue": "Estadio Atlanta",
@@ -1732,7 +1742,7 @@
     "idStage": "289288",
     "phase": "Round of 16",
     "team_home": "Suiza",
-    "team_away": "Por definir",
+    "team_away": "Colombia",
     "date": "2026-07-07",
     "time": "22:00",
     "venue": "Estadio BC Place Vancouver",

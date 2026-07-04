@@ -1673,9 +1673,12 @@
     "date": "2026-07-04",
     "time": "23:00",
     "venue": "Estadio Filadelfia",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 1,
+    "scorers": [
+      "Francia:Kylian Mbappé"
+    ]
   },
   {
     "id": "400021532",
@@ -1759,7 +1762,7 @@
     "id": "400021536",
     "idStage": "289289",
     "phase": "Quarter-finals",
-    "team_home": "Por definir",
+    "team_home": "Francia",
     "team_away": "Marruecos",
     "date": "2026-07-09",
     "time": "22:00",

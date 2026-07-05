@@ -1689,9 +1689,14 @@
     "date": "2026-07-05",
     "time": "22:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 2,
+    "scorers": [
+      "Noruega:Erling Haaland",
+      "Noruega:Erling Haaland",
+      "Brasil:NEYMAR JR"
+    ]
   },
   {
     "id": "400021531",
@@ -1788,7 +1793,7 @@
     "id": "400021539",
     "idStage": "289289",
     "phase": "Quarter-finals",
-    "team_home": "Por definir",
+    "team_home": "Noruega",
     "team_away": "Por definir",
     "date": "2026-07-11",
     "time": "23:00",

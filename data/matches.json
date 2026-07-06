@@ -1727,9 +1727,12 @@
     "date": "2026-07-06",
     "time": "21:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 1,
+    "scorers": [
+      "España:Mikel MERINO"
+    ]
   },
   {
     "id": "400021534",

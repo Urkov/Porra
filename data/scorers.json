@@ -1,8 +1,8 @@
 {
   "max_goals": 7,
   "players": {
-    "México:Julian QUINONES": 3,
-    "México:Raul JIMENEZ": 2,
+    "México:Julian QUINONES": 4,
+    "México:Raul JIMENEZ": 3,
     "República Checa:Ladislav KREJCI": 1,
     "Corea del Sur:HWANG Inbeom": 1,
     "Corea del Sur:OH Hyeongyu": 1,
@@ -52,10 +52,10 @@
     "Austria:Marko ARNAUTOVIC": 2,
     "Portugal:JOAO NEVES": 1,
     "RD Congo:Yoane WISSA": 3,
-    "Inglaterra:Harry Kane": 5,
+    "Inglaterra:Harry Kane": 6,
     "Croacia:Martin BATURINA": 1,
     "Croacia:Petar Musa": 1,
-    "Inglaterra:Jude Bellingham": 2,
+    "Inglaterra:Jude Bellingham": 4,
     "Inglaterra:Marcus RASHFORD": 1,
     "Ghana:Caleb YIRENKYI": 1,
     "Colombia:Daniel MUNOZ": 2,
@@ -212,7 +212,7 @@
     "Inglaterra:Declan RICE": 1,
     "Croacia:Ivan PERISIC": 1,
     "Inglaterra:Elliot ANDERSON": 1,
-    "Inglaterra:Bukayo Saka": 2,
+    "Inglaterra:Bukayo Saka": 3,
     "Colombia:Luis Díaz": 1,
     "Colombia:Gustavo PUERTA": 1,
     "Colombia:Cucho HERNANDEZ": 1,
@@ -314,6 +314,7 @@
     "Cabo Verde:RYAN MENDES": 1,
     "Argentina:Alexis MAC ALLISTER": 1,
     "Cabo Verde:YANNICK SEMEDO": 1,
-    "Colombia:Luis SUAREZ": 1
+    "Colombia:Luis SUAREZ": 1,
+    "Inglaterra:Harry Kane": 1
   }
 }

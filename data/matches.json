@@ -1705,11 +1705,18 @@
     "team_home": "México",
     "team_away": "Inglaterra",
     "date": "2026-07-06",
-    "time": "02:00",
+    "time": "03:00",
     "venue": "Estadio Ciudad de México",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 3,
+    "scorers": [
+      "Inglaterra:Jude Bellingham",
+      "Inglaterra:Jude Bellingham",
+      "México:Julian QUINONES",
+      "Inglaterra:Harry Kane",
+      "México:Raul JIMENEZ"
+    ]
   },
   {
     "id": "400021529",
@@ -1794,7 +1801,7 @@
     "idStage": "289289",
     "phase": "Quarter-finals",
     "team_home": "Noruega",
-    "team_away": "Por definir",
+    "team_away": "Inglaterra",
     "date": "2026-07-11",
     "time": "23:00",
     "venue": "Estadio Miami",

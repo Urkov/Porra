@@ -1783,9 +1783,13 @@
     "date": "2026-07-07",
     "time": "22:00",
     "venue": "Estadio BC Place Vancouver",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 0,
+    "decided_by": "penalties",
+    "score_home_penalties": 4,
+    "score_away_penalties": 3,
+    "winner_passed": "Suiza"
   },
   {
     "id": "400021536",
@@ -1830,8 +1834,8 @@
     "id": "400021537",
     "idStage": "289289",
     "phase": "Quarter-finals",
-    "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_home": "Argentina",
+    "team_away": "Suiza",
     "date": "2026-07-12",
     "time": "03:00",
     "venue": "Estadio Kansas City",

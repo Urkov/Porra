@@ -129,7 +129,7 @@
     "España:Alex BAENA": 1,
     "Bélgica:Leandro TROSSARD": 2,
     "Bélgica:Kevin De Bruyne": 1,
-    "Bélgica:Romelu Lukaku": 2,
+    "Bélgica:Romelu Lukaku": 3,
     "Bélgica:Alexis SAELEMAEKERS": 1,
     "Egipto:MAHMOUD SABER": 1,
     "Croacia:Petar SUCIC": 1,
@@ -153,7 +153,7 @@
     "Noruega:Antonio NUSA": 1,
     "RD Congo:Brian CIPENGA": 1,
     "Bélgica:Youri TIELEMANS": 2,
-    "Estados Unidos:Malik TILLMAN": 1,
+    "Estados Unidos:Malik TILLMAN": 2,
     "España:Pedro PORRO": 1,
     "Croacia:Ivan PERISIC": 1,
     "Portugal:GONCALO RAMOS": 1,
@@ -164,7 +164,9 @@
     "Colombia:Jhon ARIAS": 1,
     "Marruecos:Azzedine OUNAHI": 2,
     "Brasil:NEYMAR JR": 1,
-    "España:Mikel MERINO": 1
+    "España:Mikel MERINO": 1,
+    "Bélgica:Charles DE KETELAERE": 2,
+    "Bélgica:Hans VANAKEN": 1
   },
   "max_assists": 5,
   "assists": {
@@ -282,8 +284,8 @@
     "Francia:Aurelien TCHOUAMENI": 1,
     "Francia:Bradley BARCOLA": 1,
     "España:Marcos LLORENTE": 1,
-    "Bélgica:Hans VANAKEN": 1,
-    "Bélgica:Nicolas RASKIN": 1,
+    "Bélgica:Hans VANAKEN": 2,
+    "Bélgica:Nicolas RASKIN": 2,
     "Bélgica:Romelu Lukaku": 1,
     "Egipto:TREZEGUET": 1,
     "Inglaterra:Jude Bellingham": 1,
@@ -306,7 +308,7 @@
     "Inglaterra:Anthony GORDON": 2,
     "Senegal:Moussa Niakhate": 1,
     "Bélgica:Thomas MEUNIER": 1,
-    "Bélgica:Leandro TROSSARD": 1,
+    "Bélgica:Leandro TROSSARD": 2,
     "España:Marc CUCURELLA": 2,
     "España:Alex BAENA": 1,
     "Portugal:Rafael Leao": 1,
@@ -317,6 +319,7 @@
     "Cabo Verde:YANNICK SEMEDO": 1,
     "Colombia:Luis SUAREZ": 1,
     "Inglaterra:Harry Kane": 1,
-    "España:Ferran Torres": 1
+    "España:Ferran Torres": 1,
+    "Bélgica:Charles DE KETELAERE": 1
   }
 }

@@ -1743,9 +1743,16 @@
     "date": "2026-07-07",
     "time": "02:00",
     "venue": "Estadio de Seattle",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 4,
+    "scorers": [
+      "Bélgica:Charles DE KETELAERE",
+      "Estados Unidos:Malik TILLMAN",
+      "Bélgica:Charles DE KETELAERE",
+      "Bélgica:Hans VANAKEN",
+      "Bélgica:Romelu Lukaku"
+    ]
   },
   {
     "id": "400021528",
@@ -1790,8 +1797,8 @@
     "id": "400021538",
     "idStage": "289289",
     "phase": "Quarter-finals",
-    "team_home": "Por definir",
-    "team_away": "Por definir",
+    "team_home": "España",
+    "team_away": "Bélgica",
     "date": "2026-07-10",
     "time": "21:00",
     "venue": "Estadio Los Angeles",

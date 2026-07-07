@@ -1,5 +1,5 @@
 {
-  "max_goals": 7,
+  "max_goals": 8,
   "players": {
     "México:Julian QUINONES": 4,
     "México:Raul JIMENEZ": 3,
@@ -46,7 +46,7 @@
     "Noruega:Erling Haaland": 7,
     "Irak:AYMEN HUSSEIN": 1,
     "Noruega:Leo OSTIGARD": 1,
-    "Argentina:Lionel Messi": 7,
+    "Argentina:Lionel Messi": 8,
     "Austria:Romano SCHMID": 1,
     "Jordania:ALI OLWAN": 1,
     "Austria:Marko ARNAUTOVIC": 2,
@@ -86,7 +86,7 @@
     "Uruguay:Agustin CANOBBIO": 1,
     "Cabo Verde:HELIO VARELA": 1,
     "Nueva Zelanda:Finn SURMAN": 1,
-    "Egipto:MOSTAFA ZICO": 1,
+    "Egipto:MOSTAFA ZICO": 2,
     "Egipto:Mohamed Salah": 1,
     "Egipto:TREZEGUET": 1,
     "Francia:Ousmane Dembélé": 4,
@@ -166,7 +166,10 @@
     "Brasil:NEYMAR JR": 1,
     "España:Mikel MERINO": 1,
     "Bélgica:Charles DE KETELAERE": 2,
-    "Bélgica:Hans VANAKEN": 1
+    "Bélgica:Hans VANAKEN": 1,
+    "Egipto:YASSER IBRAHIM": 1,
+    "Argentina:Cristian ROMERO": 1,
+    "Argentina:Enzo FERNANDEZ": 1
   },
   "max_assists": 5,
   "assists": {
@@ -320,6 +323,11 @@
     "Colombia:Luis SUAREZ": 1,
     "Inglaterra:Harry Kane": 1,
     "España:Ferran Torres": 1,
-    "Bélgica:Charles DE KETELAERE": 1
+    "Bélgica:Charles DE KETELAERE": 1,
+    "Egipto:MARAWAN ATTIA": 1,
+    "Egipto:Haissem HASSAN": 1,
+    "Argentina:Lionel Messi": 1,
+    "Argentina:Gonzalo MONTIEL": 1,
+    "Argentina:Lautaro Martínez": 1
   }
 }

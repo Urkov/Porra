@@ -1800,9 +1800,13 @@
     "date": "2026-07-09",
     "time": "22:00",
     "venue": "Estadio Boston",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 0,
+    "scorers": [
+      "Francia:Kylian Mbappé",
+      "Francia:Ousmane Dembélé"
+    ]
   },
   {
     "id": "400021538",
@@ -1847,7 +1851,7 @@
     "id": "400021541",
     "idStage": "289290",
     "phase": "Semi-finals",
-    "team_home": "Por definir",
+    "team_home": "Francia",
     "team_away": "Por definir",
     "date": "2026-07-14",
     "time": "21:00",

@@ -1817,9 +1817,14 @@
     "date": "2026-07-10",
     "time": "21:00",
     "venue": "Estadio Los Angeles",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 2,
+    "score_away": 1,
+    "scorers": [
+      "España:Fabian RUIZ",
+      "Bélgica:Charles DE KETELAERE",
+      "España:Mikel MERINO"
+    ]
   },
   {
     "id": "400021539",
@@ -1852,7 +1857,7 @@
     "idStage": "289290",
     "phase": "Semi-finals",
     "team_home": "Francia",
-    "team_away": "Por definir",
+    "team_away": "España",
     "date": "2026-07-14",
     "time": "21:00",
     "venue": "Estadio Dallas",

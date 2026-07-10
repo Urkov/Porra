@@ -164,12 +164,13 @@
     "Colombia:Jhon ARIAS": 1,
     "Marruecos:Azzedine OUNAHI": 2,
     "Brasil:NEYMAR JR": 1,
-    "España:Mikel MERINO": 1,
-    "Bélgica:Charles DE KETELAERE": 2,
+    "España:Mikel MERINO": 2,
+    "Bélgica:Charles DE KETELAERE": 3,
     "Bélgica:Hans VANAKEN": 1,
     "Egipto:YASSER IBRAHIM": 1,
     "Argentina:Cristian ROMERO": 1,
-    "Argentina:Enzo FERNANDEZ": 1
+    "Argentina:Enzo FERNANDEZ": 1,
+    "España:Fabian RUIZ": 1
   },
   "max_assists": 5,
   "assists": {
@@ -329,6 +330,7 @@
     "Argentina:Lionel Messi": 1,
     "Argentina:Gonzalo MONTIEL": 1,
     "Argentina:Lautaro Martínez": 1,
-    "Francia:Desire DOUE": 1
+    "Francia:Desire DOUE": 1,
+    "Bélgica:Timothy CASTAGNE": 1
   }
 }

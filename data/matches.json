@@ -1835,9 +1835,14 @@
     "date": "2026-07-11",
     "time": "23:00",
     "venue": "Estadio Miami",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 2,
+    "scorers": [
+      "Noruega:Andreas SCHJELDERUP",
+      "Inglaterra:Jude Bellingham",
+      "Inglaterra:Jude Bellingham"
+    ]
   },
   {
     "id": "400021537",
@@ -1869,7 +1874,7 @@
     "id": "400021540",
     "idStage": "289290",
     "phase": "Semi-finals",
-    "team_home": "Por definir",
+    "team_home": "Inglaterra",
     "team_away": "Por definir",
     "date": "2026-07-15",
     "time": "21:00",

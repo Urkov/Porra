@@ -1853,9 +1853,15 @@
     "date": "2026-07-12",
     "time": "03:00",
     "venue": "Estadio Kansas City",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 3,
+    "score_away": 1,
+    "scorers": [
+      "Argentina:Alexis MAC ALLISTER",
+      "Suiza:Dan NDOYE",
+      "Argentina:Julian Alvarez",
+      "Argentina:Lautaro Martínez"
+    ]
   },
   {
     "id": "400021541",
@@ -1875,7 +1881,7 @@
     "idStage": "289290",
     "phase": "Semi-finals",
     "team_home": "Inglaterra",
-    "team_away": "Por definir",
+    "team_away": "Argentina",
     "date": "2026-07-15",
     "time": "21:00",
     "venue": "Estadio Atlanta",

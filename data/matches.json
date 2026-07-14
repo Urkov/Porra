@@ -1872,9 +1872,13 @@
     "date": "2026-07-14",
     "time": "21:00",
     "venue": "Estadio Dallas",
-    "status": "scheduled",
+    "status": "finished",
     "score_home": 0,
-    "score_away": 0
+    "score_away": 2,
+    "scorers": [
+      "España:Mikel Oyarzabal",
+      "España:Pedro PORRO"
+    ]
   },
   {
     "id": "400021540",
@@ -1892,7 +1896,7 @@
   {
     "id": "400021542",
     "idStage": "289291",
-    "phase": "3rd_place",
+    "phase": "Final",
     "team_home": "Por definir",
     "team_away": "Por definir",
     "date": "2026-07-18",

@@ -1907,9 +1907,21 @@
     "date": "2026-07-18",
     "time": "23:00",
     "venue": "Estadio Miami",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 4,
+    "score_away": 6,
+    "scorers": [
+      "Inglaterra:Declan RICE",
+      "Inglaterra:Ezri KONSA",
+      "Inglaterra:Bukayo Saka",
+      "Inglaterra:Bukayo Saka",
+      "Francia:Kylian Mbappé",
+      "Francia:Bradley BARCOLA",
+      "Francia:Kylian Mbappé",
+      "Inglaterra:Bukayo Saka",
+      "Francia:Ousmane Dembélé",
+      "Inglaterra:Jude Bellingham"
+    ]
   },
   {
     "id": "400021543",

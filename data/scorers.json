@@ -1,5 +1,5 @@
 {
-  "max_goals": 8,
+  "max_goals": 10,
   "players": {
     "México:Julian QUINONES": 4,
     "México:Raul JIMENEZ": 3,
@@ -40,8 +40,8 @@
     "Nueva Zelanda:Elijah JUST": 3,
     "Irán:Ramin REZAEIAN": 2,
     "Irán:Mohammad MOHEBBI": 1,
-    "Francia:Kylian Mbappé": 8,
-    "Francia:Bradley BARCOLA": 2,
+    "Francia:Kylian Mbappé": 10,
+    "Francia:Bradley BARCOLA": 3,
     "Senegal:Ibrahim MBAYE": 1,
     "Noruega:Erling Haaland": 7,
     "Irak:AYMEN HUSSEIN": 1,
@@ -55,7 +55,7 @@
     "Inglaterra:Harry Kane": 6,
     "Croacia:Martin BATURINA": 1,
     "Croacia:Petar Musa": 1,
-    "Inglaterra:Jude Bellingham": 6,
+    "Inglaterra:Jude Bellingham": 7,
     "Inglaterra:Marcus RASHFORD": 1,
     "Ghana:Caleb YIRENKYI": 1,
     "Colombia:Daniel MUNOZ": 2,
@@ -89,7 +89,7 @@
     "Egipto:MOSTAFA ZICO": 2,
     "Egipto:Mohamed Salah": 1,
     "Egipto:TREZEGUET": 1,
-    "Francia:Ousmane Dembélé": 5,
+    "Francia:Ousmane Dembélé": 6,
     "Noruega:Marcus HOLMGREN PEDERSEN": 1,
     "Senegal:Ismaila SARR": 4,
     "Jordania:NIZAR ALRASHDAN": 1,
@@ -174,9 +174,12 @@
     "Noruega:Andreas SCHJELDERUP": 1,
     "Argentina:Alexis MAC ALLISTER": 1,
     "Argentina:Julian Alvarez": 1,
-    "Inglaterra:Anthony GORDON": 1
+    "Inglaterra:Anthony GORDON": 1,
+    "Inglaterra:Declan RICE": 1,
+    "Inglaterra:Ezri KONSA": 1,
+    "Inglaterra:Bukayo Saka": 3
   },
-  "max_assists": 5,
+  "max_assists": 7,
   "assists": {
     "México:Erik LIRA": 1,
     "México:Roberto ALVARADO": 3,
@@ -207,7 +210,7 @@
     "Egipto:Mohamed Salah": 2,
     "Nueva Zelanda:Chris WOOD": 2,
     "Irán:Ramin REZAEIAN": 1,
-    "Francia:Michael OLISE": 5,
+    "Francia:Michael OLISE": 7,
     "Francia:Adrien RABIOT": 1,
     "Senegal:Iliman NDIAYE": 2,
     "Noruega:David MOLLER WOLFE": 1,
@@ -220,7 +223,7 @@
     "Portugal:PEDRO NETO": 1,
     "RD Congo:Arthur MASUAKU": 1,
     "Croacia:Petar SUCIC": 1,
-    "Inglaterra:Declan RICE": 1,
+    "Inglaterra:Declan RICE": 2,
     "Croacia:Ivan PERISIC": 1,
     "Inglaterra:Elliot ANDERSON": 1,
     "Inglaterra:Bukayo Saka": 3,
@@ -287,7 +290,7 @@
     "Senegal:Lamine CAMARA": 1,
     "Senegal:Ismaila SARR": 1,
     "Senegal:Pape GUEYE": 1,
-    "Francia:Kylian Mbappé": 3,
+    "Francia:Kylian Mbappé": 4,
     "Noruega:Andreas SCHJELDERUP": 3,
     "Francia:Aurelien TCHOUAMENI": 1,
     "Francia:Bradley BARCOLA": 1,
@@ -338,6 +341,9 @@
     "Bélgica:Timothy CASTAGNE": 1,
     "Suiza:Ricardo RODRIGUEZ": 1,
     "Argentina:Jose Manuel LOPEZ": 1,
-    "Inglaterra:Morgan ROGERS": 1
+    "Inglaterra:Morgan ROGERS": 1,
+    "Inglaterra:Marcus RASHFORD": 1,
+    "Inglaterra:Eberechi EZE": 1,
+    "Francia:Dayot UPAMECANO": 1
   }
 }

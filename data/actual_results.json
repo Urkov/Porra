@@ -74,14 +74,13 @@
     ]
   },
   "actual_podium": {
-    "P1": "",
-    "P2": "",
+    "P1": "Inglaterra",
+    "P2": "Francia",
     "P3": "",
     "P4": ""
   },
   "actual_pichichi": [
-    "Francia:Kylian Mbappé",
-    "Argentina:Lionel Messi"
+    "Francia:Kylian Mbappé"
   ],
   "official_standings": {
     "A": [
@@ -685,5 +684,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-07-18T04:47:36.233Z"
+  "lastUpdate": "2026-07-18T23:06:28.329Z"
 }

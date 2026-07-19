@@ -74,10 +74,10 @@
     ]
   },
   "actual_podium": {
-    "P1": "Inglaterra",
-    "P2": "Francia",
-    "P3": "",
-    "P4": ""
+    "P1": "",
+    "P2": "",
+    "P3": "Inglaterra",
+    "P4": "Francia"
   },
   "actual_pichichi": [
     "Francia:Kylian Mbappé"
@@ -684,5 +684,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-07-19T05:20:18.977Z"
+  "lastUpdate": "2026-07-19T09:44:32.433Z"
 }

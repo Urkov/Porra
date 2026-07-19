@@ -289,9 +289,15 @@ function mapPhase(stageDesc, hasGroup) {
   if (s.includes('grupo') || s.includes('group')) return 'groups';
   if (s.includes('32') || s.includes('dieciseisavo')) return 'Round of 32';
   if (s.includes('16') || s.includes('octavo')) return 'Round of 16';
-  // OJO: "tercer y cuarto puesto" contiene "cuarto", por eso se comprueba antes
-  if (s.includes('tercer') || s.includes('3er') || s.includes('3.º')) return '3rd_place';
-  if (s.includes('cuarto')) return 'Quarter-finals';
+  // OJO: "tercer y cuarto puesto" contiene "cuarto", por eso se comprueba antes.
+  // Se incluyen variantes en inglés ('third', '3rd', 'bronze') porque la API de
+  // FIFA puede devolver el nombre del stage en inglés incluso con language=es-ES
+  // dependiendo de la fase del torneo (observado en el Mundial 2026).
+  if (
+    s.includes('tercer') || s.includes('3er') || s.includes('3.º') ||
+    s.includes('third')  || s.includes('3rd') || s.includes('bronze')
+  ) return '3rd_place';
+  if (s.includes('cuarto') || s.includes('quarter')) return 'Quarter-finals';
   if (s.includes('semifinal')) return 'Semi-finals';
   if (s.includes('final')) return 'Final';
 
@@ -540,6 +546,25 @@ async function main() {
   // Orden cronológico
   matchesOut.sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`));
 
+  // ── Fix automático: 3er puesto vs Final ─────────────────────────────────
+  // La API de FIFA a veces asigna el mismo nombre de stage ("Final") tanto al
+  // partido del 3er puesto como a la Final real, haciendo que mapPhase()
+  // los etiquete igual. Si hay exactamente 2 partidos con phase='Final', el
+  // más temprano cronológicamente ES el partido del 3er puesto (siempre se
+  // disputa el día anterior a la Final según el reglamento FIFA). Lo corregimos
+  // aquí, una vez que matchesOut ya está ordenado cronológicamente.
+  const _finalPhaseMatches = matchesOut.filter(m => m.phase === 'Final');
+  if (_finalPhaseMatches.length === 2) {
+    // El primero cronológicamente es el 3er puesto
+    const _thirdPlaceCandidate = _finalPhaseMatches[0];
+    _thirdPlaceCandidate.phase = '3rd_place';
+    console.log(
+      `  (auto) Partido por el 3er puesto detectado y corregido: ` +
+      `${_thirdPlaceCandidate.team_home} vs ${_thirdPlaceCandidate.team_away} ` +
+      `(${_thirdPlaceCandidate.date}) → phase='3rd_place'`
+    );
+  }
+
   // --------------------------------------------------------------------
   // Clasificaciones oficiales de grupo (A-L)
   // --------------------------------------------------------------------
@@ -715,7 +740,12 @@ async function main() {
   // --------------------------------------------------------------------
   // Podio final (campeón, subcampeón, 3º y 4º puesto)
   // --------------------------------------------------------------------
-  let actualPodium = { ...(previousResults.actual_podium || { P1: '', P2: '', P3: '', P4: '' }) };
+  // Siempre empezamos con el podio vacío y lo rellenamos desde los resultados
+  // reales de los partidos. NUNCA arrastramos los valores del JSON anterior
+  // (previousResults.actual_podium) para evitar que datos incorrectos persistan
+  // de una ejecución a otra. Los overrides manuales (manual_overrides.json)
+  // siguen teniendo la última palabra si es necesario.
+  let actualPodium = { P1: '', P2: '', P3: '', P4: '' };
 
   const winnerOf = (m) => {
     if (!m) return null;
@@ -728,16 +758,16 @@ async function main() {
     return w === m.team_home ? m.team_away : m.team_home;
   };
 
-  const finalMatch = matchesOut.find((m) => m.phase === 'Final' && m.status === 'finished');
-  const thirdPlaceMatch = matchesOut.find((m) => m.phase === '3rd_place' && m.status === 'finished');
+  const finalMatch      = matchesOut.find(m => m.phase === 'Final'     && m.status === 'finished');
+  const thirdPlaceMatch = matchesOut.find(m => m.phase === '3rd_place' && m.status === 'finished');
 
   if (finalMatch) {
-    actualPodium.P1 = winnerOf(finalMatch);
-    actualPodium.P2 = loserOf(finalMatch);
+    actualPodium.P1 = winnerOf(finalMatch) || '';
+    actualPodium.P2 = loserOf(finalMatch)  || '';
   }
   if (thirdPlaceMatch) {
-    actualPodium.P3 = winnerOf(thirdPlaceMatch);
-    actualPodium.P4 = loserOf(thirdPlaceMatch);
+    actualPodium.P3 = winnerOf(thirdPlaceMatch) || '';
+    actualPodium.P4 = loserOf(thirdPlaceMatch)  || '';
   }
   if (manualOverrides.actual_podium) {
     actualPodium = { ...actualPodium, ...manualOverrides.actual_podium };

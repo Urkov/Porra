@@ -594,6 +594,63 @@ function populateMatchFilters() {
   venueSelect.innerHTML = `<option value="all">Todas las sedes</option>` + venues.map(venue => `<option value="${venue}">${venue}</option>`).join('');
 }
 
+/**
+ * Resuelve el podio final (P1-P4) derivándolo SIEMPRE de los resultados
+ * reales de los partidos de Final y 3er Puesto registrados en matchList.
+ *
+ * - P3/P4 se extraen del partido '3rd_place' terminado.
+ * - P1/P2 se extraen del partido 'Final' terminado.
+ * - Si el partido correspondiente aún no ha terminado, la posición queda
+ *   vacía (nunca se usan datos manuales de actual_podium para P1/P2 cuando
+ *   la final no se ha jugado, para evitar que datos incorrectos otorguen
+ *   puntos de podio prematuramente).
+ * - Si no existe ningún partido con esa fase en matchList, se usa el dato
+ *   manual de podiumData como fallback (para el caso extremo de que el
+ *   partido no esté en matches.json pero sí en actual_results.json).
+ */
+function resolveActualPodium(podiumData, matchList) {
+  const result = { P1: '', P2: '', P3: '', P4: '' };
+
+  // ── P3 / P4: partido del 3er puesto ───────────────────────────────────
+  const thirdMatch = (matchList || []).find(m => m.phase === '3rd_place');
+  if (thirdMatch) {
+    if (thirdMatch.status === 'finished') {
+      const w3 = thirdMatch.decided_by === 'penalties'
+        ? thirdMatch.winner_passed
+        : (Number(thirdMatch.score_home) > Number(thirdMatch.score_away)
+            ? thirdMatch.team_home : thirdMatch.team_away);
+      result.P3 = w3 || '';
+      result.P4 = (w3 === thirdMatch.team_home ? thirdMatch.team_away : thirdMatch.team_home) || '';
+    }
+    // partido no terminado → P3/P4 vacíos (no usamos dato manual)
+  } else {
+    // No hay partido de 3er puesto en matches.json → fallback manual
+    result.P3 = (podiumData && podiumData.P3) || '';
+    result.P4 = (podiumData && podiumData.P4) || '';
+  }
+
+  // ── P1 / P2: final ────────────────────────────────────────────────────
+  const finalMatch = (matchList || []).find(m => m.phase === 'Final');
+  if (finalMatch) {
+    if (finalMatch.status === 'finished') {
+      const champion = finalMatch.decided_by === 'penalties'
+        ? finalMatch.winner_passed
+        : (Number(finalMatch.score_home) > Number(finalMatch.score_away)
+            ? finalMatch.team_home : finalMatch.team_away);
+      result.P1 = champion || '';
+      result.P2 = (champion === finalMatch.team_home ? finalMatch.team_away : finalMatch.team_home) || '';
+    }
+    // final no terminada → P1/P2 vacíos (no usamos dato manual para evitar
+    // dar puntos prematuramente con datos incorrectos en actual_podium)
+  } else {
+    // No hay final en matches.json → fallback manual
+    result.P1 = (podiumData && podiumData.P1) || '';
+    result.P2 = (podiumData && podiumData.P2) || '';
+  }
+
+  return result;
+}
+
 // ALGORITMO INTEGRAL DEL MOTOR DE CÁLCULO DE LA PORRA
 function computeScores() {
   // Precalcular standings y posición real (1º-4º) de cada equipo en su
@@ -820,11 +877,15 @@ function computeScores() {
     });
 
     // 5. CLASIFICACIÓN DEL PODIO FINAL (CAMP, SUBC, 3º, 4º)
-    if (participant.podium && currentActualResults.actual_podium) {
-      if (participant.podium.P1 === currentActualResults.actual_podium.P1) scorePodium += rules.points.final_classification.P1;
-      if (participant.podium.P2 === currentActualResults.actual_podium.P2) scorePodium += rules.points.final_classification.P2;
-      if (participant.podium.P3 === currentActualResults.actual_podium.P3) scorePodium += rules.points.final_classification.P3;
-      if (participant.podium.P4 === currentActualResults.actual_podium.P4) scorePodium += rules.points.final_classification.P4;
+    // Usamos resolveActualPodium para derivar P1-P4 desde los resultados
+    // reales de los partidos (Final y 3er Puesto), no desde datos manuales
+    // de actual_podium que pueden estar desactualizados o ser incorrectos.
+    if (participant.podium) {
+      const rp = resolveActualPodium(currentActualResults.actual_podium, currentMatches);
+      if (rp.P1 && participant.podium.P1 === rp.P1) scorePodium += rules.points.final_classification.P1;
+      if (rp.P2 && participant.podium.P2 === rp.P2) scorePodium += rules.points.final_classification.P2;
+      if (rp.P3 && participant.podium.P3 === rp.P3) scorePodium += rules.points.final_classification.P3;
+      if (rp.P4 && participant.podium.P4 === rp.P4) scorePodium += rules.points.final_classification.P4;
     }
 
     // Total de puntos para este participante
@@ -1275,11 +1336,12 @@ function computeParticipantTeamPoints(participant) {
   });
 
   // Puntos de "Top4" (podio final: Campeón, Subcampeón, 3º y 4º puesto).
-  // El Mundial no ha terminado, así que esto da 0 para todos los equipos
-  // hasta que currentActualResults.actual_podium tenga cada puesto fijado;
-  // se muestra siempre en el tooltip (aunque sea 0) para que se entienda
+  // Usamos resolveActualPodium para derivar P1-P4 desde los resultados
+  // reales de los partidos, evitando datos manuales incorrectos.
+  // Se muestra siempre en el tooltip (aunque sea 0) para que se entienda
   // que el equipo está apostado en el podio del participante.
-  if (participant.podium && currentActualResults.actual_podium) {
+  if (participant.podium) {
+    const rpTP = resolveActualPodium(currentActualResults.actual_podium, currentMatches);
     ['P1', 'P2', 'P3', 'P4'].forEach(pos => {
       const predictedTeam = participant.podium[pos];
       if (!predictedTeam) return;
@@ -1288,7 +1350,7 @@ function computeParticipantTeamPoints(participant) {
       if (!teamPoints[predictedTeam]) {
         teamPoints[predictedTeam] = { matches: 0, groups: 0, rounds: 0, top4: 0, total: 0 };
       }
-      if (predictedTeam === currentActualResults.actual_podium[pos]) {
+      if (rpTP[pos] && predictedTeam === rpTP[pos]) {
         addTeamPoint(teamPoints, predictedTeam, 'top4', rules.points.final_classification[pos]);
       }
     });
@@ -1530,9 +1592,10 @@ function showParticipantDetail(id) {
   const orderList = ["P1", "P2", "P3", "P4"];
   const titles = { P1: "🥇 1.º", P2: "🥈 2.º", P3: "🥉 3.º", P4: "4️⃣ 4.º" };
 
+  const resolvedPodiumModal = resolveActualPodium(currentActualResults.actual_podium, currentMatches);
   orderList.forEach(pos => {
     const selectedTeam = p.podium[pos];
-    const isHit = currentActualResults.actual_podium && currentActualResults.actual_podium[pos] === selectedTeam;
+    const isHit = resolvedPodiumModal[pos] && resolvedPodiumModal[pos] === selectedTeam;
     const ptsEarned = isHit ? rules.points.final_classification[pos] : 0;
 
     podiumList.innerHTML += `

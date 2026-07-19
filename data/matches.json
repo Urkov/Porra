@@ -1932,8 +1932,11 @@
     "date": "2026-07-19",
     "time": "21:00",
     "venue": "Estadio Nueva York/Nueva Jersey",
-    "status": "scheduled",
-    "score_home": 0,
-    "score_away": 0
+    "status": "finished",
+    "score_home": 1,
+    "score_away": 0,
+    "scorers": [
+      "España:Ferran Torres"
+    ]
   }
 ]

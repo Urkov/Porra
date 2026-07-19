@@ -74,8 +74,8 @@
     ]
   },
   "actual_podium": {
-    "P1": "",
-    "P2": "",
+    "P1": "España",
+    "P2": "Argentina",
     "P3": "Inglaterra",
     "P4": "Francia"
   },
@@ -684,5 +684,5 @@
       }
     ]
   },
-  "lastUpdate": "2026-07-19T09:44:32.433Z"
+  "lastUpdate": "2026-07-19T22:03:25.042Z"
 }

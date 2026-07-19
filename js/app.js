@@ -781,8 +781,10 @@ function computeScores() {
       // victoria/empate ya calculados arriba), NO da puntos de "pase de
       // ronda" a ninguno de los dos equipos, porque no hay ninguna fase
       // siguiente a la que clasificar desde ahí (ni para el que gana y
-      // queda 3º, ni para el que pierde y queda 4º).
-      if (match.phase !== 'groups' && match.phase !== '3rd_place') {
+      // queda 3º, ni para el que pierde y queda 4º). La Final también queda
+      // excluida: el campeón no avanza a ninguna ronda más, sus puntos de
+      // victoria (+6) y de podio (+20) ya lo reflejan suficientemente.
+      if (match.phase !== 'groups' && match.phase !== '3rd_place' && match.phase !== 'Final') {
         const winner = match.decided_by === 'penalties' ? match.winner_passed : (match.score_home > match.score_away ? match.team_home : match.team_away);
 
         if (winner && chosenTeams.has(winner)) {
@@ -1261,7 +1263,8 @@ function computeParticipantTeamPoints(participant) {
     // cálculo de "pase de ronda": cuenta como partido normal (puntos de
     // victoria/empate ya sumados arriba), pero no da puntos de pase de
     // ronda a ninguno de los dos equipos, ya que no hay fase siguiente.
-    if (match.phase !== 'groups' && match.phase !== '3rd_place') {
+    // Lo mismo aplica a la Final: el campeón no avanza a ninguna ronda más.
+    if (match.phase !== 'groups' && match.phase !== '3rd_place' && match.phase !== 'Final') {
       const winner = match.decided_by === 'penalties' ? match.winner_passed : (match.score_home > match.score_away ? match.team_home : match.team_away);
       if (winner && chosenTeams.has(winner)) {
         if (!roundsPassedByTeamsByPhase[match.phase]) {
